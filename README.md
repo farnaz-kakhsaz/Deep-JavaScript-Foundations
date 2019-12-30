@@ -1,6 +1,6 @@
 # Deep JavaScript Foundations
 > **Note:** I collected some important and deep JavaScript foundations. 
-Most of this information comes from Kyle Simpson's books (You Don't Know JS series) or courses that I took. 
+Most of this information comes from Kyle Simpson's books (You Don't Know JS series), MDN (Mozilla Developer Network) or courses that I took. 
 It would help to have a deeper understanding of JavaScript.
 
 ## Table of Contents
@@ -99,7 +99,7 @@ So let's refer to them as value types.
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-ecmascript-overview)
 
-### typeof Operator
+### typeof Operator:
 
 When we assign some value to a variable, and use operator like `typeof`, we're not asking what's the `typeof` the variable (for example v), we're asking what is the `typeof` the value that is currently in v.
 
@@ -127,7 +127,7 @@ typeof v;              // "symbol"
 
 When there is no other value, the value that you have is called the `undefined` value. And remember, there's an `undefined` type with one and only one value in it called `undefined`. So typeof is telling us v currently is `undefined`. It got initialized and it's `undefined`. And that, by the way, does not mean it doesn't have a value yet.
 
-> `undefined` means, does not currently have a value.
+> The `undefined` means, does not currently have a value.
 
 A lot of people think, `undefined` means doesn't have a value yet. The most appropriate way to think about it is, does not currently have a value. Because it's entirely plausible and possible, that you have a variable or a property that has some value and then it goes back to the state of not having a value anymore. You set it to `undefined`, you undefine it. It just takes it back to that state where the value that it's holding is `undefined`. 
 
@@ -156,7 +156,7 @@ Why typeof null returns object? This is a historical fact from ES1 which essenti
 
 Remember, function is not an official type at the top level, in the most official sense. But it has its own return value here, the typeof operator returns as function. So it's useful that it returns to us function, but arrays, it doesn't. Arrays just returns object.
 
-The `Array.isArray()` will tell you for sure or not whether you have an array.
+> The `Array.isArray()` will tell you for sure or not whether you have an array.
 
 The following table summarizes the possible return values of `typeof` from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#Description).
 
@@ -238,3 +238,23 @@ typeof function() {} === 'function';
 typeof class C {} === 'function';
 typeof Math.sin === 'function';
 ```
+
+### `undefined` vs. `undeclared` vs. `uninitialized`:
+
+This is often confused between `undefined` and `undeclared` concept. And it's confused because developers, quite naturally, think of these words as sort of synonyms. They seem like they mean kind of almost the same thing. And in English, that's probably true. But in programming, it's entirely not true. In programming, and especially in JavaScript, these are two entirely different concepts.
+
+> `undefined` and `undeclared` in JavaScript are two entirely different concepts.
+
+When we said type of V, and we got back quote, `undefined`, V or whatever that variable is, didn't even exist. So how is it that I can get back quote `undefined` when something doesn't even exist? Well, that's another historical wart, JavaScript trying to pretend as if the absence of a declaration isn't that big a deal. It's not that big of a problem, you can work around it. In retrospect, they never should have done that. They should have just returned a string `undeclared`. 
+
+> The `undeclared` means it's never been created in any scope that we have access to.
+>
+> The `undefined` means there's definitely a variable, and at the moment, it has no value.
+>
+> the `uninitialized` or TDZ (Temporal Dead Zone) was introduced with ES6, and the best way to describe this is uninitialized. 
+
+> The `typeof` operator is the only operator in existence that is able to reference a thing that doesn't exist and not throw an error.
+
+The idea for `uninitialized` is that certain variables, never initially get set to undefined. When something is in an uninitialized state, it is off-limits. You're not allowed to touch it in any way, shape or form, or you'll get an error, and the error you get is the TDZ error.
+
+We can have a variable that's never been initialized. We can have a variable that's been initialized that is undefined. Or we can have a variable that was never even created, and then it's undeclared. Three different concepts that we need to wrap our brains around.
