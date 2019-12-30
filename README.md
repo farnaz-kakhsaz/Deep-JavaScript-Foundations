@@ -382,3 +382,35 @@ sign(0);               // 1
 > * Otherwise, `NaN` is returned.
 >
 > [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign)
+
+
+### Fundamental Objects:
+
+What are these fundamental objects, are they types? Sort of, but not really.
+
+This is like the kind of bolted on object orientedness of JavaScript, the almost Java-like mutation of JavaScript where we have in all of those cases where we have primitive values, we now also have object representations with similar behaviors. Like in Java when you want to make a string and you call it new capital S string, we have things like that in JavaScript.
+
+> Fundamental Objects = Built-In Objects = Native Functions
+
+So these are the ones where you really should absolutely use the new keyword:
+
+> Usage of the `new` keyword:
+>
+> * `Object()`
+> * `Array()`
+> * `Function()`
+> * `Date()`
+> * `RegExp()`
+> * `Error()`
+
+If you need to construct an object of that fundamental type, then use `new Object()`, or `new Array()`, or `new Function()`. Probably the most useful one that would be use is `new Date()`.
+
+But there are other ones that are fundamental objects which could be used with new, but you should definitely not use them with `new` keyword:
+
+> Don't use with `new` keyword:
+>
+> * `String()`
+> * `Number()`
+> * `Boolean()`
+
+They can be used with `new` keyword to construct the objects of this form. You should absolutely never do that. You should use them only as functions, not as constructors. In coercion we can see the usefulness of them. But `String()`, `Number()`, and `Boolean()` when used as a function coerce any value to that respective primitive type. That is a far more useful utility of those than the fact that they can construct this weird Frankensteiny object. 
