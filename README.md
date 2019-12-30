@@ -79,7 +79,6 @@ Let's take a look at the JavaScript specification:
 >
 > [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Data_types)
 
-
 But what about functions and arrays? functions and arrays are subtype of the object type. 
 
 Unlike languages like C++ and Java, in JavaScript and in other dynamically typed languages, variables do not that have types.  
@@ -122,8 +121,8 @@ typeof v;              // "object"
 
 v = Symbol();
 typeof v;              // "symbol"
-
 ```
+
 > We can think of `undefined` as basically a default value.
 
 When there is no other value, the value that you have is called the `undefined` value. And remember, there's an `undefined` type with one and only one value in it called `undefined`. So typeof is telling us v currently is `undefined`. It got initialized and it's `undefined`. And that, by the way, does not mean it doesn't have a value yet.
@@ -146,7 +145,13 @@ typeof v;                   // "function"   hmmm?
 
 var v = [1, 2, 3];
 typeof v;                   // "object"   hmmm?
+
+// coming soon!
+var v = 42n;
+// or: BigInt(42)
+typeof v;                   // "bigint"
 ```
+
 Why typeof null returns object? This is a historical fact from ES1 which essentially indicated to developers that if you wanted to unset a regular value, like a number, you would use undefined. But if you wanted to unset an object reference, you would use null.
 
 Remember, function is not an official type at the top level, in the most official sense. But it has its own return value here, the typeof operator returns as function. So it's useful that it returns to us function, but arrays, it doesn't. Arrays just returns object.
@@ -166,7 +171,6 @@ The following table summarizes the possible return values of `typeof` from [MDN]
 | Symbol (new in ECMAScript 2015)                         | "symbol"    |
 | Function object (implements [[Call]] in ECMA-262 terms) | "function"  |
 | Any other object                                        | "object"    |
-
 
 Some `typeof` examples from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof#Examples):
 
