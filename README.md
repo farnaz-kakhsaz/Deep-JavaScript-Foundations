@@ -7,6 +7,7 @@ It would help to have a deeper understanding of JavaScript.
 
 1. [Introduction](#Introduction)
 2. [Types](#Types)
+3. [Coercion](#Coercion)
 
 ## Introduction
 
@@ -390,7 +391,7 @@ What are these fundamental objects, are they types? Sort of, but not really.
 
 This is like the kind of bolted on object orientedness of JavaScript, the almost Java-like mutation of JavaScript where we have in all of those cases where we have primitive values, we now also have object representations with similar behaviors. Like in Java when you want to make a string and you call it new capital S string, we have things like that in JavaScript.
 
-> Fundamental Objects = Built-In Objects = Native Functions
+> Fundamental Objects aka Built-In Objects aka Native Functions.
 
 So these are the ones where you really should absolutely use the new keyword:
 
@@ -414,3 +415,73 @@ But there are other ones that are fundamental objects which could be used with n
     * `Boolean()`
 
 They can be used with `new` keyword to construct the objects of this form. You should absolutely never do that. You should use them only as functions, not as constructors. In coercion we can see the usefulness of them. But `String()`, `Number()`, and `Boolean()` when used as a function coerce any value to that respective primitive type. That is a far more useful utility of those than the fact that they can construct this weird Frankensteiny object. 
+
+# Coercion
+
+## Abstract Operation:
+
+Earlier, we see `toNumber()`, actually that's an abstract operation.
+
+> **Abstract Operations**
+>
+> These operations are not a part of the ECMAScript language; they are defined here to solely to aid the specification of the semantics of the ECMAScript language. Other, more specialized `abstract operations` are defined throughout this specification.
+>
+> ***Type Conversion:***
+>
+> The ECMAScript language implicitly performs automatic type conversion as needed. To clarify the semantics of certain constructs it is useful to define a set of conversion `abstract operations`. The conversion `abstract operations` are polymorphic; they can accept a value of any ECMAScript language type. But no other specification types are used with these operations.
+>
+> [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-operations)
+
+When we think of conversion and coercion, you should really think of them as interchangeable, at least as far as JavaScript is concerned.
+
+> In JavaScript, we refer to `Type Conversion` as `Coercion`. 
+
+### ToPrimitive:
+The first abstract operation that we have is called `ToPrimitive`. Now obviously, if we don't have a `primitive`, we need to turn it into a `primitive`. So if we have something `non-primitive`, like one of the `object` types, like an `object`, an `array`, a `function`, whatever, and we need to make it into a `primitive`, this is the abstract operation that's going to be involved in doing that.
+
+> If we have a `non-primitive` value, and we need to make it into a `primitive`, there the `abstract operation` is going to be involved in doing that.
+
+By the way, the `abstract operations` they're not like a function that could somehow be called. There may, in fact, be actual methods inside of a JavaScript engine or not, they're not like required to be actual things. But when we call them abstract, we mean they're a conceptual operation. So any time you have something that is not a `primitive` and it needs to become a `primitive`, conceptually, what we need to do is this set of algorithmic steps, and that's called `ToPrimitive`, as if it were a function that could be invoked.
+
+So the `ToPrimitive` abstract operation takes an optional type hint. So in other words, it says, if you have something that is not a `primitive`, tell what kind of type you would like it to be.
+
+> The `ToPrimitive` abstract operation takes an optional type hint.
+
+If you're doing a numeric operation and it invokes `ToPrimitive`, guess what hint it's gonna send in? It's gonna say, I would like to have a `number`. That doesn't guarantee you a `number`, by the way. It's just a hint to say, the place that I'm using it, I would like it to be a `number`. If you're doing something `string` based, guess what hint it's going to send in? It's going to send in `string`.
+
+Those are basically the only two hints. It can say, I would like it to be a `number`, I would like it to be a `string`, or I'm not going to tell you at all, so just give me whatever `primitive` you can.
+
+Another thing you need to understand about the algorithms within JavaScript is that they are inherently recursive, which means that they define something, for example to `ToPrimitive`. If the return result from `ToPrimitive` is not a `primitive`, if it's another `non-primitive`, like another object, then it's gonna get evoked again, and it's gonna keep getting invoked until we can get something that's an actual `primitive`, or in some cases get an error.
+
+> The Abstract Operation algorithms within JavaScript are inherently recursive.
+
+So `ToPrimitive`, the way it works, essentially, boiling down the algorithm, is that there are two methods that can be available on any `non-primitive` (any `object`, `function`, `array`, whatever...). There are these two functions, The `valueOf()` function and the `toString()` function. And this algorithm says, if you've told me that the hint is `number`, then I'm going to first try to invoke the `valueOf()`, if it's there, and see what it gives me. And if it gives me a `primitive`, then we're done. If it doesn't give me a `primitive`, or it doesn't exist, then we try the `toString()`. And we either get a `primitive`or not. And if we tried both of those (functions), and we don't get a `primitive`, generally that's gonna end up resulting in an error.
+
+
+That's if the hint was `number`. If the hint was `string`, they just reverse the order that they consult them in, but they still essentially consult both of them. So if the hint is `string`, we would ask for that that `non-primitives`, `toString()` method, and if it has it, use what it returns. And if it gives us legitimately a `primitive` like a `string`, which it should, then we'll just use that. And then we'll try to `valueOf()`.
+
+> The way the `ToPrimitive` abstract operation works, is with two methods that available on any `non-primitive`.
+>
+> * The `valueOf()` function
+> * The `toString()` function
+>
+> If we told this algorithm that the hint is `number`, it first invoke the `valueOf()`, if it gives us a `primitive`, then it's done, if it doesn't give us a `primitive`, then it invoke `toString()` to get `primitive`. and if it tried both of those functions, and don't get a `primitive`, then gonna end up resulting in an error.
+>
+> If the hint was `string`, it invoke `toString()` method on the `non-primitives`, if it gives us a `primitive` like a `string` (which it should) then we'll just use that. if it doesn't then it'll try `valueOf()`, and if we don't get a `primitive`, then we it's end up resulting in an error.
+
+> **Description:**
+>
+> JavaScript calls the `valueOf` method to convert an object to a primitive value. You rarely need to invoke the `valueOf` method yourself; JavaScript automatically invokes it when encountering an object where a primitive value is expected.
+>
+> By default, the `valueOf` method is inherited by every object descended from `Object`. Every built-in core object overrides this method to return an appropriate value. If an object has no primitive value, `valueOf` returns the object itself.
+>
+> You can use `valueOf` within your own code to convert a built-in object into a primitive value. When you create a custom object, you can override `Object.prototype.valueOf()` to call a custom method instead of the default `Object` method.
+>
+> [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf#Description)
+
+So just keep in mind, if we're gonna use something that is not a `primitive` in some place that definitely needs `primitives`, like math or concatenation. We should realize, it is going to end up coercing it through this `ToPrimitive` algorithm, and it's gonna end up either invoking the `valueOf()` or the `toString()`. 
+
+
+
+
+
