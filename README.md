@@ -138,13 +138,13 @@ A lot of people think, `undefined` means doesn't have a value yet. The most appr
 typeof doesNotExist;        // "undefined"
 
 var v = null;
-typeof v;                   // "object"   OOPS!
+typeof v;                   // "object"      OOPS!
 
 var v = function() {};
-typeof v;                   // "function"   hmmm?
+typeof v;                   // "function"    hmmm?
 
 var v = [1, 2, 3];
-typeof v;                   // "object"   hmmm?
+typeof v;                   // "object"      hmmm?
 
 // coming soon!
 var v = 42n;
@@ -305,7 +305,7 @@ And JavaScript shipped originally with a utility called `isNaN`, which when we p
 >
 > The `Number.isNaN()` method (ES6) tells us defiantly for sure  the passed value, is the `NaN` value or it's not.
 >
-> **NOTE:** This function differs from the global `isNaN` function in that it does not convert its argument to a Number before determining whether it is `NaN`.
+> **Note:** This function differs from the global `isNaN` function in that it does not convert its argument to a Number before determining whether it is `NaN`.
 
 So now we can answer that, what is `NaN`? Well, if we do a numeric operation and I get back a value what type am I expecting back from every single numeric operation? I'm expecting a number, right? And remember I said `NaN`s are part of the IEEE 754 spec which is a numeric representation specification.
 
@@ -327,7 +327,7 @@ Now, early days of JavaScript felt that JavaScript developers would never want a
 var trendRate = -0;
 trendRate === -0;             // true
 
-trendRate.toString();         // "0"   OOPS!
+trendRate.toString();         // "0"    OOPS!
 trendRate === 0;              // true   OOPS!
 trendRate < 0;                // false
 trendRate > 0;                // false
@@ -336,17 +336,17 @@ Object.is(trendRate, -0);     // true
 Object.is(trendRate, 0);      //false
 ```
 
-> **NOTE:** When we `toString()` the `-0` we got `0`.
+> **Note:** When we `toString()` the `-0` we got `0`.
 
-> **NOTE:** The triple equals operator ( === ) again lies to us, cuz it says the `-0` is equal to a `0`.
+> **Note:** The triple equals operator ( === ) again lies to us, cuz it says the `-0` is equal to a `0`.
 
-> **NOTE:** the `<` (less than sign) and the `>` (greater than sign) , also lie to us.
+> **Note:** the `<` (less than sign) and the `>` (greater than sign) , also lie to us.
 
 Until ES6 they added a utility called `Object.is()`, and it doesn't lie at all. So the best way to do this is to use this built-in checker and by the way, object.is can be used to check `NaN`s.
 
 > The `Object.is()` method (ES6) determines whether two values are the same value. And the best way to check if `-0` and `0` are the same or not.
 >
-> **NOTE:** The `Object.is()` also can be useful to check `NaN`s.
+> **Note:** The `Object.is()` also can be useful to check `NaN`s.
 
 ```JavaScript
 Math.sign(-3);         // -1
@@ -368,7 +368,7 @@ sign(0);               // 1
 
 > The `Math.sign()` function returns either a positive or negative +/- 1, indicating the sign of a number passed into the argument. 
 >
-> **NOTE:** If the number passed into Math.sign() is 0, it will return a +/- 0. Note that if the number is positive, an explicit (+) will not be returned.
+> **Note:** If the number passed into Math.sign() is 0, it will return a +/- 0. Note that if the number is positive, an explicit (+) will not be returned.
 >
 > **Syntax:** `Math.sign(x)`
 >
@@ -394,23 +394,23 @@ This is like the kind of bolted on object orientedness of JavaScript, the almost
 
 So these are the ones where you really should absolutely use the new keyword:
 
-> Usage of the `new` keyword:
->
-> * `Object()`
-> * `Array()`
-> * `Function()`
-> * `Date()`
-> * `RegExp()`
-> * `Error()`
+* Usage of the `new` keyword:
+
+    * `Object()`
+    * `Array()`
+    * `Function()`
+    * `Date()`
+    * `RegExp()`
+    * `Error()`
 
 If you need to construct an object of that fundamental type, then use `new Object()`, or `new Array()`, or `new Function()`. Probably the most useful one that would be use is `new Date()`.
 
 But there are other ones that are fundamental objects which could be used with new, but you should definitely not use them with `new` keyword:
 
-> Don't use with `new` keyword:
->
-> * `String()`
-> * `Number()`
-> * `Boolean()`
+* Don't use with `new` keyword:
+
+    * `String()`
+    * `Number()`
+    * `Boolean()`
 
 They can be used with `new` keyword to construct the objects of this form. You should absolutely never do that. You should use them only as functions, not as constructors. In coercion we can see the usefulness of them. But `String()`, `Number()`, and `Boolean()` when used as a function coerce any value to that respective primitive type. That is a far more useful utility of those than the fact that they can construct this weird Frankensteiny object. 
