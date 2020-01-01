@@ -531,7 +531,7 @@ Some examples of things and what they end up producing as a string representatio
         false   "false"
       3.14159   "3.14159"
             0   "0"
-           -0   "0"
+           -0   "0"   // *
 
 Abstract Operations: ToString
 ```
@@ -590,3 +590,89 @@ And it turns out you can actually override the string tag for any of your own cu
 > So that (capital O Object) `Object` is the default string tag for all default `objects`. And then the `toString` method takes that string tag and wraps this around it.
 
 If you override the `toString` method, you can completely control what you want the stringtification of your `object` to look like. In this case, we are making it turn, return just a string X.
+
+### ToNumber:
+
+The `ToNumber` is a bit more interesting cuz there's a lot more corner cases involved.
+
+> Anytime we need to do something numeric and we don't have a `number`, we're gonna invoke the `ToNumber` abstract operation.
+
+```JavaScript
+           ""   0   // The root of all evil in JavaScript. *
+          "0"   0
+         "-0"   -0
+      " 009 "   9
+    "3.14159"   3.14159
+         "0."   0
+         ".0"   0
+          "."   NaN
+       "Oxaf"   175
+
+Abstract Operations: ToNumber
+```
+
+```JavaScript
+        false   0
+         true   1
+         null   0   // *
+    undefined   NaN
+
+Abstract Operations: ToNumber
+```
+
+When we use `ToNumber` on a `non-primitive` (not a `string`, `undefined`, `boolean` or whatever), when we use it in an `object`, remember it invokes the `ToPrimitive` with the `number` hint. That consults first the valueOf, and then it consults the toString.
+
+> ### **ToNumber (object):**
+>
+> #### ToPrimitive (number)
+>
+> ##### aka: valueOf() / toString()
+>
+> Abstract Operations: ToNumber(Array/Object)
+
+So what does that look like?
+
+> ##### (for [] and {} by default):
+>
+> ### **valueOf() { return this; }**
+>
+> ### **--> toString()**
+>
+> Abstract Operations: ToNumber(Array/Object)
+
+> For any `array` or `object`, by default, meaning you have not overridden these, the `valueOf` method essentially just returns itself (does this, `return this`). Which has the affect of just ignoring the `valueOf` and deferring to `toString`.
+>
+> So it doesn’t even matter that the hint was number. It just goes directly to the toString.
+
+You can think of the numberification of an `object` as, essentially, the stringification of it. It's that it's gonna end up producing whatever `toString` or `valueOf` produces. That's a perplexing choice, but it's the choice nonetheless, is that it's gonna actually produce a `primitive` `string`.
+
+So then in your various operations where you were expecting a `primitive`, but you wanted a `primitive` `number`, there's actually a `primitive` `string` there. And then further coersions will kick in. So we're gonna end up deferring to the `toString` and whatever the `toString` returns.
+
+> So with `ToNumber` we're gonna end up deferring to the `ToString` and whatever the `ToString` returns.
+
+```JavaScript
+           [""]   0   // *
+          ["0"]   0
+         ["-0"]   -0
+         [null]   0   // *
+    [undefined]   0   // *
+      [1, 2, 3]   NaN
+       [[[[]]]]   0   // *
+
+Coercion: ToNumber(Array)
+```
+
+If the `array` has either `null` or `undefined`, it becomes 0. Because they first become empty `strings`, and then empty `string` becomes `0`. Remember, empty `string` is the root of all coercion evil.
+
+And if you have an object
+
+```JavaScript
+                      { .. }   NaN   // means {} or for example {x: 5}
+   { valueOf() { return 3;}}   3
+
+Coercion: ToNumber(Object)
+```
+
+And remember what a stringification of an `object` by default is, it's that `[object Object]` thing. Which is definitely not a representation of a number, so we get `NaN`. If you override the `valueOf` for some `object`, you can return whatever thing you want.
+
+> The stringification of `object` by default is `[object Object]`, Which is definitely not a representation of a `number`, so we get `NaN`.
