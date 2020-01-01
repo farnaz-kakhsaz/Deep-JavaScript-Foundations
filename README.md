@@ -421,8 +421,6 @@ They can be used with `new` keyword to construct the objects of this form. You s
 
 ## Abstract Operation:
 
-Earlier, we see `toNumber()`, actually that's an abstract operation.
-
 > **Abstract Operations**
 >
 > These operations are not a part of the ECMAScript language; they are defined here to solely to aid the specification of the semantics of the ECMAScript language. Other, more specialized `abstract operations` are defined throughout this specification.
@@ -676,3 +674,56 @@ Coercion: ToNumber(Object)
 And remember what a stringification of an `object` by default is, it's that `[object Object]` thing. Which is definitely not a representation of a number, so we get `NaN`. If you override the `valueOf` for some `object`, you can return whatever thing you want.
 
 > The stringification of `object` by default is `[object Object]`, Which is definitely not a representation of a `number`, so we get `NaN`.
+
+### ToBoolean:
+
+let's look at the `ToBoolean` abstract operation. And by the way, these four are what we're looking at, `toPrimitive`, `toString`, `toNumber`, and `toBoolean`. There are other abstract operations, but these are the major ones.
+
+> Anytime we have any value that is not a `Boolean`, and it's used in a place that needs a `Boolean`, this operation occurs. Exactly the same as the other ones.
+
+> The `ToBoolean` is less algorithmic and more lookup. So there's essentially a look up table.
+
+There's not really anything to do, other than to say, is the value, what we call `falsy`, or not, that's really the only question here.
+
+> If the value is one of these things (on look up table), return `false`. And otherwise just return `true`.
+
+So it defines a very specific and short limited list of what we call `falsy` values.
+
+> The values that will return `false` when coerced to a `Boolean`. These are the `falsy` values:
+>
+> - The empty `string`
+> - either of the 0 (0, -0)
+> - the `null`,
+> - the `NaN`
+> - the `false`
+> - the `undefined`
+
+> # &ensp; `Falsy` &emsp; &emsp; &emsp; `Truthy`
+>
+> &emsp; &emsp; &ensp; `""` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; "foo"
+>
+> &emsp; &emsp; `0`, `-0` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; 23
+>
+> &emsp; &emsp; `null` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; { a: 1 }
+>
+> &emsp; &ensp; &ensp; `NaN` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; [ 1, 3 ]
+>
+> &ensp; &ensp; &ensp; `false` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &nbsp; `true`
+>
+> &emsp; `undefined` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; function() {..}
+>
+> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; ... &emsp; &emsp; &emsp; &ensp; (this list is infinitely long)
+>
+> Abstract Operations: `ToBoolean`
+
+> If the value is not on that list, it is always truthy.
+
+What would happen if you try to `toBoolean` an empty `array`? So is the empty `array` on the `falsy` the list? No, so it returns `truthy`
+
+> The `ToBoolean`, it does not invoke the `toPrimitive` algorithm. Or the `toNumber`, or the `toString`, or anything, it just does a look up.
+
+> when we're doing `toBooleans`, there's no other coercion stuff happening. It's just a straight look up, is it there or is it not.
+>
+> We can't override it with a `valueOf` or `toString` or anything. It's just is it on the list or is it not.
+
+Essentially, memorize the falsy the list, and then always ask is the value on that list if so falsy, otherwise, it must be truthy.
