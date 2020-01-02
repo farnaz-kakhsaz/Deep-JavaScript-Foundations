@@ -727,3 +727,141 @@ What would happen if you try to `toBoolean` an empty `array`? So is the empty `a
 > We can't override it with a `valueOf` or `toString` or anything. It's just is it on the list or is it not.
 
 Essentially, memorize the falsy the list, and then always ask is the value on that list if so falsy, otherwise, it must be truthy.
+
+## Coercion
+
+> ### Converting Values:
+>
+> Converting a value from one type to another is often called `“type casting”`, when done `explicitly`, and `“coercion”` when done `implicitly` (forced by the rules of how a value is used).
+>
+>     It may not be obvious, but JavaScript coercions always result in one of the scalar primitive (see Chapter 2) values, like string, number, or boolean. There is no coercion that results in a complex value like object or function. Chapter 3 covers “boxing,” which wraps scalar primitive values in their object counterparts, but this is not really coercion in an accurate sense.
+>
+> Another way these terms are often distinguished is as follows: `“type casting”` (or `“type conversion”`) occurs in statically typed languages at compile time, while `“type coercion”` is a runtime conversion for dynamically typed languages.
+>
+> However, in JavaScript, most people refer to all these types of `conversions` as `coercion`, so the way I prefer to distinguish is to say `“implicit coercion”` versus `“explicit coercion”`.
+>
+> The difference should be obvious: `“explicit coercion”` is when it is obvious from looking at the code that a type conversion is intentionally occurring, whereas `“implicit coercion”` is when the type conversion will occur as a less obvious side effect of some other intentional operation.
+>
+> For example, consider these two approaches to `coercion`:
+>
+> ```JavaScript
+> var a = 42;
+> var b = a + "";        // implicit coercion
+> var c = String( a );   // explicit coercion
+> ```
+>
+> [You Don't Know JS: Types & Grammar](https://github.com/getify/You-Dont-Know-JS) ( CHAPTER 4: Coercion | Page 57 )
+
+Let's look at some examples where we're already doing coercion whether we realize it or not:
+
+```JavaScript
+// ES6 Template literals (Template strings)
+
+var numStudents = 16;
+
+console.log(
+  `There are ${numStrudents} students.`
+);
+// "There are 16 students."
+
+Coercion: number to string
+```
+
+> Overloaded operator: Defining or redefining how an operator (+, -, \*, /, etc.) acts.
+>
+> [Medium](https://medium.com/@julianknodt/javascript-operator-overloading-e1ebd2344b78)
+
+> In JavaScript the `+` operator is overloaded to serve the purposes of both `number` addition and `string` concatenation.
+>
+> [You Don't Know JS: Types & Grammar](https://github.com/getify/You-Dont-Know-JS) ( CHAPTER 4: Coercion | Page 88 )
+
+> The plus operator (`+`) is normally thought of, is doing numerical operation.
+>
+> But with plus operator (`+`) if either one of them is a `string`, the plus operator prefers `string` concatenation.
+>
+> Which means, if only one of them is a `string`, it's gonna call a `toString` abstract operation on it, and turn it in to a `string`.
+
+> We could throw a value into an array, just the one value into an array, and then call `.join` on it. And that actually ends up stringify it.
+>
+> ```JavaScript
+> console.log([16].join(""));
+> // "16"
+> ```
+>
+> Even though it does no `string` concatenation at all, `.join` first turns it into a `string`.
+
+Because we're dealing with web applications, which means grabbing things as `strings`:
+
+```JavaScript
+function addAStudent(numStudents) {
+  return numStudents + 1;
+}
+
+addAStudent(studentsInputElem.value);
+// "161"   OOPS!
+
+Coercion: string to number
+```
+
+> The plus operator (`+`) with `string` value (`+"6"` for example), invoke `toNumber` abstract operation.
+>
+> And if we add plus operator (`+`) to empty `string` value (+""), it end up to `0`.
+
+```JavaScript
+function addAStudent(numStudents) {
+  return numStudents + 1;
+}
+
+addAStudent( + studentsInputElem.value);
+// "17"
+
+Coercion: string to number
+```
+
+If we use the minus operator (`-`) that one is only defined for `numbers`.
+
+That it's not overloaded for `string`, it wouldn't make any sense to subtract one `string` from another.
+
+So that minus operator (`-`), is gonna invoke that `toNumber` abstract operation.
+
+```JavaScript
+function kickStudentOut(numStudents) {
+  return numStudents - 1;
+}
+
+kickStudentOut(studentsInputElem.value);
+// "15"
+
+Coercion: string to number
+```
+
+But what about `boolean`?
+
+```JavaScript
+if (studentsInputElem.value) {
+  numStudents = Number(studentsInputElem.value)
+}
+
+Coercion: __ to boolean
+```
+
+If `studentsInputElem.value` as an empty `string` that's gonna be `falsy`, But what if that `string` has just a bunch of white space, now it's gonna be `truthy`.
+It's not a valid `string` that you care about because it's got a bunch of white space in it but all of a sudden it's going to be `truthy`.
+
+```JavaScript
+while (newStudents.length) {
+  enrollStudent(newStudents.pop());
+}
+
+Coercion: __ to boolean
+```
+
+So if my length is zero then it becomes `false` and if my length is anything non zero then it becomes `true`. Because it's not one of the zeros. But what happens when it's `NaN` it becomes `false`.
+
+> The `Double NOT operator` or `Double negation` (`!!`) make things become a `boolean`.
+
+> If wanna be super explicit, we can use:
+>
+> - `String()`
+> - `Number()`
+> - `Boolean()`
