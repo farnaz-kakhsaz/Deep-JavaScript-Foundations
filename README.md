@@ -865,3 +865,26 @@ So if my length is zero then it becomes `false` and if my length is anything non
 > - `String()`
 > - `Number()`
 > - `Boolean()`
+
+## Boxing:
+
+> Because of `boxing` in JavaScript we are be able to access properties on `primitive` values.
+> For example access a length on a primitive `string` or some method on a primitive `number`.
+>
+> The `boxing` is a form of `implicit` coercion.
+> It's not called out in the same way in the `abstract operations`
+
+> This DOM elements value is always a `string`.
+
+It is saying you have this thing that is not an `object` and you're trying to use it as if it is an `object`. So JavaScript is gonna be helpful and go ahead and make it into an `object` for us.
+The only other option would be for the JavaScript to throw an exception that said you're trying to access a property on an `primitive` value.
+
+But fortunetly JavaScript `implicitly` coerces these `primitives` into their `object` counterpart so that we can access properties and methods on them.
+
+> Because of the `boxing` most of people think “everything in JavaScript is an `object`”.
+>
+> It turns out that things can behave as `objects`, but that doesn't make them an `object`
+
+> ### All programming languages have `type conversions`, because it's absolutly necessary.
+
+> Whether we call them `coercion` or we call them `conversion` every single language in existence that we've ever programmed in has to deal with `type conversions`.
