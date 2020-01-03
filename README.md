@@ -728,7 +728,7 @@ What would happen if you try to `toBoolean` an empty `array`? So is the empty `a
 
 Essentially, memorize the falsy the list, and then always ask is the value on that list if so falsy, otherwise, it must be truthy.
 
-## Coercion
+## Cases of Coercion
 
 > ### Converting Values:
 >
@@ -888,3 +888,81 @@ But fortunetly JavaScript `implicitly` coerces these `primitives` into their `ob
 > ### All programming languages have `type conversions`, because it's absolutly necessary.
 
 > Whether we call them `coercion` or we call them `conversion` every single language in existence that we've ever programmed in has to deal with `type conversions`.
+
+## Corner Cases
+
+> Because all languages have `type conversions`, that means all languages have `corner cases`, including JavaScript.
+
+Here's an example of some of these corner cases:
+
+```JavaScript
+Number("");                     //   0                    OOPS!
+Number("   \t\n");              //   0                    OOPS!
+Number(null);                   //   0                    OOPS!
+Number(undefined);              //   NaN
+Number([]);                     //   0                    OOPS!
+Number([1, 2, 3]);              //   NaN
+Number([null]);                 //   0                    OOPS!
+Number([undefined]);            //   0                    OOPS!
+Number({})                      //   NaN
+
+String(-0);                     //   "0"                  OOPS!
+String(null);                   //   "null"
+String(undefined);              //   "undefined"
+String([null]);                 //   ""                   OOPS!
+String([undefined]);            //   ""                   OOPS!
+
+Boolean(new Boolean(false));    //   true                 OOPS!
+
+
+Coercion: corner cases
+```
+
+The root of all (Coercion) Evil:
+
+```JavaScript
+studentsInput.value = "";
+
+// ..
+
+Number(studentsInput.value);            //   0
+
+studentsInput.value = "   \t\n";
+
+// ..
+
+Number(studentsInput.value);            //   0
+
+Coercion: corner cases
+```
+
+Not only does the empty `string` become zero, but any `string` that's full of white space also becomes zero.
+
+Because the `toNumber` operations first strips off all leading and trailing `whitespace` before doing it’s `coercion`. So all examples of white space strings of all forms, still all end up producing that same `zero`.
+
+There are also corner cases that are not as obvious:
+
+```JavaScript
+Number(true);              //   1
+Number(false);             //   0
+
+1 < 2;                     //   true
+2 < 3;                     //   true
+1 < 2 < 3;                 //   true      (but...)
+
+(1 < 2) < 3;
+(true) < 3;
+1 < 3;                    //    true      (hmm...)
+
+// *************************************
+
+3 > 2;                     //   true
+2 > 1;                     //   true
+3 > 2 > 1;                 //   false      OOPS!
+
+(3 > 2) > 1;               
+(true) > 1;                
+1 > 1;                     //   false
+
+Coercion: corner cases
+```
