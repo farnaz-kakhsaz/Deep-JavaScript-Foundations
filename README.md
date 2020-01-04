@@ -960,9 +960,24 @@ Number(false);             //   0
 2 > 1;                     //   true
 3 > 2 > 1;                 //   false      OOPS!
 
-(3 > 2) > 1;               
-(true) > 1;                
+(3 > 2) > 1;
+(true) > 1;
 1 > 1;                     //   false
 
 Coercion: corner cases
 ```
+
+___
+> JavaScript's dynamic typing is not a weakness, it's one of its strong qualities.
+>
+> The first truly `multi-paradigm` language and a big reason why it has been able to survive `multi-paradigm` is because of its `type` system.
+
+> For `code comments`: You should not have more reliance upon `code comments` than the code.
+>
+> Problem with `code comments`: People write the `How` in their `code comment` but what we want is to the `code comment` tell us, `Why`.
+
+> Implicit in JavaScript in not a magic or bad thing, but should think about implicitness as `abstraction`.
+>
+> In the `abstraction` we're hiding unnecessary details, because that re-focuses the reader on the important stuff.
+
+So some of the implicit nature of JavaScript's type system is sketchy, but some of it is quite useful. For example, the `boxing`.
