@@ -693,23 +693,16 @@ So it defines a very specific and short limited list of what we call `falsy` val
 > - the `false`
 > - the `undefined`
 
-> # &ensp; `Falsy` &emsp; &emsp; &emsp; `Truthy`
->
-> &emsp; &emsp; &ensp; `""` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; "foo"
->
-> &emsp; &emsp; `0`, `-0` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; 23
->
-> &emsp; &emsp; `null` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; { a: 1 }
->
-> &emsp; &ensp; &ensp; `NaN` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; [ 1, 3 ]
->
-> &ensp; &ensp; &ensp; `false` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &nbsp; `true`
->
-> &emsp; `undefined` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; function() {..}
->
-> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; ... &emsp; &emsp; &emsp; &ensp; (this list is infinitely long)
->
-> Abstract Operations: `ToBoolean`
+| Falsy                            | Truthy                             |
+| -------------------------------- | ---------------------------------- |
+| `""`                               | "foo"                              |
+| `0,-0`                             | 23                                 |
+| `null`                             |  { a: 1 }                             |
+| `NaN`                              | [1, 3]                             |
+| `false`                            | `true`                               |
+| `undefined`                       | function() {..}                    |
+|                                  | ... (this list is infinitely long) |
+| **Abstract Operations: ToBoolean** |                                    |
 
 > If the value is not on that list, it is always truthy.
 
@@ -1158,3 +1151,51 @@ This is summary of how `double equals` works:
 - If both of them are `null` or `undefined`, they are equal.
 - If there are `non-primitives` involved in the comparison, they are always gonna become `primitive` first.
 - And then once you have `primitives` prefer `toNumber`.
+
+## Double Equals Corner Cases
+
+How could something like an empty array somehow be coercively equal to the negation of itself?
+
+```JavaScript
+[] == ![];      // true WAT!?
+
+// let's explain how it works. With an example:
+
+var workshop1Students = [];
+var workshop2Students = [];
+
+1- if ( workshop1Students == !workshop2Students ) {
+  // Yep, WAT!?
+
+  // 1- if ( [] == ![] )
+  // The workshop2Students is an array which is truthy. So if we negate (!) it it becomes false.
+
+  // 2- if ( [] == false )
+  // Now, we have a non-primitive compared to a primitive. So we need to turn that non-primitive (array) into a primitive. So it becomes the empty string.
+
+  // 3- if ( "" == false )
+  // So now, We have two primitives but they are not of the same type. The algorithm prefers that they both become numbers.
+
+  // if ( 0 == 0 )
+  // if ( true )
+}
+
+
+2- if ( workshop1Students !== workshop2Students ) {
+  // Yep, WAT!?
+
+  // if ( !(workshop1Students == workshop2Students) )
+  // if ( !(false) )
+  // if ( true )
+}
+
+== Corner Cases: WAT!?
+```
+
+Compare the first one in your mind to the more appropriate comparison (the second one), which is to say, I want to check to see if they're not the same `array`.
+
+Those might look like the same thing (first one and second one), but these are entirely different approaches. One is saying I wanna see if it is coercively `equal` to its `negation` (`!`), and the other one is saying I wanna see if it is not coercively `equal`. Those are entirely different beasts.
+
+In the second one, since they're both `arrays`, then what we're effectively doing is asking an `identity` question. We're saying, are they not the same `identity`?
+
+And it would work `identically` if you use the `triple equals` version of them. It's a rational thing, and it has no difference in the rational case between double equals and triple equals.
