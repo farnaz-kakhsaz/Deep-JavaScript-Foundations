@@ -9,6 +9,7 @@
 1. [Introduction](#Introduction)
 2. [Types](#Types)
 3. [Coercion](#Coercion)
+4. [Equality](#Equality)
 
 ## Introduction
 
@@ -61,7 +62,7 @@ The reason behind why people say everything is an object, is because most of the
 
 Let's take a look at the JavaScript specification:
 
-> An ECMAScript language type corresponds to values that are directly manipulated by an ECMAScript programmer using the ECMAScript language. The ECMAScript language types are `Undefined`, `Null`, `Boolean`, `String`, `Symbol`, `Number`, and `Object`. An ECMAScript language value is a value that is characterized by an ECMAScript language type.
+> ![Untitled2](https://user-images.githubusercontent.com/37678729/71778735-c9916300-2fc6-11ea-9732-e453c03cf75b.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-ecmascript-language-types)
 
@@ -97,7 +98,7 @@ So let's refer to them as value types.
 >
 > [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
 
-> ECMAScript is object-based: basic language and host facilities are provided by objects, and an ECMAScript program is a cluster of communicating objects. In ECMAScript, an object is a collection of zero or more properties each with attributes that determine how each property can be used—for example, when the Writable attribute for a property is set to **false**, any attempt by executed ECMAScript code to assign a different value to the property fails. Properties are containers that hold other objects, primitive values, or functions. A primitive value is a member of one of the following built-in types: **Undefined**, **Null**, **Boolean**, **Number**, **String**, and **Symbol**; an object is a member of the built-in type **Object**; and a function is a callable object. A function that is associated with an object via a property is called a method.
+> ![Untitled3](https://user-images.githubusercontent.com/37678729/71778767-2b51cd00-2fc7-11ea-88d6-35eec3875d6f.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-ecmascript-overview)
 
@@ -421,13 +422,7 @@ They can be used with `new` keyword to construct the objects of this form. You s
 
 ## Abstract Operation:
 
-> **Abstract Operations**
->
-> These operations are not a part of the ECMAScript language; they are defined here to solely to aid the specification of the semantics of the ECMAScript language. Other, more specialized `abstract operations` are defined throughout this specification.
->
-> **_Type Conversion:_**
->
-> The ECMAScript language implicitly performs automatic type conversion as needed. To clarify the semantics of certain constructs it is useful to define a set of conversion `abstract operations`. The conversion `abstract operations` are polymorphic; they can accept a value of any ECMAScript language type. But no other specification types are used with these operations.
+> ![Untitled4](https://user-images.githubusercontent.com/37678729/71778794-8daacd80-2fc7-11ea-81fb-d072db0100ba.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-operations)
 
@@ -967,7 +962,8 @@ Number(false);             //   0
 Coercion: corner cases
 ```
 
-___
+---
+
 > JavaScript's dynamic typing is not a weakness, it's one of its strong qualities.
 >
 > The first truly `multi-paradigm` language and a big reason why it has been able to survive `multi-paradigm` is because of its `type` system.
@@ -981,3 +977,70 @@ ___
 > In the `abstraction` we're hiding unnecessary details, because that re-focuses the reader on the important stuff.
 
 So some of the implicit nature of JavaScript's type system is sketchy, but some of it is quite useful. For example, the `boxing`.
+
+# Equality
+
+> JavaScript provides three different value-comparison operations:
+>
+> - `===` - `Strict Equality` Comparison ("`strict equality`", "`identity`", "`triple equals`")
+> - `==` - `Abstract Equality` Comparison ("`loose equality`", "`double equals`")
+> - `Object.is` provides SameValue (new in `ES2015`).
+>
+> Which operation you choose depends on what sort of comparison you are looking to perform. Briefly:
+>
+> - `double equals` (`==`) will perform a `type conversion` when comparing two things, and will handle `NaN`, `-0`, and `+0` specially to conform to [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) (so `NaN != NaN`, and `-0 == +0`);
+>
+> - `triple equals` (`===`) will do the same comparison as `double equals` (including the special handling for `NaN`, `-0`, and `+0`) but without `type conversion`; if the types differ, `false` is returned.
+>
+> - `Object.is` does no type conversion and no special handling for NaN, -0, and +0 (giving it the same behavior as `===` except on those special numeric values).
+>
+> Note that the distinction between these all have to do with their handling of `primitives`; none of them compares whether the parameters are conceptually similar in structure. For any `non-primitive` objects `x` and `y` which have the same structure but are distinct objects themselves, all of the above forms will evaluate to `false`.
+>
+> [MDN](Equality_comparisons_and_sameness)
+
+> ![Untitled](https://user-images.githubusercontent.com/37678729/71779325-2262fa80-2fcb-11ea-835d-debd2bccb90f.png)
+>
+> [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-relational-comparison)
+
+> The `double equals` and the `triple equals` both checked the types, it's just that one does something different with that information than the other one.
+
+The `triple equals` is also checking the types, and if they're not the same, it's `false`. It doesn't matter what the values are, if the types are different, it doesn't do anything else. It sorta short-circuits and says, if the types are different there's no possible way that they could be equal.
+
+> Essentially the real difference between `strict equality` and `loose equality` is whether or not we're going to to allow any coercion to occur.
+
+> If the types are the same in `Strict Equality` (`===`), it's going to, return `false` if they're `NaNs`, because remember it's supposed to lie about `NaNs`. And it's gonna return `true` if there's a `-0` because it's supposed to lie about `-0`. But it only does the lies if the types already match.
+
+Otherwise, it says `false` and it didn't check anything at all. They both check the types one of them stops early and one of them doesn't. Or said a different way, the difference is whether we allow `coercion`.
+
+We have two `objects`:
+
+```JavaScript
+var workshop1 = {
+  name: "Deep JS Foundations"
+};
+
+var workshop2 = {
+  name: "Deep JS Foundations"
+};
+
+if (workshop1 == workshop2) {
+  // Nope
+}
+
+if (workshop1 === workshop2) {
+  // Nope
+}
+
+Equality: identity, not structure
+```
+
+We have two `objects`, they have the same structure and ostensibly and the same value. But they are not the same object.
+
+The JavaScript doesn't do like a deep assertion check that the structure of one object is exactly the same as a structure of another object.
+
+> The Equality comparisons in JavaScript does `identity comparison` not `structure comparison`.
+
+If workshop1 and workshop 2 pointed at literally the same `object reference` then their `identity` would be the same and you'd get `true`.
+So neither `==` nor `===` is gonna return a `true` because they are different objects.
+
+> The `==` is going to allow `coercion` when the types were different. And the `===` is going to disallow `coercion` when the types are the same.
