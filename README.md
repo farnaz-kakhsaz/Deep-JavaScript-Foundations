@@ -639,7 +639,7 @@ So what does that look like?
 
 You can think of the numberification of an `object` as, essentially, the stringification of it. It's that it's gonna end up producing whatever `toString` or `valueOf` produces. That's a perplexing choice, but it's the choice nonetheless, is that it's gonna actually produce a `primitive` `string`.
 
-So then in your various operations where you were expecting a `primitive`, but you wanted a `primitive` `number`, there's actually a `primitive` `string` there. And then further coersions will kick in. So we're gonna end up deferring to the `toString` and whatever the `toString` returns.
+So then in your various operations where you were expecting a `primitive`, but you wanted a `primitive` `number`, there's actually a `primitive` `string` there. And then further coercions will kick in. So we're gonna end up deferring to the `toString` and whatever the `toString` returns.
 
 > So with `ToNumber` we're gonna end up deferring to the `ToString` and whatever the `ToString` returns.
 
@@ -980,6 +980,8 @@ So some of the implicit nature of JavaScript's type system is sketchy, but some 
 
 # Equality
 
+## Double & Triple Equals:
+
 > JavaScript provides three different value-comparison operations:
 >
 > - `===` - `Strict Equality` Comparison ("`strict equality`", "`identity`", "`triple equals`")
@@ -1043,4 +1045,37 @@ The JavaScript doesn't do like a deep assertion check that the structure of one 
 If workshop1 and workshop 2 pointed at literally the same `object reference` then their `identity` would be the same and you'd get `true`.
 So neither `==` nor `===` is gonna return a `true` because they are different objects.
 
-> The `==` is going to allow `coercion` when the types were different. And the `===` is going to disallow `coercion` when the types are the same.
+> The `==` is going to allow `coercion` when the `types` were different. And the `===` is going to disallow `coercion` when the `types` are the same.
+
+## Coercive Equality:
+
+> In the `double equals` if the `types` are `null` or `undefined` on either side, then return `true`.
+>
+> The `null` value and the `undefined` value are `coercively` equal to each other and to no other values in the language.
+>
+> So we have the option of treating `null` and `undefined` as indistinguishable (or pretend that they're interchangeable) through coercive equality.
+
+Here is a example that it is better to treating `null` and `undefined` as indistinguishable:
+
+```JavaScript
+var workshop1 = { topic: null };
+var workshop2 {};
+
+if (
+  (workshop1.topic === null || workshop1.topic === undefined) &&
+  (workshop2.topic === null || workshop2.topic === undefined) &&
+) {
+  // ..
+}
+
+if (
+  workshop1.topic == null &&
+  workshop2.topic == null
+) {
+  // ..
+}
+```
+
+The reader has not gaining anything readability-wise by being `explicit` between two empty values.
+
+The second one (`double equals`) says, whether they are `null` or `undefined`, tell us if they're empty or not. Tell us if they're one of those two empty values. And by the way, we just picked the shorter of the two cuz it's less to type.
