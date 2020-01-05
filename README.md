@@ -1117,9 +1117,33 @@ So the abstraction of the `double equals` is helpful there.
 > But if they are both `strings`, that means they are both of the same `type` (literally `identical`), it does the `triple equals` (`===`).
 >
 > The `double equals` is going to allow `coercion` when the `types` are different.
-> 
+>
 > If we're in a scenario where the `types` are not different, where the types are the same, then it's not ever going to invoke `coercion`, ever.
 
 > if you use a `double equals` with something that's not already a `primitive`, We invoke the `toPrimitive` abstract operation.
 
 The `double equals` only compares `primitives`. If we use it with something that's not a `primitive`, it turn it into a `primitive`. The only time it does something useful with `non-primitives` is when they're the exact same type and then it just does the same value `triple equals` comparison. Otherwise it invokes `toPrimitive` abstract operation.
+
+This is a example where `coercion` is a very bad thing for us:
+
+```JavaScript
+var workshop1Count = 42;
+var workshop2Count = [42];
+
+// 1- if (workshop1Count == workshop2Count)
+// Because workshop2Count is non-primitive, algorithm invokes toPrimitive on it. (because of that weird array stringification that doesn’t include the brackets. And only accidentally working because there is only one value in the array.)
+
+// 2- if (42 == "4")
+// Now we have two different types, we have a number and a string. There's two options here. We could either make the number into a string and compare the strings, or make the string into a number and compare the numbers. The algorithm prefers numeric comparison. So the string becomes the number.
+
+// 3- if (42 === 42)
+// Because the types are now the same, it does a `triple equals` comparison.
+
+if (true) {
+  // Yep (hmm...)
+}
+
+Coercive Equality: only primitives
+```
+
+> We should never use `double equals` to compares a `primitive` with `non-primitive` value.
