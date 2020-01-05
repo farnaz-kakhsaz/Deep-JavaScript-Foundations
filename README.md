@@ -863,11 +863,11 @@ So if my length is zero then it becomes `false` and if my length is anything non
 
 ## Boxing:
 
-> Because of `boxing` in JavaScript we are be able to access properties on `primitive` values.
+> Because of `boxing` in JavaScript, we are able to access properties on `primitive` values.
 > For example access a length on a primitive `string` or some method on a primitive `number`.
 >
 > The `boxing` is a form of `implicit` coercion.
-> It's not called out in the same way in the `abstract operations`
+> It's not called out in the same way in the `abstract operations`.
 
 > This DOM elements value is always a `string`.
 
@@ -1074,8 +1074,52 @@ if (
 ) {
   // ..
 }
+
+Coercive Equality: null == undefined
 ```
 
 The reader has not gaining anything readability-wise by being `explicit` between two empty values.
 
 The second one (`double equals`) says, whether they are `null` or `undefined`, tell us if they're empty or not. Tell us if they're one of those two empty values. And by the way, we just picked the shorter of the two cuz it's less to type.
+
+## Double Equals Algorithm
+
+If we're not talking about `nulls` and `undefines`, but we're talking about `strings`, `numbers` and `booleans`:
+
+> For `strings`, `numbers` and `booleans` primitive values, the `Abstract Equality` (`double equals`) prefers to do numeric comparison (`toNumber`).
+
+> The [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-relational-comparison) says if one of them is `number`, but the other one is `string`, then call `toNumber` on the `string`, so it can do a numeric comparison.
+>
+> If one of them's `boolean`, then do a `toNumber` on it, and make the comparison.
+
+> The `double equals` prefers numeric comparison.
+
+Here is a example of `string` and `number`:
+
+```JavaScript
+var workshopEnrollment1 = 16;
+var workshopEnrollment2 = workshop2Elem.value;
+
+if (Number(workshopEnrollment1) === Number(workshopEnrollment2)) {
+  // ..
+}
+
+// Ask: what do we know about the types here?
+if (workshopEnrollment1 == workshopEnrollment2) {
+  // ..
+}
+
+Coercive Equality: perfers numeric comparison
+```
+
+So the abstraction of the `double equals` is helpful there.
+
+> But if they are both `strings`, that means they are both of the same `type` (literally `identical`), it does the `triple equals` (`===`).
+>
+> The `double equals` is going to allow `coercion` when the `types` are different.
+> 
+> If we're in a scenario where the `types` are not different, where the types are the same, then it's not ever going to invoke `coercion`, ever.
+
+> if you use a `double equals` with something that's not already a `primitive`, We invoke the `toPrimitive` abstract operation.
+
+The `double equals` only compares `primitives`. If we use it with something that's not a `primitive`, it turn it into a `primitive`. The only time it does something useful with `non-primitives` is when they're the exact same type and then it just does the same value `triple equals` comparison. Otherwise it invokes `toPrimitive` abstract operation.
