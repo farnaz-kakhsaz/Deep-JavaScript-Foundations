@@ -1004,6 +1004,8 @@ So some of the implicit nature of JavaScript's type system is sketchy, but some 
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-relational-comparison)
 
+> This is not exactly the case:~~~The difference between `double equals` and `triple equals` is that `double equals` checks the value so called `loose equality` and `triple equals` checks the `value` and the `type` so called `strict equality`.~~~
+>
 > The `double equals` and the `triple equals` both checked the types, it's just that one does something different with that information than the other one.
 
 The `triple equals` is also checking the types, and if they're not the same, it's `false`. It doesn't matter what the values are, if the types are different, it doesn't do anything else. It sorta short-circuits and says, if the types are different there's no possible way that they could be equal.
@@ -1147,3 +1149,12 @@ Coercive Equality: only primitives
 ```
 
 > We should never use `double equals` to compares a `primitive` with `non-primitive` value.
+
+### Summary:
+
+This is summary of how `double equals` works:
+
+- If the types are the same it's just gonna use `triple equals` (`===`).
+- If both of them are `null` or `undefined`, they are equal.
+- If there are `non-primitives` involved in the comparison, they are always gonna become `primitive` first.
+- And then once you have `primitives` prefer `toNumber`.
