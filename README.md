@@ -1,7 +1,7 @@
 # Deep JavaScript Foundations
 
 > **Note:** I collected some important and deep JavaScript foundations.
-> Most of this information comes from Kyle Simpson's books (You Don't Know JS series), MDN (Mozilla Developer Network) or courses that I took.
+> Most of this information comes from Kyle Simpson's books ( [You Don't Know JS](https://github.com/getify/You-Dont-Know-JS) series ), [ECMAScript](https://www.ecma-international.org/), [MDN](https://developer.mozilla.org/en-US/) (Mozilla Developer Network) or courses that I took.
 > It would help to have a deeper understanding of JavaScript.
 
 ## Table of Contents
@@ -693,15 +693,15 @@ So it defines a very specific and short limited list of what we call `falsy` val
 > - the `false`
 > - the `undefined`
 
-| Falsy                            | Truthy                             |
-| -------------------------------- | ---------------------------------- |
+| Falsy                              | Truthy                             |
+| ---------------------------------- | ---------------------------------- |
 | `""`                               | "foo"                              |
 | `0,-0`                             | 23                                 |
-| `null`                             |  { a: 1 }                             |
+| `null`                             | { a: 1 }                           |
 | `NaN`                              | [1, 3]                             |
-| `false`                            | `true`                               |
-| `undefined`                       | function() {..}                    |
-|                                  | ... (this list is infinitely long) |
+| `false`                            | `true`                             |
+| `undefined`                        | function() {..}                    |
+|                                    | ... (this list is infinitely long) |
 | **Abstract Operations: ToBoolean** |                                    |
 
 > If the value is not on that list, it is always truthy.
@@ -1115,7 +1115,7 @@ So the abstraction of the `double equals` is helpful there.
 >
 > If we're in a scenario where the `types` are not different, where the types are the same, then it's not ever going to invoke `coercion`, ever.
 
-> if you use a `double equals` with something that's not already a `primitive`, We invoke the `toPrimitive` abstract operation.
+> if we use a `double equals` with something that's not already a `primitive`, We invoke the `toPrimitive` abstract operation.
 
 The `double equals` only compares `primitives`. If we use it with something that's not a `primitive`, it turn it into a `primitive`. The only time it does something useful with `non-primitives` is when they're the exact same type and then it just does the same value `triple equals` comparison. Otherwise it invokes `toPrimitive` abstract operation.
 
@@ -1164,29 +1164,29 @@ How could something like an empty array somehow be coercively equal to the negat
 var workshop1Students = [];
 var workshop2Students = [];
 
-1- if ( workshop1Students == !workshop2Students ) {
+1- if (workshop1Students == !workshop2Students) {
   // Yep, WAT!?
 
-  // 1- if ( [] == ![] )
+  // 1- if ([] == ![])
   // The workshop2Students is an array which is truthy. So if we negate (!) it it becomes false.
 
-  // 2- if ( [] == false )
+  // 2- if ([] == false)
   // Now, we have a non-primitive compared to a primitive. So we need to turn that non-primitive (array) into a primitive. So it becomes the empty string.
 
-  // 3- if ( "" == false )
+  // 3- if ("" == false)
   // So now, We have two primitives but they are not of the same type. The algorithm prefers that they both become numbers.
 
-  // if ( 0 == 0 )
-  // if ( true )
+  // if (0 === 0)
+  // if (true)
 }
 
 
-2- if ( workshop1Students !== workshop2Students ) {
+2- if (workshop1Students !== workshop2Students) {
   // Yep, WAT!?
 
-  // if ( !(workshop1Students == workshop2Students) )
-  // if ( !(false) )
-  // if ( true )
+  // if (!(workshop1Students == workshop2Students))
+  // if (!(false))
+  // if (true)
 }
 
 == Corner Cases: WAT!?
@@ -1198,4 +1198,54 @@ Those might look like the same thing (first one and second one), but these are e
 
 In the second one, since they're both `arrays`, then what we're effectively doing is asking an `identity` question. We're saying, are they not the same `identity`?
 
-And it would work `identically` if you use the `triple equals` version of them. It's a rational thing, and it has no difference in the rational case between double equals and triple equals.
+And it would work `identically` if we use the `triple equals` version of them. It's a rational thing, and it has no difference in the rational case between double equals and triple equals.
+
+### Corner Cases Booleans:
+
+This is another example one of those corner cases that we shouldn't do:
+
+```JavaScript
+var workshopStudents = [];
+
+1- if (workshopStudents) {
+  // Yep
+
+  // if (Boolean(workshopStudents))
+  // if (true)
+}
+
+2- if (workshopStudents == true) {
+  // Nope :(
+
+  // if ([] == true)
+  // We have a non-primitive which need to became primitive, so it becomes empty string.
+
+  // if ("" == true)
+  // We have an empty string and a true. These are not the same type, so they need to both become numbers.
+
+  // if (0 === 1)
+  // One of them becomes 0, (which should have been NaN), the other one becomes 1.
+
+  // if (false)
+}
+
+3- if (workshopStudents == false) {
+  // Yep :(
+
+  // if ("" == false)
+  // if (0 === 0)
+  // if (true)
+== Corner Cases: booleans
+}
+```
+
+If we wanna check and we want to allow the `boolean` coercion of an `array` to be `true`. In other words, we wanna say its `truthy` sort of construct.
+There's one way of doing it (the first statement), which is just to do an if statement. Allow the if statement to invoke the `toBoolean` operation on the `array`, which in this case, is a lookup that says the `array` is not on the table, so, therefore, it's `true`. That's a perfectly rational implicit `toBoolean` coercion.
+
+But if we try to get more clever and tricky with it and say, well, if it's `truthy`, then maybe what we want to do is do a `double equals` with `true`. Well, now all of a sudden it doesn't work. And by the way, it wouldn't work with `triple equals` either. There's no case where second and third statement are better. And there's a bunch of cases where they are worse, like these one.
+
+So `implicit` is sometimes much better than `explicit`.
+
+> Don't ever do a `double equals`, (or even in that case, `triple equals`) with `true` or a `double equals` with `false`.
+>
+> We don't need to `double equals` to `true`, or `double equals` to `false`, we should allow the `toBoolean` to happen `implicitly`. 
