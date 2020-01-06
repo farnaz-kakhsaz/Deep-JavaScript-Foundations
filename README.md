@@ -1257,3 +1257,18 @@ How to avoid corner cases with the `double equals`:
 - Avoid the `double equals` when either side of them can be a `0`, or an `empty string`, or even one of those `strings` with only `whitespace` in it.
 - Don't use it with `non-primitives`. Only use it for coercion among the `primitives`.
 - Definitely don't use `double equals` to `true` or `double equals` to `false`. Essentially, just allow the `ToBoolean` to happen. And if we really can't allow that, if it really has to exactly `true` or exactly `false`, which sometimes it does, then use `triple equals`.
+
+---
+
+### The Case for Double Equals:
+
+If we <u>know</u> the `type(s)` in a comparison:
+
+- Whether the `types` match or not, `==` is the more sensible choice when we know the `types`.
+
+If we <u>don't know</u> the `type(s)` in a comparison:
+
+- If we can't or won't, use a style where we can know and have obvious `types`, the only thing that is sensible and reasonable is for us to use the `===`.
+
+Making our `types` known and obvious just leads to better code. Knowing the `types` leads to better code and if the `types` are known, `==` is always best.
+In every scenario `==` is best when the `types` are known and in any scenario where you can't you should fall back to `===`.
