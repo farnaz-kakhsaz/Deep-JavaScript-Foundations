@@ -926,7 +926,7 @@ Coercion: corner cases
 
 Not only does the empty `string` become zero, but any `string` that's full of white space also becomes zero.
 
-Because the `toNumber` operations first strips off all leading and trailing `whitespace` before doing it’s `coercion`. So all examples of white space strings of all forms, still all end up producing that same `zero`.
+Because the `toNumber` operations first strips off all leading and trailing `whitespace` before doing it’s `coercion`. So all examples of `whitespace` strings of all forms, still all end up producing that same `zero`.
 
 There are also corner cases that are not as obvious:
 
