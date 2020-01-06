@@ -1150,7 +1150,7 @@ This is summary of how `double equals` works:
 - If the types are the same it's just gonna use `triple equals` (`===`).
 - If both of them are `null` or `undefined`, they are equal.
 - If there are `non-primitives` involved in the comparison, they are always gonna become `primitive` first.
-- And then once you have `primitives` prefer `toNumber`.
+- And then once we have `primitives`, prefer `toNumber`.
 
 ## Double Equals Corner Cases
 
@@ -1248,4 +1248,12 @@ So `implicit` is sometimes much better than `explicit`.
 
 > Don't ever do a `double equals`, (or even in that case, `triple equals`) with `true` or a `double equals` with `false`.
 >
-> We don't need to `double equals` to `true`, or `double equals` to `false`, we should allow the `toBoolean` to happen `implicitly`. 
+> We don't need to `double equals` to `true`, or `double equals` to `false`, we should allow the `toBoolean` to happen `implicitly`.
+
+Summary:
+
+How to avoid corner cases with the `double equals`:
+
+- Avoid the `double equals` when either side of them can be a `0`, or an `empty string`, or even one of those `strings` with only `whitespace` in it.
+- Don't use it with `non-primitives`. Only use it for coercion among the `primitives`.
+- Definitely don't use `double equals` to `true` or `double equals` to `false`. Essentially, just allow the `ToBoolean` to happen. And if we really can't allow that, if it really has to exactly `true` or exactly `false`, which sometimes it does, then use `triple equals`.
