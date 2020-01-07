@@ -1365,7 +1365,7 @@ But nevertheless, it's able to do some very useful guarantees if the problems th
 
 ## Validating Operand Types
 
-In this particular case, `TypeSript` (or `Flow`) saying we can't subtract a `string` from a `number`:
+In this particular case, `TypeSript/Flow` saying we can't subtract a `string` from a `number`:
 
 ```JavaScript
 var studentName: string = "Frank";
@@ -1377,10 +1377,19 @@ var studentCount: number = 16 - studentName;
 Type-Aware Linting: validating operand types
 ```
 
-Because that particular preference is saying don't allow that `coercion`, and in this particular case, that would be a really useful help for us. 
+Because that particular preference is saying don't allow that `coercion`, and in this particular case, that would be a really useful help for us.
 
- An undervalued part of what they do, Is that they are actually allowing us to check the operations that we're doing where most of our business logic is, and making sure that those operations are valid. 
+An undervalued part of what they do, Is that they are actually allowing us to check the operations that we're doing where most of our business logic is, and making sure that those operations are valid.
 
- > It would be nice if `TypeScript` would have some mechanism by which we could allow some more `coercion` to occur.
+> It would be nice if `TypeScript` would have some mechanism by which we could allow some more `coercion` to occur.
 
- Because there are plenty of places, where we'd like to be able to do `coercion` and other places we'd like to avoid it. It appears that `TypeScript` is kind of all or nothing. We opt into it or we don't opt into it.
+Because there are plenty of places, where we'd like to be able to do `coercion` and other places we'd like to avoid it. It appears that `TypeScript` is kind of all or nothing. We opt into it or we don't opt into it.
+
+## Static Typing Pros and Cons
+
+### Pros:
+
+- They make types more obvious in code.
+- Familiarty: they look like other language's type systems.
+- Extremely popular these days.
+- They're <u>very</u> sophisticated and good at what they do.
