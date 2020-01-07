@@ -1353,6 +1353,7 @@ var firstStudentName: string = getName(firstStudent);
 
 Type-Aware Linting: custom types & signatures
 ```
+
 Here we're defining that an `object` of a `type` that has a property called `name` that is of type `string`, that is a `type`. And then we can pass values of that `type` as parameters. And we can receive values back as parameters. So here we are passing in `studentRec` of the type `student`. we're defining our own `type`. this program doesn't have any errors.
 
 But most of the guarantee here is are things being assigned correctly.
@@ -1361,3 +1362,25 @@ A parameter to a `function` is a lot like a `variable`. If we're saying we wanna
 Where I to uses something like `TypeScript` I probably would define many more of my parameters as say union `types`. Or I would say, you know what, I'm gonna allow `strings`, `numbers`, and `nulls`. Because it's rare that I want it to be so restrictive that it can only ever receive exactly this kind of structured `object` for example.
 
 But nevertheless, it's able to do some very useful guarantees if the problems that you have are misassignments of types.
+
+## Validating Operand Types
+
+In this particular case, `TypeSript` (or `Flow`) saying we can't subtract a `string` from a `number`:
+
+```JavaScript
+var studentName: string = "Frank";
+
+var studentCount: number = 16 - studentName;
+// error: can't substract string
+
+
+Type-Aware Linting: validating operand types
+```
+
+Because that particular preference is saying don't allow that `coercion`, and in this particular case, that would be a really useful help for us. 
+
+ An undervalued part of what they do, Is that they are actually allowing us to check the operations that we're doing where most of our business logic is, and making sure that those operations are valid. 
+
+ > It would be nice if `TypeScript` would have some mechanism by which we could allow some more `coercion` to occur.
+
+ Because there are plenty of places, where we'd like to be able to do `coercion` and other places we'd like to avoid it. It appears that `TypeScript` is kind of all or nothing. We opt into it or we don't opt into it.
