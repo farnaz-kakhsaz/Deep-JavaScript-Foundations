@@ -1290,7 +1290,7 @@ let's look at what `TypeScript` and `Flow` can do for us.
 **Caveats of TypeScript & Flow:**
 
 1. Inferencing is best-guess, not a guarantee.
-2. The annotations are optional. (Which means the developers on our team, if they don't put an annotation on a variable, TypeScript will default to the any type unless we have that turned off. And then we're not getting any benefit out of it.)
+2. The annotations are optional. (Which means the developers on our team, if they don't put an annotation on a variable, `TypeScript` will default to the any type unless we have that turned off. And then we're not getting any benefit out of it.)
 3. Any part of the application that isn't typed, introduces uncertainty.
 
 ## Inferencing:
@@ -1393,3 +1393,12 @@ Because there are plenty of places, where we'd like to be able to do `coercion` 
 - Familiarty: they look like other language's type systems.
 - Extremely popular these days.
 - They're <u>very</u> sophisticated and good at what they do.
+
+### Cons:
+
+- They use "non-JS-standard" syntax (or code comments) (they chose to use a syntax that they had to layer on top of `JavaScript`.)
+- They require\* a build process, which raises the barrier to entry.
+- Their sophistication can be intimidating to those without prior formal types experience.
+- They focus more on "static types" (variables, parameters, returns, properties, etc) than <u>value types</u>.
+
+These tools came out with a way that we can do their typing annotations using only code comments. So at least in that scenario, we haven't locked ourself into if we don't use this tool this code literally can't run. That's sort of an escape valve, and that's a good thing, but almost nobody's using the code comments. Everybody's using the inline syntax annotations.
