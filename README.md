@@ -1,7 +1,7 @@
 # Deep JavaScript Foundations
 
 > **Note:** I collected some important and deep JavaScript foundations.
-> Most of this information comes from Kyle Simpson's books (You Don't Know JS series), MDN (Mozilla Developer Network) or courses that I took.
+> Most of this information comes from Kyle Simpson's books ( [You Don't Know JS](https://github.com/getify/You-Dont-Know-JS) series ), [ECMAScript](https://www.ecma-international.org/), [MDN](https://developer.mozilla.org/en-US/) (Mozilla Developer Network) or courses that I took.
 > It would help to have a deeper understanding of JavaScript.
 
 ## Table of Contents
@@ -9,6 +9,7 @@
 1. [Introduction](#Introduction)
 2. [Types](#Types)
 3. [Coercion](#Coercion)
+4. [Equality](#Equality)
 
 ## Introduction
 
@@ -61,7 +62,7 @@ The reason behind why people say everything is an object, is because most of the
 
 Let's take a look at the JavaScript specification:
 
-> An ECMAScript language type corresponds to values that are directly manipulated by an ECMAScript programmer using the ECMAScript language. The ECMAScript language types are `Undefined`, `Null`, `Boolean`, `String`, `Symbol`, `Number`, and `Object`. An ECMAScript language value is a value that is characterized by an ECMAScript language type.
+> ![Untitled2](https://user-images.githubusercontent.com/37678729/71778735-c9916300-2fc6-11ea-9732-e453c03cf75b.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-ecmascript-language-types)
 
@@ -97,7 +98,7 @@ So let's refer to them as value types.
 >
 > [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
 
-> ECMAScript is object-based: basic language and host facilities are provided by objects, and an ECMAScript program is a cluster of communicating objects. In ECMAScript, an object is a collection of zero or more properties each with attributes that determine how each property can be used—for example, when the Writable attribute for a property is set to **false**, any attempt by executed ECMAScript code to assign a different value to the property fails. Properties are containers that hold other objects, primitive values, or functions. A primitive value is a member of one of the following built-in types: **Undefined**, **Null**, **Boolean**, **Number**, **String**, and **Symbol**; an object is a member of the built-in type **Object**; and a function is a callable object. A function that is associated with an object via a property is called a method.
+> ![Untitled3](https://user-images.githubusercontent.com/37678729/71778767-2b51cd00-2fc7-11ea-88d6-35eec3875d6f.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-ecmascript-overview)
 
@@ -421,13 +422,7 @@ They can be used with `new` keyword to construct the objects of this form. You s
 
 ## Abstract Operation:
 
-> **Abstract Operations**
->
-> These operations are not a part of the ECMAScript language; they are defined here to solely to aid the specification of the semantics of the ECMAScript language. Other, more specialized `abstract operations` are defined throughout this specification.
->
-> **_Type Conversion:_**
->
-> The ECMAScript language implicitly performs automatic type conversion as needed. To clarify the semantics of certain constructs it is useful to define a set of conversion `abstract operations`. The conversion `abstract operations` are polymorphic; they can accept a value of any ECMAScript language type. But no other specification types are used with these operations.
+> ![Untitled4](https://user-images.githubusercontent.com/37678729/71778794-8daacd80-2fc7-11ea-81fb-d072db0100ba.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-operations)
 
@@ -644,7 +639,7 @@ So what does that look like?
 
 You can think of the numberification of an `object` as, essentially, the stringification of it. It's that it's gonna end up producing whatever `toString` or `valueOf` produces. That's a perplexing choice, but it's the choice nonetheless, is that it's gonna actually produce a `primitive` `string`.
 
-So then in your various operations where you were expecting a `primitive`, but you wanted a `primitive` `number`, there's actually a `primitive` `string` there. And then further coersions will kick in. So we're gonna end up deferring to the `toString` and whatever the `toString` returns.
+So then in your various operations where you were expecting a `primitive`, but you wanted a `primitive` `number`, there's actually a `primitive` `string` there. And then further coercions will kick in. So we're gonna end up deferring to the `toString` and whatever the `toString` returns.
 
 > So with `ToNumber` we're gonna end up deferring to the `ToString` and whatever the `ToString` returns.
 
@@ -698,23 +693,16 @@ So it defines a very specific and short limited list of what we call `falsy` val
 > - the `false`
 > - the `undefined`
 
-> # &ensp; `Falsy` &emsp; &emsp; &emsp; `Truthy`
->
-> &emsp; &emsp; &ensp; `""` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; "foo"
->
-> &emsp; &emsp; `0`, `-0` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; 23
->
-> &emsp; &emsp; `null` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; { a: 1 }
->
-> &emsp; &ensp; &ensp; `NaN` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &ensp; [ 1, 3 ]
->
-> &ensp; &ensp; &ensp; `false` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &nbsp; `true`
->
-> &emsp; `undefined` &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; function() {..}
->
-> &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; &emsp; ... &emsp; &emsp; &emsp; &ensp; (this list is infinitely long)
->
-> Abstract Operations: `ToBoolean`
+| Falsy                              | Truthy                             |
+| ---------------------------------- | ---------------------------------- |
+| `""`                               | "foo"                              |
+| `0,-0`                             | 23                                 |
+| `null`                             | { a: 1 }                           |
+| `NaN`                              | [1, 3]                             |
+| `false`                            | `true`                             |
+| `undefined`                        | function() {..}                    |
+|                                    | ... (this list is infinitely long) |
+| **Abstract Operations: ToBoolean** |                                    |
 
 > If the value is not on that list, it is always truthy.
 
@@ -868,11 +856,11 @@ So if my length is zero then it becomes `false` and if my length is anything non
 
 ## Boxing:
 
-> Because of `boxing` in JavaScript we are be able to access properties on `primitive` values.
+> Because of `boxing` in JavaScript, we are able to access properties on `primitive` values.
 > For example access a length on a primitive `string` or some method on a primitive `number`.
 >
 > The `boxing` is a form of `implicit` coercion.
-> It's not called out in the same way in the `abstract operations`
+> It's not called out in the same way in the `abstract operations`.
 
 > This DOM elements value is always a `string`.
 
@@ -938,7 +926,7 @@ Coercion: corner cases
 
 Not only does the empty `string` become zero, but any `string` that's full of white space also becomes zero.
 
-Because the `toNumber` operations first strips off all leading and trailing `whitespace` before doing it’s `coercion`. So all examples of white space strings of all forms, still all end up producing that same `zero`.
+Because the `toNumber` operations first strips off all leading and trailing `whitespace` before doing it’s `coercion`. So all examples of `whitespace` strings of all forms, still all end up producing that same `zero`.
 
 There are also corner cases that are not as obvious:
 
@@ -967,7 +955,8 @@ Number(false);             //   0
 Coercion: corner cases
 ```
 
-___
+---
+
 > JavaScript's dynamic typing is not a weakness, it's one of its strong qualities.
 >
 > The first truly `multi-paradigm` language and a big reason why it has been able to survive `multi-paradigm` is because of its `type` system.
@@ -981,3 +970,305 @@ ___
 > In the `abstraction` we're hiding unnecessary details, because that re-focuses the reader on the important stuff.
 
 So some of the implicit nature of JavaScript's type system is sketchy, but some of it is quite useful. For example, the `boxing`.
+
+# Equality
+
+## Double & Triple Equals:
+
+> JavaScript provides three different value-comparison operations:
+>
+> - `===` - `Strict Equality` Comparison ("`strict equality`", "`identity`", "`triple equals`")
+> - `==` - `Abstract Equality` Comparison ("`loose equality`", "`double equals`")
+> - `Object.is` provides SameValue (new in `ES2015`).
+>
+> Which operation you choose depends on what sort of comparison you are looking to perform. Briefly:
+>
+> - `double equals` (`==`) will perform a `type conversion` when comparing two things, and will handle `NaN`, `-0`, and `+0` specially to conform to [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) (so `NaN != NaN`, and `-0 == +0`);
+>
+> - `triple equals` (`===`) will do the same comparison as `double equals` (including the special handling for `NaN`, `-0`, and `+0`) but without `type conversion`; if the types differ, `false` is returned.
+>
+> - `Object.is` does no type conversion and no special handling for NaN, -0, and +0 (giving it the same behavior as `===` except on those special numeric values).
+>
+> Note that the distinction between these all have to do with their handling of `primitives`; none of them compares whether the parameters are conceptually similar in structure. For any `non-primitive` objects `x` and `y` which have the same structure but are distinct objects themselves, all of the above forms will evaluate to `false`.
+>
+> [MDN](Equality_comparisons_and_sameness)
+
+> ![Untitled](https://user-images.githubusercontent.com/37678729/71779325-2262fa80-2fcb-11ea-835d-debd2bccb90f.png)
+>
+> [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-relational-comparison)
+
+> This is not exactly the case:~~~The difference between `double equals` and `triple equals` is that `double equals` checks the value so called `loose equality` and `triple equals` checks the `value` and the `type` so called `strict equality`.~~~
+>
+> The `double equals` and the `triple equals` both checked the types, it's just that one does something different with that information than the other one.
+
+The `triple equals` is also checking the types, and if they're not the same, it's `false`. It doesn't matter what the values are, if the types are different, it doesn't do anything else. It sorta short-circuits and says, if the types are different there's no possible way that they could be equal.
+
+> Essentially the real difference between `strict equality` and `loose equality` is whether or not we're going to to allow any coercion to occur.
+
+> If the types are the same in `Strict Equality` (`===`), it's going to, return `false` if they're `NaNs`, because remember it's supposed to lie about `NaNs`. And it's gonna return `true` if there's a `-0` because it's supposed to lie about `-0`. But it only does the lies if the types already match.
+
+Otherwise, it says `false` and it didn't check anything at all. They both check the types one of them stops early and one of them doesn't. Or said a different way, the difference is whether we allow `coercion`.
+
+We have two `objects`:
+
+```JavaScript
+var workshop1 = {
+  name: "Deep JS Foundations"
+};
+
+var workshop2 = {
+  name: "Deep JS Foundations"
+};
+
+if (workshop1 == workshop2) {
+  // Nope
+}
+
+if (workshop1 === workshop2) {
+  // Nope
+}
+
+Equality: identity, not structure
+```
+
+We have two `objects`, they have the same structure and ostensibly and the same value. But they are not the same object.
+
+The JavaScript doesn't do like a deep assertion check that the structure of one object is exactly the same as a structure of another object.
+
+> The Equality comparisons in JavaScript does `identity comparison` not `structure comparison`.
+
+If workshop1 and workshop 2 pointed at literally the same `object reference` then their `identity` would be the same and you'd get `true`.
+So neither `==` nor `===` is gonna return a `true` because they are different objects.
+
+> The `==` is going to allow `coercion` when the `types` were different. And the `===` is going to disallow `coercion` when the `types` are the same.
+
+## Coercive Equality:
+
+> In the `double equals` if the `types` are `null` or `undefined` on either side, then return `true`.
+>
+> The `null` value and the `undefined` value are `coercively` equal to each other and to no other values in the language.
+>
+> So we have the option of treating `null` and `undefined` as indistinguishable (or pretend that they're interchangeable) through coercive equality.
+
+Here is a example that it is better to treating `null` and `undefined` as indistinguishable:
+
+```JavaScript
+var workshop1 = { topic: null };
+var workshop2 {};
+
+if (
+  (workshop1.topic === null || workshop1.topic === undefined) &&
+  (workshop2.topic === null || workshop2.topic === undefined) &&
+) {
+  // ..
+}
+
+if (
+  workshop1.topic == null &&
+  workshop2.topic == null
+) {
+  // ..
+}
+
+Coercive Equality: null == undefined
+```
+
+The reader has not gaining anything readability-wise by being `explicit` between two empty values.
+
+The second one (`double equals`) says, whether they are `null` or `undefined`, tell us if they're empty or not. Tell us if they're one of those two empty values. And by the way, we just picked the shorter of the two cuz it's less to type.
+
+## Double Equals Algorithm
+
+If we're not talking about `nulls` and `undefines`, but we're talking about `strings`, `numbers` and `booleans`:
+
+> For `strings`, `numbers` and `booleans` primitive values, the `Abstract Equality` (`double equals`) prefers to do numeric comparison (`toNumber`).
+
+> The [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-relational-comparison) says if one of them is `number`, but the other one is `string`, then call `toNumber` on the `string`, so it can do a numeric comparison.
+>
+> If one of them's `boolean`, then do a `toNumber` on it, and make the comparison.
+
+> The `double equals` prefers numeric comparison.
+
+Here is a example of `string` and `number`:
+
+```JavaScript
+var workshopEnrollment1 = 16;
+var workshopEnrollment2 = workshop2Elem.value;
+
+if (Number(workshopEnrollment1) === Number(workshopEnrollment2)) {
+  // ..
+}
+
+// Ask: what do we know about the types here?
+if (workshopEnrollment1 == workshopEnrollment2) {
+  // ..
+}
+
+Coercive Equality: perfers numeric comparison
+```
+
+So the abstraction of the `double equals` is helpful there.
+
+> But if they are both `strings`, that means they are both of the same `type` (literally `identical`), it does the `triple equals` (`===`).
+>
+> The `double equals` is going to allow `coercion` when the `types` are different.
+>
+> If we're in a scenario where the `types` are not different, where the types are the same, then it's not ever going to invoke `coercion`, ever.
+
+> if we use a `double equals` with something that's not already a `primitive`, We invoke the `toPrimitive` abstract operation.
+
+The `double equals` only compares `primitives`. If we use it with something that's not a `primitive`, it turn it into a `primitive`. The only time it does something useful with `non-primitives` is when they're the exact same type and then it just does the same value `triple equals` comparison. Otherwise it invokes `toPrimitive` abstract operation.
+
+This is a example where `coercion` is a very bad thing for us:
+
+```JavaScript
+var workshop1Count = 42;
+var workshop2Count = [42];
+
+// 1- if (workshop1Count == workshop2Count)
+// Because workshop2Count is non-primitive, algorithm invokes toPrimitive on it. (because of that weird array stringification that doesn’t include the brackets. And only accidentally working because there is only one value in the array.)
+
+// 2- if (42 == "4")
+// Now we have two different types, we have a number and a string. There's two options here. We could either make the number into a string and compare the strings, or make the string into a number and compare the numbers. The algorithm prefers numeric comparison. So the string becomes the number.
+
+// 3- if (42 === 42)
+// Because the types are now the same, it does a `triple equals` comparison.
+
+if (true) {
+  // Yep (hmm...)
+}
+
+Coercive Equality: only primitives
+```
+
+> We should never use `double equals` to compares a `primitive` with `non-primitive` value.
+
+### Summary:
+
+This is summary of how `double equals` works:
+
+- If the types are the same it's just gonna use `triple equals` (`===`).
+- If both of them are `null` or `undefined`, they are equal.
+- If there are `non-primitives` involved in the comparison, they are always gonna become `primitive` first.
+- And then once we have `primitives`, prefer `toNumber`.
+
+## Double Equals Corner Cases
+
+How could something like an empty array somehow be coercively equal to the negation of itself?
+
+```JavaScript
+[] == ![];      // true WAT!?
+
+// let's explain how it works. With an example:
+
+var workshop1Students = [];
+var workshop2Students = [];
+
+1- if (workshop1Students == !workshop2Students) {
+  // Yep, WAT!?
+
+  // 1- if ([] == ![])
+  // The workshop2Students is an array which is truthy. So if we negate (!) it it becomes false.
+
+  // 2- if ([] == false)
+  // Now, we have a non-primitive compared to a primitive. So we need to turn that non-primitive (array) into a primitive. So it becomes the empty string.
+
+  // 3- if ("" == false)
+  // So now, We have two primitives but they are not of the same type. The algorithm prefers that they both become numbers.
+
+  // if (0 === 0)
+  // if (true)
+}
+
+
+2- if (workshop1Students !== workshop2Students) {
+  // Yep, WAT!?
+
+  // if (!(workshop1Students == workshop2Students))
+  // if (!(false))
+  // if (true)
+}
+
+== Corner Cases: WAT!?
+```
+
+Compare the first one in your mind to the more appropriate comparison (the second one), which is to say, I want to check to see if they're not the same `array`.
+
+Those might look like the same thing (first one and second one), but these are entirely different approaches. One is saying I wanna see if it is coercively `equal` to its `negation` (`!`), and the other one is saying I wanna see if it is not coercively `equal`. Those are entirely different beasts.
+
+In the second one, since they're both `arrays`, then what we're effectively doing is asking an `identity` question. We're saying, are they not the same `identity`?
+
+And it would work `identically` if we use the `triple equals` version of them. It's a rational thing, and it has no difference in the rational case between double equals and triple equals.
+
+### Corner Cases Booleans:
+
+This is another example one of those corner cases that we shouldn't do:
+
+```JavaScript
+var workshopStudents = [];
+
+1- if (workshopStudents) {
+  // Yep
+
+  // if (Boolean(workshopStudents))
+  // if (true)
+}
+
+2- if (workshopStudents == true) {
+  // Nope :(
+
+  // if ([] == true)
+  // We have a non-primitive which need to became primitive, so it becomes empty string.
+
+  // if ("" == true)
+  // We have an empty string and a true. These are not the same type, so they need to both become numbers.
+
+  // if (0 === 1)
+  // One of them becomes 0, (which should have been NaN), the other one becomes 1.
+
+  // if (false)
+}
+
+3- if (workshopStudents == false) {
+  // Yep :(
+
+  // if ("" == false)
+  // if (0 === 0)
+  // if (true)
+== Corner Cases: booleans
+}
+```
+
+If we wanna check and we want to allow the `boolean` coercion of an `array` to be `true`. In other words, we wanna say its `truthy` sort of construct.
+There's one way of doing it (the first statement), which is just to do an if statement. Allow the if statement to invoke the `toBoolean` operation on the `array`, which in this case, is a lookup that says the `array` is not on the table, so, therefore, it's `true`. That's a perfectly rational implicit `toBoolean` coercion.
+
+But if we try to get more clever and tricky with it and say, well, if it's `truthy`, then maybe what we want to do is do a `double equals` with `true`. Well, now all of a sudden it doesn't work. And by the way, it wouldn't work with `triple equals` either. There's no case where second and third statement are better. And there's a bunch of cases where they are worse, like these one.
+
+So `implicit` is sometimes much better than `explicit`.
+
+> Don't ever do a `double equals`, (or even in that case, `triple equals`) with `true` or a `double equals` with `false`.
+>
+> We don't need to `double equals` to `true`, or `double equals` to `false`, we should allow the `toBoolean` to happen `implicitly`.
+
+Summary:
+
+How to avoid corner cases with the `double equals`:
+
+- Avoid the `double equals` when either side of them can be a `0`, or an `empty string`, or even one of those `strings` with only `whitespace` in it.
+- Don't use it with `non-primitives`. Only use it for coercion among the `primitives`.
+- Definitely don't use `double equals` to `true` or `double equals` to `false`. Essentially, just allow the `ToBoolean` to happen. And if we really can't allow that, if it really has to exactly `true` or exactly `false`, which sometimes it does, then use `triple equals`.
+
+---
+
+### The Case for Double Equals:
+
+If we <u>know</u> the `type(s)` in a comparison:
+
+- Whether the `types` match or not, `==` is the more sensible choice when we know the `types`.
+
+If we <u>don't know</u> the `type(s)` in a comparison:
+
+- If we can't or won't, use a style where we can know and have obvious `types`, the only thing that is sensible and reasonable is for us to use the `===`.
+
+Making our `types` known and obvious just leads to better code. Knowing the `types` leads to better code and if the `types` are known, `==` is always best.
+In every scenario `==` is best when the `types` are known and in any scenario where you can't you should fall back to `===`.
