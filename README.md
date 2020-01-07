@@ -10,6 +10,7 @@
 2. [Types](#Types)
 3. [Coercion](#Coercion)
 4. [Equality](#Equality)
+5. [Static Typing](#Static Typing)
 
 ## Introduction
 
@@ -1272,3 +1273,142 @@ If we <u>don't know</u> the `type(s)` in a comparison:
 
 Making our `types` known and obvious just leads to better code. Knowing the `types` leads to better code and if the `types` are known, `==` is always best.
 In every scenario `==` is best when the `types` are known and in any scenario where you can't you should fall back to `===`.
+
+# Static Typing
+
+## Typecript & Flow:
+
+let's look at what `TypeScript` and `Flow` can do for us.
+
+**Benefits of Typecript & Flow:**
+
+1. Catch type-related mistakes.
+2. Communicate type intent. (because the typing is in the code.
+   And it's gonna make our code more obvious.)
+3. Provide IDE feedback. (maybe one of the biggest things is it get us an amazing amount of feedback through the tooling ecosystem that can show up live directly in our IDE.)
+
+**Caveats of TypeScript & Flow:**
+
+1. Inferencing is best-guess, not a guarantee.
+2. The annotations are optional. (Which means the developers on our team, if they don't put an annotation on a variable, `TypeScript` will default to the any type unless we have that turned off. And then we're not getting any benefit out of it.)
+3. Any part of the application that isn't typed, introduces uncertainty.
+
+## Inferencing:
+
+So some examples of `TypeScript` and `Flow`, and these examples are actually identical between the two:
+
+```JavaScript
+var teacher = "Kyle";
+
+// ..
+
+teacher = { name: "Kyle"};
+// Error: can't assin object to string
+
+
+Type-Awarw Linting: inferencing
+```
+
+> `Type inference` refers to the automatic detection of the `data type` of an expression in a programming language.
+>
+> [Wikipedia](https://en.wikipedia.org/wiki/Type_inference)
+
+If we don't do any typing at all, both `TypeScript` and `Flow` by default will do some inferencing.
+
+So here they're doing a `static types inference`, which means my intent (that they're guessing), is that we want `teacher` (the variable), to only ever hold `strings`. And when we later try to assign it something `non-string`, it throws us an error, and says, you're doing an assignment that you shouldn't do. That's their best guess.
+
+But that's what we refer to as `static types`, inferring that the variable has a `type` based upon the value that goes into it. JavaScript `variables` don't have `types`, but we're layering on this extra requirement.
+
+So that's when we don't annotate the `types`, but of course we can annotate the `types`:
+
+```JavaScript
+var teacher: string = "Kyle";
+
+// ..
+
+teacher = { name: "Kyle"};
+// Error: can't assin object to string
+
+
+Type-Awarw Linting: annotating
+```
+
+We can say `teacher` is definitely a `string`. We're gonna get basically the same error, but here we're not guessing at the error. We're literally saying we intended for this thing to only ever hold `strings`, and now we're trying to put something `non-string` to it. In both cases `TypeScript` and `Flow` are gonna throw us an error and say, you're assigning something you shouldn't have.
+
+## Custon Types:
+
+We can define custom types like this:
+
+```JavaScript
+type student = { name: string };
+
+function getName(studentRec: student): string {
+  return studentRec.name;
+}
+
+var firstStudent: student = { name: "Farank"};
+
+var firstStudentName: string = getName(firstStudent);
+
+
+Type-Aware Linting: custom types & signatures
+```
+
+Here we're defining that an `object` of a `type` that has a property called `name` that is of type `string`, that is a `type`. And then we can pass values of that `type` as parameters. And we can receive values back as parameters. So here we are passing in `studentRec` of the type `student`. we're defining our own `type`. this program doesn't have any errors.
+
+But most of the guarantee here is are things being assigned correctly.
+A parameter to a `function` is a lot like a `variable`. If we're saying we wanna only be able to pass in `numbers`, then we're basically saying the same thing as we want this `variable` to only hold `numbers`.
+
+Where I to uses something like `TypeScript` I probably would define many more of my parameters as say union `types`. Or I would say, you know what, I'm gonna allow `strings`, `numbers`, and `nulls`. Because it's rare that I want it to be so restrictive that it can only ever receive exactly this kind of structured `object` for example.
+
+But nevertheless, it's able to do some very useful guarantees if the problems that you have are misassignments of types.
+
+## Validating Operand Types
+
+In this particular case, `TypeSript/Flow` saying we can't subtract a `string` from a `number`:
+
+```JavaScript
+var studentName: string = "Frank";
+
+var studentCount: number = 16 - studentName;
+// error: can't substract string
+
+
+Type-Aware Linting: validating operand types
+```
+
+Because that particular preference is saying don't allow that `coercion`, and in this particular case, that would be a really useful help for us.
+
+An undervalued part of what they do, Is that they are actually allowing us to check the operations that we're doing where most of our business logic is, and making sure that those operations are valid.
+
+> It would be nice if `TypeScript` would have some mechanism by which we could allow some more `coercion` to occur.
+
+Because there are plenty of places, where we'd like to be able to do `coercion` and other places we'd like to avoid it. It appears that `TypeScript` is kind of all or nothing. We opt into it or we don't opt into it.
+
+## Static Typing Pros and Cons
+
+### Pros:
+
+- They make types more obvious in code.
+- Familiarty: they look like other language's type systems.
+- Extremely popular these days.
+- They're <u>very</u> sophisticated and good at what they do.
+
+### Cons:
+
+- They use "non-JS-standard" syntax (or code comments) (they chose to use a syntax that they had to layer on top of `JavaScript`.)
+- They require\* a build process, which raises the barrier to entry.
+- Their sophistication can be intimidating to those without prior formal types experience.
+- They focus more on "static types" (variables, parameters, returns, properties, etc) than <u>value types</u>.
+
+These tools came out with a way that we can do their typing annotations using only code comments. So at least in that scenario, we haven't locked ourself into if we don't use this tool this code literally can't run. That's sort of an escape valve, and that's a good thing, but almost nobody's using the code comments. Everybody's using the inline syntax annotations.
+
+---
+
+**Summary:**
+
+- `JavaScript` has a (`dynamic`) `type` system, which uses various forms of `coercion` for `value type` `conversion`, including `equality comparisons`.
+
+- We simply cannot write quality `JS` programs without knowing the `types` involved in your operations.
+
+- ...
