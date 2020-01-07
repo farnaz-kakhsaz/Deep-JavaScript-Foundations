@@ -1277,6 +1277,7 @@ In every scenario `==` is best when the `types` are known and in any scenario wh
 # Static Typing
 
 ## Typecript & Flow:
+
 let's look at what `TypeScript` and `Flow` can do for us.
 
 **Benefits of Typecript & Flow:**
@@ -1333,3 +1334,30 @@ Type-Awarw Linting: annotating
 ```
 
 We can say `teacher` is definitely a `string`. We're gonna get basically the same error, but here we're not guessing at the error. We're literally saying we intended for this thing to only ever hold `strings`, and now we're trying to put something `non-string` to it. In both cases `TypeScript` and `Flow` are gonna throw us an error and say, you're assigning something you shouldn't have.
+
+## Custon Types:
+
+We can define custom types like this:
+
+```JavaScript
+type student = { name: string };
+
+function getName(studentRec: student): string {
+  return studentRec.name;
+}
+
+var firstStudent: student = { name: "Farank"};
+
+var firstStudentName: string = getName(firstStudent);
+
+
+Type-Aware Linting: custom types & signatures
+```
+Here we're defining that an `object` of a `type` that has a property called `name` that is of type `string`, that is a `type`. And then we can pass values of that `type` as parameters. And we can receive values back as parameters. So here we are passing in `studentRec` of the type `student`. we're defining our own `type`. this program doesn't have any errors.
+
+But most of the guarantee here is are things being assigned correctly.
+A parameter to a `function` is a lot like a `variable`. If we're saying we wanna only be able to pass in `numbers`, then we're basically saying the same thing as we want this `variable` to only hold `numbers`.
+
+Where I to uses something like `TypeScript` I probably would define many more of my parameters as say union `types`. Or I would say, you know what, I'm gonna allow `strings`, `numbers`, and `nulls`. Because it's rare that I want it to be so restrictive that it can only ever receive exactly this kind of structured `object` for example.
+
+But nevertheless, it's able to do some very useful guarantees if the problems that you have are misassignments of types.
