@@ -1402,3 +1402,13 @@ Because there are plenty of places, where we'd like to be able to do `coercion` 
 - They focus more on "static types" (variables, parameters, returns, properties, etc) than <u>value types</u>.
 
 These tools came out with a way that we can do their typing annotations using only code comments. So at least in that scenario, we haven't locked ourself into if we don't use this tool this code literally can't run. That's sort of an escape valve, and that's a good thing, but almost nobody's using the code comments. Everybody's using the inline syntax annotations.
+
+---
+
+**Summary:**
+
+- `JavaScript` has a (`dynamic`) `type` system, which uses various forms of `coercion` for `value type` `conversion`, including `equality comparisons`.
+
+- We simply cannot write quality `JS` programs without knowing the `types` involved in your operations.
+
+- ...
