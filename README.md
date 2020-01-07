@@ -10,6 +10,7 @@
 2. [Types](#Types)
 3. [Coercion](#Coercion)
 4. [Equality](#Equality)
+5. [Static Typing](#Static Typing)
 
 ## Introduction
 
@@ -1272,3 +1273,22 @@ If we <u>don't know</u> the `type(s)` in a comparison:
 
 Making our `types` known and obvious just leads to better code. Knowing the `types` leads to better code and if the `types` are known, `==` is always best.
 In every scenario `==` is best when the `types` are known and in any scenario where you can't you should fall back to `===`.
+
+# Static Typing
+
+let's look at what `TypeScript` and `Flow` can do for us.
+
+**Benefits of Typecript & Flow:**
+
+1. Catch type-related mistakes.
+2. Communicate type intent. (because the typing is in the code.
+   And it's gonna make our code more obvious.)
+3. Provide IDE feedback. (maybe one of the biggest things is it get us an amazing amount of feedback through the tooling ecosystem that can show up live directly in our IDE.)
+
+**Caveats of TypeScript & Flow:**
+
+1. Inferencing is best-guess, not a guarantee.
+
+2. The annotations are optional. (Which means the developers on our team, if they don't put an annotation on a variable, TypeScript will default to the any type unless we have that turned off. And then we're not getting any benefit out of it.)
+
+3. Any part of the application that isn't typed, introduces uncertainty.
