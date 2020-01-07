@@ -1276,6 +1276,7 @@ In every scenario `==` is best when the `types` are known and in any scenario wh
 
 # Static Typing
 
+## Typecript & Flow:
 let's look at what `TypeScript` and `Flow` can do for us.
 
 **Benefits of Typecript & Flow:**
@@ -1288,7 +1289,47 @@ let's look at what `TypeScript` and `Flow` can do for us.
 **Caveats of TypeScript & Flow:**
 
 1. Inferencing is best-guess, not a guarantee.
-
 2. The annotations are optional. (Which means the developers on our team, if they don't put an annotation on a variable, TypeScript will default to the any type unless we have that turned off. And then we're not getting any benefit out of it.)
-
 3. Any part of the application that isn't typed, introduces uncertainty.
+
+## Inferencing:
+
+So some examples of `TypeScript` and `Flow`, and these examples are actually identical between the two:
+
+```JavaScript
+var teacher = "Kyle";
+
+// ..
+
+teacher = { name: "Kyle"};
+// Error: can't assin object to string
+
+
+Type-Awarw Linting: inferencing
+```
+
+> `Type inference` refers to the automatic detection of the `data type` of an expression in a programming language.
+>
+> [Wikipedia](https://en.wikipedia.org/wiki/Type_inference)
+
+If we don't do any typing at all, both `TypeScript` and `Flow` by default will do some inferencing.
+
+So here they're doing a `static types inference`, which means my intent (that they're guessing), is that we want `teacher` (the variable), to only ever hold `strings`. And when we later try to assign it something `non-string`, it throws us an error, and says, you're doing an assignment that you shouldn't do. That's their best guess.
+
+But that's what we refer to as `static types`, inferring that the variable has a `type` based upon the value that goes into it. JavaScript `variables` don't have `types`, but we're layering on this extra requirement.
+
+So that's when we don't annotate the `types`, but of course we can annotate the `types`:
+
+```JavaScript
+var teacher: string = "Kyle";
+
+// ..
+
+teacher = { name: "Kyle"};
+// Error: can't assin object to string
+
+
+Type-Awarw Linting: annotating
+```
+
+We can say `teacher` is definitely a `string`. We're gonna get basically the same error, but here we're not guessing at the error. We're literally saying we intended for this thing to only ever hold `strings`, and now we're trying to put something `non-string` to it. In both cases `TypeScript` and `Flow` are gonna throw us an error and say, you're assigning something you shouldn't have.
