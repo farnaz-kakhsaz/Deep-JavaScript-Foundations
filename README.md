@@ -1397,7 +1397,7 @@ Because there are plenty of places, where we'd like to be able to do `coercion` 
 
 ### Cons:
 
-- They use "non-JS-standard" syntax (or code comments) (they chose to use a syntax that they had to layer on top of `JavaScript`.)
+- They use "non-JS-standard" syntax (or code comments) (they chose to use a syntax that they had to layer on top of JavaScript.)
 - They require\* a build process, which raises the barrier to entry.
 - Their sophistication can be intimidating to those without prior formal types experience.
 - They focus more on "static types" (variables, parameters, returns, properties, etc) than <u>value types</u>.
@@ -1408,7 +1408,7 @@ These tools came out with a way that we can do their typing annotations using on
 
 **Summary:**
 
-- `JavaScript` has a (`dynamic`) `type` system, which uses various forms of `coercion` for `value type` `conversion`, including `equality comparisons`.
+- JavaScript has a (`dynamic`) `type` system, which uses various forms of `coercion` for `value type` `conversion`, including `equality comparisons`.
 
 - We simply cannot write quality `JS` programs without knowing the `types` involved in our operations.
 
@@ -1427,23 +1427,48 @@ console.log(y);
 
 Here you see an `x` that's being assigned to, or a `y` that's being a value retrieved from.
 
-All `variables` are in one of those two roles in your program:
+> **Identifiers and Reserved Words**
+>
+> An `identifier` is simply a name. In JavaScript, `identifiers` are used to name `variables` and `functions` and to provide labels for certain loops in JavaScript code. A JavaScript `identifier` must begin with a `letter`, an `underscore` (`_`), or a `dollar sign` (`$`). Subsequent characters can be `letters`, `digits`, `underscores`, or `dollar signs`. (`Digits` are not allowed as the first character so that JavaScript can easily distinguish `identifiers` from `numbers`.) These are all legal `identifiers`:
+>
+> ```JavaScript
+>   i
+>   my_variable_name
+>   v13
+>   2.4 Identifiers and Reserved Words | 23
+>   Core JavaScript
+>   _dummy
+>   $str
+> ```
+>
+> For portability and ease of editing, it is common to use only `ASCII letters` and `digits` in `identifiers`. Note, however, that JavaScript allows `identifiers` to contain `letters` and `digits` from the entire `Unicode` character set. (Technically, the `ECMAScript` standard also allows `Unicode` characters from the obscure categories Mn, Mc, and Pc to appear in `identifiers` after the first character.) This allows programmers to use variable names from non-English languages and also to use `mathematical` symbols:
+>
+> ```JavaScript
+>   var sí = true;
+>   var π = 3.14;
+> ```
+>
+> Like any language, JavaScript reserves certain `identifiers` for use by the language itself. These `“reserved words”` cannot be used as regular `identifiers`.
+>
+> [JavaScript: The Definitive Guide](https://www.oreilly.com/library/view/javascript-the-definitive/9781449393854/) ( Page 23 | 2.4 Identifiers and Reserved Words )
+
+All `variables` are in one of those two roles in our program:
 
 1. Receiving the assignment of some `value`
 2. We are retrieving a `value` from the `variable`.
 
-When the `scope` is being processed by the `JavaScript` engine, it's essentially asking two question, when it see this `variable`:
+When the `scope` is being processed by the JavaScript engine, it's essentially asking two question, when it see this `variable`:
 
 1. What position is it in?
-2. What scope does it belong to?
+2. What `scope` does it belong to?
 
-In other words, this is basically like a game of matching marbles to their color-coded buckets. If you think about the way a `JavaScript` engine processes the code, it's going to find a `variable` and it's gonna say, hmm, this is a green marble so it goes in the green bucket. And this is a red marble, so it goes into the red bucket. So it's fundamentally a game of sorting colored marbles.
+In other words, this is basically like a game of matching marbles to their color-coded buckets. If you think about the way a JavaScript engine processes the code, it's going to find a `variable` and it's gonna say, hmm, this is a green marble so it goes in the green bucket. And this is a red marble, so it goes into the red bucket. So it's fundamentally a game of sorting colored marbles.
 
-But this processing that we're talking about is an actual step within `JavaScript`. It's not simply inlined with the `execution`. It's extremely common for people to think about `JavaScript` as running top down, line by line, executing.
+But this processing that we're talking about is an actual step within JavaScript. It's not simply inlined with the `execution`. It's extremely common for people to think about JavaScript as running top down, line by line, `executing`.
 
-> Because when we think of `interpreted programs`, or `dynamic scripted programs`, we generally think of them as executing line by line, top down. 
+> Because when we think of `interpreted programs`, or `dynamic scripted programs`, we generally think of them as `executing` line by line, top down.
 >
-> But it turned out, `JavaScript` is not an `interpreted language`, but is in fact actually a `compiled language`, that may not fit with our whole mental model because we're probably used to thinking of line-by-line `JavaScript interpretation`.
+> But it turned out, JavaScript is not an `interpreted language`, but is in fact actually a `compiled language`, that may not fit with our whole mental model because we're probably used to thinking of line-by-line `JavaScript interpretation`.
 
 > **Compiled Languages:**
 >
@@ -1463,45 +1488,47 @@ But this processing that we're talking about is an actual step within `JavaScrip
 >
 > [freecodecamp.org](https://guide.freecodecamp.org/computer-science/compiled-versus-interpreted-languages/)
 
-> So the `JavaScript` is, in fact, `compiled`, or at least, as we would say, it's `parsed`. 
+> So the JavaScript is, in fact, `compiled`, or at least, as we would say, it's `parsed`.
+>
+> There's some processing step that has to happen before `execution` has occurred.
 
-> There's some processing step that has to happen before execution has occurred.
+So let me prove to you, if you have ever written a JavaScript, syntax error, left off a comma, had an extra parenthesis, or curly brace somewhere, and then you try to run the program, and you immediately got a syntax error.
 
-So let me prove to you, if you have ever written a `JavaScript`, syntax error, left off a comma, had an extra parenthesis, or curly brace somewhere, and then you try to run the program, and you immediately got a syntax error.
+That is, say you have a syntax error on line 10, but you immediately get that error reported to you before lines 1 through 9 have `executed`.
 
-That is, say you have a syntax error on line 10, but you immediately get that error reported to you before lines 1 through 9 have `executed`. 
+The question is: How is it possible that JavaScript knew about the syntax error on line 10 before `executing` lines 1 through 9, unless JavaScript actually went through a processing step first. As opposed to simply `executing` top down, there was some processing step.
 
-The question is: How is it possible that `JavaScript` knew about the syntax error on line 10 before executing lines 1 through 9, unless `JavaScript` actually went through a processing step first. As opposed to simply executing top down, there was some processing step.
-
-What does that processing step look like? 
+What does that processing step look like?
 
 **In compiler theory, there are essentially four stages to a compiler:**
 
 (Sometimes the first two are combined into one stage, sometimes they're separate.)
 
-1. There's `lexing` and `tokenization`. 
+1. There's `lexing` and `tokenization`.
 2. There's `parsing` (which turns the stream of tokens into what's called an `abstract syntax tree`).
-3. The last step is what's called `code generation` (taking an `abstract syntax tree` and producing some kind of other executable form of that program).
+3. The last step is what's called `code generation` (taking an `abstract syntax tree` and producing some kind of other `executable` form of that program).
 
 This is how our program gets processed from its `textual code` and our `source format` into some kind of representation that can be `executed`.
 
-Now, a lot of people think, well, `JavaScript` can't be `compiled` because I don't run a `compiler` on my development machine and then ship off the `compiled code` to some other location.
+Now, a lot of people think, well, JavaScript can't be `compiled` because I don't run a `compiler` on my development machine and then ship off the `compiled code` to some other location.
 
-So in other words, a lot of people think about this difference between `interpreted` and `compiled` as the distribution model for the binary. But that's not really the right axis to be thinking about. The right axis is, is the code processed before it is `executed` or not? We do have languages that exist which generally don't get processing before execution. for example, Bash script. 
+So in other words, a lot of people think about this difference between `interpreted` and `compiled` as the distribution model for the binary. But that's not really the right axis to be thinking about. The right axis is, is the code processed before it is `executed` or not? We do have languages that exist which generally don't get processing before `execution`. for example, `Bash script`.
 
-In a Bash script, if we write a malformed command on line 4, lines 1, 2, and 3 are gonna run. And when line 4 fails that might screw stuff up, because we wanna undo  lines 1, 2, and 3. This is a perpetual problem in something like a true scripting language.
+In a `Bash script`, if we write a malformed command on line 4, lines 1, 2, and 3 are gonna run. And when line 4 fails that might screw stuff up, because we wanna undo lines 1, 2, and 3. This is a perpetual problem in something like a true scripting language.
 
-But in `JavaScript`, if you have a syntax error on line 10 nothing happens on lines 1 through 9. It has to be processed to check that it's a well-formed, correctly formed, program.
+But in JavaScript, if you have a syntax error on line 10 nothing happens on lines 1 through 9. It has to be processed to check that it's a well-formed, correctly formed, program.
 
-So the way that processing first happens before we `execute`, is that there is a stage where it goes through all of that `compilation`, It goes through all of that `parsing`, and it produces this `abstract syntax tree`. But it also produces, essentially, a plan for the `lexical environment`. That is, where all the `lexical scopes` are, and what marbles are gonna be in them, what identifiers.
-It prepares this plan, and that is the executable code that is handed off to be `executed` by the other part of the JavaScript engine.
+So the way that processing first happens before we `execute`, is that there is a stage where it goes through all of that `compilation`, It goes through all of that `parsing`, and it produces this `abstract syntax tree`. But it also produces, essentially, a plan for the `lexical environment`. That is, where all the `lexical scopes` are, and what marbles are gonna be in them, what `identifiers`.
+It prepares this plan, and that is the `executable` code that is handed off to be `executed` by the other part of the JavaScript engine.
 
-Now, some people would say, for example, `Java`, well, that's a `compiled language` because I compile it and then they distribute a bytecode. It turns out, `JavaScript` does almost the same thing.
+Now, some people would say, for example, `Java`, well, that's a `compiled language` because I compile it and then they distribute a bytecode. It turns out, JavaScript does almost the same thing.
 
-There is a `parser` that `parses` through your JavaScript `source code`, and it produces, in essence, an intermediate representation not that dissimilar from a `bytecode`. And it hands it off to the `JavaScript virtual machine`, which is embedded inside of the same `JavaScript engine`. And it `interprets` all that stuff, and one of the things that it `interprets` is, whenever it enters a scope it creates all the marbles according to what the program told it to do.
+There is a `parser` that `parses` through your JavaScript `source code`, and it produces, in essence, an intermediate representation not that dissimilar from a `bytecode`. And it hands it off to the `JavaScript virtual machine`, which is embedded inside of the same `JavaScript engine`. And it `interprets` all that stuff, and one of the things that it `interprets` is, whenever it enters a `scope` it creates all the marbles according to what the program told it to do.
 
-> We have to think about JavaScript as a two-pass system rather than a single-pass. 
+> We have to think about JavaScript as a two-pass system rather than a single-pass.
 >
 > We are gonna process (`compilation` or `parsing`) the code first, and set up the `scopes`, and then we are gonna `execute` it.
 
-> `JavaScript` organizes `scopes` with `functions` and `blocks` (ES6).
+> JavaScript organizes `scopes` with `functions` and `blocks` (ES6).
+
+So we have `functions` and you have `blocks`, those are the units of `scope`. 
