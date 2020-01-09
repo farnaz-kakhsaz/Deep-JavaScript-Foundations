@@ -1505,7 +1505,7 @@ What does that processing step look like?
 (Sometimes the first two are combined into one stage, sometimes they're separate.)
 
 1. There's `lexing` and `tokenization`.
-2. There's `parsing` (which turns the stream of tokens into what's called an `abstract syntax tree`).
+2. There's `parsing` (which turns the stream of `tokens` into what's called an `abstract syntax tree`).
 3. The last step is what's called `code generation` (taking an `abstract syntax tree` and producing some kind of other `executable` form of that program).
 
 This is how our program gets processed from its `textual code` and our `source format` into some kind of representation that can be `executed`.
@@ -1531,4 +1531,121 @@ There is a `parser` that `parses` through your JavaScript `source code`, and it 
 
 > JavaScript organizes `scopes` with `functions` and `blocks` (ES6).
 
-So we have `functions` and you have `blocks`, those are the units of `scope`. 
+So we have `functions` and you have `blocks`, those are the units of `scope`.
+
+## Compilation & Scope
+
+In this exercise we try to think more like JavaScript engine:
+
+```JavaScript
+1.  var teacher = "Kyle";         // Red
+2.
+3.  function otherClass() {       // Red
+4.    var teacher = "Suzy";       // Green
+5.    console.log("Welcome!");
+6.  }
+7.
+8.  function ask() {              // Blue
+9.    var question = "Why?";      // Blue
+10.   console.log(question);      // Blue (question is blue)
+11. }
+12.
+13. otherClass();                 // Welcome!
+14. ask();                        // Why?
+
+scope
+```
+
+After we've set up all those plans
+(`compilation` step which we have two actors on it, the `compiler` and `scope manager` ), then we'll come back and `execute` the code.
+
+There's going to be two actors, two entities that are going to be talking. One is the `compiler`, the thing that's processing the JavaScript program.
+The other one is the `scope manager`, that makes buckets, makes marbles, drops the marbles in. It's the `compiler` who says, hey, I have this thing, and it's the `scope manager` who says, I'm gonna make a plan for that, I'm gonna make a plan for a bucket and make a plan for a marble.
+
+Remember, in our processing phase (`compilation` phase), we have a `scope manager` and we have a `compiler`.
+
+Just for the simplicity of our discussion we use the three primary colors. (red bucket represents the `global scope`, blue and green for wherever we have inner buckets or `scopes`)
+
+On line 1, the `compiler` see a `var` declaration.
+That's a formal declaration. In other words, we're creating a marble. So the `compiler` asks the `global scope` (red bucket), I have a marble here, have you ever heard of this thing called `teacher`?
+
+And the `compiler` asking this question because if the `scope manager` (here `global scope` or red bucket) already knows about an `identifier` of the name `teacher`, it doesn't need to do anything. That's a no-op (no operation).
+
+> (In processing phase or `compilation` phase) there's no such thing as redeclaration.
+
+But in this particular case, since it's the first time that the `compiler` would have asked the `global scope` about a `variable` called `teacher`, then the `global scope's` gonna say, nope, never heard of it. But I've created now a red marble for you and, now we just dropped it into the red bucket.
+
+> It (the `variable`) hadn't actually been created, that they don't get created for real until `execution`, but conceptually we're creating this plan from what we see in the program.
+>
+> Actually what we're (the `compiler`) doing is looking for these formal declarations.
+
+Sometimes the formal declarations look like on line 1 `var teacher`, sometimes they look like line 3, `functions` or another kind of declaration. `Functions` make a marble, in this case, the marble on line 3 would be called `otherClass`. And that needs to get added to some `scope`.
+
+So the compiler, on line 3, ask the `scope manager`. I found another formal declaration (`function`), in this case for a marble called `otherClass`. Have you ever heard of that `identifier` before? Nope, never heard of it, but here's another red marble because we're still in the `global scope`.
+
+So now we have two red marbles in the red bucket. That takes care of the `identifier otherClass` as well as the `identifier teacher`.
+
+> When the `compiler` realize a `function`, it knows `function` makes `scopes` (buckets). So when it sees a `function` create both marble and bucket.
+
+Now, the `compiler` is smart enough to realize, oh... that's a special kind of thing, because a `function` makes `scopes`, it makes buckets.
+
+So, the `compiler` tells the `scope manager`, we're gonna need another bucket. Now we're creating a bucket inside of a bucket, so like a giant barrel and then a tiny little bucket inside.
+
+So `scope manager` says, sure, now we got a blue bucket, and now we are talking about the blue bucket, and let's step into that `function` and talk about it as its own `scope`, since that's `functions` creates `scopes`.
+
+So (into that `function`) line 4 has another formal declaration, in this case for a `variable` called `teacher`. So we're gonna say, hey blue bucket (the `scope manager`) for this `otherClass` I have a formal declaration for a marble called `teacher`, ever heard of it? Now the answer to that question might surprise us because we might think, sure, we heard about it on line 1! But remember we're talking to an entire different bucket now. We're talking to the blue bucket, not the red barrel (the `global scope`).
+
+So we're saying hey, blue bucket, do you have a marble called `teacher`? And what's the `scope manager` going to say? no so here's your blue marble.
+
+Okay, so now there are two marbles in two separate buckets of two different colors, even though they have the same name.
+
+> Having two `variables` with the same name at different `scopes`, that has a term, it's called `shadowing`.
+>
+> Because we have two `variables` with the same name there's no possible way that we can reference `lexically` the `variable` from out side a inner `scope`. It just limit us from what we can access. Because those `names`, it would match the nearest one (`identifier`).
+
+Sounds like sort of like evil or whatever, there's nothing bad about it, `shadowing` is entirely okay. But there is an offshoot of `shadowing`, which is, now that we've created a `variable` called `teacher`, we've created a blue marble called `teacher` in that `otherClass scope`. Well, now there's no possible way that we can reference `lexically` the `variable` from line 1.
+
+We can't reference the red marble because now there's a blue marble of the same name, because of the `shadowing`. It's totally okay, but it does limit us from what we can access. Because those `names`, it would match the nearest one, which in this case would be the blue marble.
+
+Because we see no more formal declarations. So we're finished with the `otherClass function`. Now we step back out to the red `scope` (`global scope`).
+
+But why did we skip over console.log in line 5?
+
+We didn't skip over it from the perspective of `compilation`. The `compiler` would have certainly handled line 5 and done a bunch of `compilation`. It doesn't have any impact on our `scopes`. So we've narrowed our focus of `compiler` theory to preparing our `identifiers` and our `scopes`. Doing our marble bucket sorting thing. So we're just skipping over the uninteresting details at this point. Since line 5 doesn't create or access any `variables` within our `scopes`, we don't need to worry about it.
+
+> At this stage (the stage before `executing`), the `compiler` preparing our `identifiers` and our `scopes`.
+>
+> So we're just skipping over the uninteresting details at this point. Since it doesn't create or access any `variables` within our `scopes`, we don't need to worry about it.
+
+In the `global scope` we find the next formal decoration on line 8 (the formal `function` declaration for an `identifier` called `ask`). Again the `compiler` aske the `global scope` (red bucket), I have a formal declaration for an `identifier` called `ask`, ever heard of it? Nope, never heard of it. But here's red marble. There's a red marble, because we are in the `global scope`. And that's what color marble matches with the red bucket.
+
+All right, so we just made a red marble called `ask`. And the `compiler` notice that's attached to a `function`. So `scope manager`, make a green bucket (another scope) for us, and now we step into the `scope` of the green bucket, the `function` labeled `ask` here.
+
+And the `compiler` find the formal declaration (a `var` declaration) on line 9. And it asks the `scope manager` (the green bucket, or `scope` of `ask`) I have a formal declaration for an `identifier` called `question`, ever heard of him? Nope, but here's your green marble. So we get a green marble and we drop it in the green bucket.
+
+Now, this is critical, because you'll notice on line 10 we have a reference to an `identifier`. This isn't creating marbles, so in this processing step we're not gonna worry so much about creating it. But we are going to have to understand where that marble comes from, what color marble that is, when we `execute` the code in the next step.
+
+> Even if the `compiler` sees the reference to an `identifier` (not creating it) the `compiler` needs to find out where that `identifier` comes from (which `scope`) for when we `execute` the code in the next step.
+
+So it's critical that we do this marble sorting correctly as we process the code the first time. So we're done with the `ask function`. There's no more formal declarations. And then we step back out to the `global scope`. And we don't find any more formal declarations in the `global scope`.
+
+So that `compiler` phase of this code is finished. And what we are left with is a plan for all the buckets and all the marbles. We've accounted for all the `scopes` that exist and where all the `identifiers` fit into all of those. Including references to them like on line 10, we know what color marble that is.
+
+Now it's important to note that when we `execute` the code, there's no more declarations for anything. All the `vars` are gone, essentially, because we don't need to declare anything anymore. We already know what that's gonna do, because we figured that stuff out at `compile time`.
+
+> In the `compiler` phase we create a plan for all the `scopes` that exist and where all the `identifiers` fit into all of those `scopes`. Including references `identifiers`.
+>
+> That is then handed over as part of the `execution` plan so that the `virtual machine` (the JavaScript engine), can run this code.
+>
+> And when we `execute` the code, there's no more declarations for anything, because we figured that stuff out at `compile time`.
+
+**It is very important to know:**
+
+> In a `lexically scoped language` (like JavaScript), all of the `scopes` (`lexical scopes`) and `identifiers`, that's all determined at `compile time`. It's not determined at `run time`. It is used at `run time`, but it is determined at `compile time`.
+
+And why that matters is, that allows the engine to much more efficiently optimize, because everything is known and it's fixed. Nothing during the `run time` can determine that this marble is no longer red, now it's blue. Once we've processed through, we already know what color marble it is and we're done with that discussion.
+
+> This means the decisions that we've made about `scope` are author time decisions.
+> When we write a `function` or put a `variable` here, it means that `variable` is always gonna be that color marble (inside that `scope`).
+
+So that allows the JavaScript engine to be much more efficient at its job. The takeaway that you should have from that is, the decisions that I've made about `scope` are author time decisions. When I write this `function` and we put this `variable` here, it means that `variable` is always gonna be that color marble.
