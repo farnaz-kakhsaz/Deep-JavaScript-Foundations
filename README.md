@@ -1755,3 +1755,13 @@ So what is `global scope` gonna do? Here's your red marble, and we can look on t
 > When we reference a `variable` in a `source position`, we have to first look it up, and when you reference a `variable` in a `target position`, we also have to first look it up.
 >
 > So there is a look up process involved.
+
+There is a very important takeaway that we should have:
+
+> We discover the `source` versus `target` position at `compile time`, but we don't use that information until `run time`.
+>
+> Basically think of it like a plan (map), it's like a to do list for every `scope`, that's the `executable code` (what `compiler` outputs). And then when it runs is when it all actually comes into existence.
+>
+> Every time we `execute` a `function`, the environment is recreated from scratch.
+>
+> So the `compiler` output is not actually reserved `memory`, it's the plan for how to reserve `memory` and make `identifier` (marbles) and all that. And then every time we `execute` that plan is effected into `memory`.
