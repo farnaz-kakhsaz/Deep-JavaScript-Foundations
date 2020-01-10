@@ -1486,7 +1486,7 @@ But this processing that we're talking about is an actual step within JavaScript
 >
 > Examples of common interpreted languages are PHP, Ruby, Python, and JavaScript.
 >
-> [freecodecamp.org](https://guide.freecodecamp.org/computer-science/compiled-versus-interpreted-languages/)
+> [freeCodeCamp.org](https://guide.freecodecamp.org/computer-science/compiled-versus-interpreted-languages/)
 
 > So the JavaScript is, in fact, `compiled`, or at least, as we would say, it's `parsed`.
 >
@@ -1719,7 +1719,7 @@ Line 3 through 6, and line 8 through 11, those were declarations, they're not th
 
 Don't skip just to how the `function` runs inside. We first have to ask how the line 13 itself `executes`. Cuz JavaScript has gotta figure out that and `execute` it.
 
-> The `otherClass identifier` (what we see in `function` call line 13), is in `sorce position`.
+> The `otherClass identifier` (what we see in `function` call line 13), is in `source position`.
 > We're not assigning something to `otherClass`. So if we're not assigning to it, we are pulling a `value` out. We wanna know what is currently in the `identifier otherClass`. Because, in just a moment, we're about to turn the `executor`. So we need to go get it.
 
 Now the `virtual machine` (JavaScript engine), ask `global scope` (`scope manager`), I've got a `source` reference for a marble (`identifier`) called `otherClass`. Have you ever heard of it? Yes, and it give us the marble and the `virtual machine` pulls the `value` out from that location and memory conceptual, but the question is what is that `value` at this moment? It's the `function` that `otherClass` was declared to point at.
@@ -1756,6 +1756,8 @@ So what is `global scope` gonna do? Here's your red marble, and we can look on t
 >
 > So there is a look up process involved.
 
+---
+
 There is a very important takeaway that we should have:
 
 > We discover the `source` versus `target` position at `compile time`, but we don't use that information until `run time`.
@@ -1765,3 +1767,40 @@ There is a very important takeaway that we should have:
 > Every time we `execute` a `function`, the environment is recreated from scratch.
 >
 > So the `compiler` output is not actually reserved `memory`, it's the plan for how to reserve `memory` and make `identifier` (marbles) and all that. And then every time we `execute` that plan is effected into `memory`.
+
+---
+
+We have finished `executing` line 5, and `execution` moves back. Now we're on line 14.
+
+The JavaScript engine find a `source` reference for `identifier` called `ask` on line 14. And asks `scope manager` (here `global scope`), do you know about an `identifier` called `ask`? Yes, here's location in memory for that `identifier` called `ask`. so we go to that `identifier` (that location in memory) and it have a `function` (green bucket, the things we declared on line 8), in it.
+
+So now we have a `function`, and that open close parenthesis `executes` the `function`. Now `execution` moves to line 9. Now, there's no more `var`. And now the JavaScript engine asks, green bucket (`scope` of `ask`), I have a `target` reference for `identifier` called `question`, ever heard of it? Yes, here your `identifier` location in memory. So we don't care what's in it right now. We go and get the `value` from the right-hand side (`"Why?"`), we assign into that location of memory and line 9 is finished.
+
+Now, line 10. We remember how the `console` works. So the JavaScript engine doesn't find `console` on that `scope`, it goes to the `global scope`, finds it, finds a `method` called `log`. But before it can execute `log`, it's gotta figure out what's being passed to it. So in line 10, it's a reference to another marble. So we gotta look that up. Again it asks green bucket `scope manager` (`scope` of `ask`), I have a `source` reference for `identifier` called `question`, ever heard of it? Yes, here's your green marble.
+
+And now, because we're not assigning to it, now we want the `value` that's currently in it.
+So we go to that area of memory. We pull the `value` out, which happens to be the `string` (`"Why?"`) in this case. And that `argument` is assigned to the `parameter` that `console.log` is receiving. So `arguments` (the things that we pass in) get assigned to the `parameters` that receive them.
+
+> An `argument`: is a `value` passed to a `function` when the `function` is called. Whenever any `function` is called during the `execution` of the program there are some `values` passed with the `function`. These `values` are called `arguments`. An `argument` when passed with a `function` replaces with those `variables` which were used during the `function` definition and the `function` is then `executed` with these `values`.
+>
+> A `parameter`: is a `variable` used to define a particular `value` during a `function` definition. Whenever we define a `function` we introduce our compiler with some `variables` that are being used in the running of that `function`. These `variables` are often termed as Parameters. The `parameters` and `arguments` mostly have the same `value` but theoretically, are different from each other.
+>
+> | ARGUMENT                                                                                                          | PARAMETER                                                                                                      |
+> | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+> | When a `function` is called, the `values` that are passed in the call are called `arguments`.                     | The `values` which are written at the time of the `function` `prototype` and the definition of the `function`. |
+> | These are used in `function` call statement to send `value` from the calling `function` to the called `function`. | These are used in `function` header of the called `function` to receive the `value` from the `arguments`.      |
+> | During the time of call each `argument` is always assigned to the `parameter` in the `function` definition.       | `Parameters` are local `variables` which are assigned `value` of the `arguments` when the `function` is called |
+> | They are also called `Actual Parameters`                                                                          | They are also called `Formal Parameters`                                                                       |
+>
+> [GeeksforGeeks](https://www.geeksforgeeks.org/argument-vs-parameter-in-java/)
+
+> The JavaScript engine before `execute` method (like `log` in `console`), first it's gotta figure out what's being passed to it (if what we passed in is an `identifier`).
+>
+> And that `identifier` we passed in to the `console.log` is in a `source position`, so we go to that area of memory, and pull the `value` out. And that `argument` (the `value` we pull it out and passed to the `console.log()`) is assigned to the `parameter` that `console.log` is receiving.
+>
+> So `arguments` (the `values` that we pass in) get assigned to the `parameters` that receive them.
+>
+> We can think about a `parameter`, in a `function` definition, like a `variable` that is in `target position`.
+> And `argument` (if we have an `identifier` to passed in to the `function` call) is in a `source position`.
+
+We can think about a `parameter`, like if I had `function ask()` and it took a `parameter`, the `parameter` is a `target` reference (`variable`). And if we have an `identifier` in an `argument` position like in line 10, is a `source` reference,
