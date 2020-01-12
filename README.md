@@ -1805,21 +1805,25 @@ So we go to that area of memory. We pull the `value` out, which happens to be th
 
 We can think about a `parameter`, like if I had `function ask()` and it took a `parameter`, the `parameter` is a `target` reference (`variable`). And if we have an `identifier` in an `argument` position like in line 10, is a `source` reference.
 
+And in the end, it becomes something like this:
+
+![Untitled](https://user-images.githubusercontent.com/37678729/72223439-fb389a00-3583-11ea-825d-bd90add1f8da.png)
+
 ---
 
 ### Summary:
 
-The JavaScript is not an `interpreted language` and that it goes step by step one line at a time. But rather, we should think about JavaScript as a two pass `processing`.
+The JavaScript is not an `interpreted language` that it goes step by step one line at a time. But rather, we should think about JavaScript as a two pass `processing`.
 
 First pass, we could call it `compilation` (or `parsing`), we're gonna go through the entire code. And there's lots of things that happen during the `parsing` and `compilation`, but the main thing that happens is all of the `scopes` (all of those colored marble buckets, the plan for those all) get created, we figure out where all the `scope` boundaries are.
 
 And indeed, all of the `identifier` references, those are color coded as marbles. And we'll use that information about the color of the marble and what bucket it comes from, in the second pass when we `execute` code.
 
-The first pass is `compilation`, and the second pass is `execution`. In the `compilation phase`, it's the `parser` (or `compiler`) and the `scope manager` , And in `execution phase` (`run time`), we have `JavaScript virtual machine` (or `JavaScript engine`) and the `scope manager`.
+> The first pass is `compilation`, and the second pass is `execution`. In the `compilation phase`, it's the `parser` (or `compiler`) and the `scope manager` , And in `execution phase` (`run time`), we have `JavaScript virtual machine` (or `JavaScript engine`) and the `scope manager`.
 
 > `JavaScript engine` = `execution engine` = `virtual machine` = `VM`
 
-The `parser` in `compilation phase` looking for formal declaration (like `var` or `function`), and if there was it do nothing. And if there wasn't, the `scope manager` will create that `identifier` on that `scope`.
+The `parser` in `compilation phase` looking for formal declaration (like `var` or `function`), and if the formal declaration there was before, it do nothing. And if there wasn't, the `scope manager` will create that `identifier` on that `scope`.
 
 > The reason for that chaking or question is, if we'd seen a formal declaration (like `var`) of same `identifier` a couple of times in the same `scope`, we don't need to make multiple `identifiers` (marbles) with the same name.
 >
@@ -1831,3 +1835,57 @@ The `parser` in `compilation phase` looking for formal declaration (like `var` o
 > If it's not `target` receiving something, it must be a `source`, cuz that's the only two options.
 
 ---
+
+Another example with corner cases:
+
+```JavaScript
+1.  var teacher = "Kyle";
+2.
+3.  function otherClass() {
+4.    teacher = "Suzy";
+5.    topic = "React";
+6.    console.log("Welcome!"):
+7.  }
+8.
+9.  otherClass();                    // Welcome!
+10.
+11. teacher;                         // "Suzy"
+12. topic;                           // "React"
+
+Scope
+```
+
+First Step: `compilation`
+
+> In `compilation stage` we looking for formal declarations and create `identifiers` for them, but in `execution stage` we see that `identifiers` is in `source position` or `target position`.
+
+So `processing` begins with the `compiler` talking to the `scope manager`. And the `compiler` says on line 1, hey `scope manager` (`global scope`), we have a formal declaration for `teacher` (in `execution` it will be a `target reference` but, during the `compilation`, we have a formal declaration), ever of it? No, so we go ahead and create red marble.
+
+> We will heard of `teacher` in `execution`. but in `compilation stage` we'd never heard of it.
+
+In line 3 we have the formal declaration. Hey `global scope`, ever heard of formal declaration for an `identifier` called `otherClass`? No, and here's your red marble (and goes in the red bucket).
+
+And because it is a `function`, It needs its own bucket, so the `scope manager` creates blue bucket.
+And now we step into that `scope` and make its plan. And because there is no `var` there, we don't make any blue marbles.
+
+> If in `compilation stage` there is `identifier`, but without formal declaration (such as `var` or `function`), the `scope manager` didn't create `identifier` for it.
+>
+> But in `execution stage` the `JavaScript engine`, will go up one level until it gets to `global scope` and if it didn't find it there too, it will `auto global` it, which means it will create that `identifier` in `global scope`.
+
+So from the perspective of the `compiler`, we didn't have any formal declarations, so there's no marbles to create. So we're done with the blue bucket. Effectively it exists, but effectively it has no marbles in it.
+
+Now, we step back out to the `global scope`. And there is no more formal declaration. So we're done with `compilation`.
+
+Second Step: `execution`
+
+So we remember, there's no formal declarations but there are `executable` statements. Line 1 has an `executable` statement. And so the `JavaScript engine` says, hey, `global scope`, I have a `target reference` for `teacher`, ever heard of it? Yes, here's your red marble. So we take the `value` `"Kyle"`, we assign it into the red marble (`teacher`), and we are complete.
+
+Now remember, `functions` are declarations, they don't really exist. At least, they're only here symbolically. So we're going to move from the `function` to the next `execution` line of code, which would be line 9.
+
+> In `execution stage`, because `functions` and other kind of formal declarations aren't exist (they're only there symbolically), the `JavaScript engine` skip them.
+
+So in line 9, hey `global scope` (the red bucket), I have a source reference for an identifier called `otherClass`, have you ever heard of it before? Yes, Here's your red marble. And in red marble is a reference to the `function` which we've called `otherClass` here which has attached to it this blue bucket of `scope`. So we find that `function`, we `execute` it with the parenthesis `()` on line 9, and `execution` moves to line 4.
+
+Now on line 4, hey, blue bucket, I have a `target reference` (because it is receiving an assignment) for `teacher`, ever heard of it? No. So we go up one level. Hey, `global scope`, I have a `target reference` for `teacher` ever heard of it? Yes, here's your red marble (**Important to see that it's a red marble here not a blue marble**).
+
+Even though we're inside of the blue `scope`, we are referencing a red marble. So we get a red marble and when we assign `"Suzy"` to it, we are assigning over the `value` that was currently there (`"Kyle"`), because it's the same marble in this case. This wasn't `shadowed` because we didn't declare `teacher` inside of the `otherClass function`.
