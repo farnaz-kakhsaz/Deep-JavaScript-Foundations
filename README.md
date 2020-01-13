@@ -180,67 +180,67 @@ Some `typeof` examples from [MDN](https://developer.mozilla.org/en-US/docs/Web/J
 
 ```JavaScript
 // Numbers
-typeof 37 === 'number';
-typeof 3.14 === 'number';
-typeof(42) === 'number';
-typeof Math.LN2 === 'number';
-typeof Infinity === 'number';
-typeof NaN === 'number'; // Despite being "Not-A-Number"
-typeof Number('1') === 'number';      // Number tries to parse things into numbers
-typeof Number('shoe') === 'number';   // including values that cannot be type coerced to a number
+typeof 37 === "number";
+typeof 3.14 === "number";
+typeof(42) === "number";
+typeof Math.LN2 === "number";
+typeof Infinity === "number";
+typeof NaN === "number"; // Despite being "Not-A-Number"
+typeof Number("1") === "number";      // Number tries to parse things into numbers
+typeof Number("shoe") === "number";   // including values that cannot be type coerced to a number
 
-typeof 42n === 'bigint';
+typeof 42n === "bigint";
 
 
 // Strings
-typeof '' === 'string';
-typeof 'bla' === 'string';
-typeof `template literal` === 'string';
-typeof '1' === 'string'; // note that a number within a string is still typeof string
-typeof (typeof 1) === 'string'; // typeof always returns a string
-typeof String(1) === 'string'; // String converts anything into a string, safer than toString
+typeof "" === "string";
+typeof "bla" === "string";
+typeof `template literal` === "string";
+typeof "1" === "string"; // note that a number within a string is still typeof string
+typeof (typeof 1) === "string"; // typeof always returns a string
+typeof String(1) === "string"; // String converts anything into a string, safer than toString
 
 
 // Booleans
-typeof true === 'boolean';
-typeof false === 'boolean';
-typeof Boolean(1) === 'boolean'; // Boolean() will convert values based on if they're truthy or falsy
-typeof !!(1) === 'boolean'; // two calls of the ! (logical NOT) operator are equivalent to Boolean()
+typeof true === "boolean";
+typeof false === "boolean";
+typeof Boolean(1) === "boolean"; // Boolean() will convert values based on if they're truthy or falsy
+typeof !!(1) === "boolean"; // two calls of the ! (logical NOT) operator are equivalent to Boolean()
 
 
 // Symbols
-typeof Symbol() === 'symbol'
-typeof Symbol('foo') === 'symbol'
-typeof Symbol.iterator === 'symbol'
+typeof Symbol() === "symbol"
+typeof Symbol("foo") === "symbol"
+typeof Symbol.iterator === "symbol"
 
 
 // Undefined
-typeof undefined === 'undefined';
-typeof declaredButUndefinedVariable === 'undefined';
-typeof undeclaredVariable === 'undefined';
+typeof undefined === "undefined";
+typeof declaredButUndefinedVariable === "undefined";
+typeof undeclaredVariable === "undefined";
 
 
 // Objects
-typeof {a: 1} === 'object';
+typeof {a: 1} === "object";
 
 // use Array.isArray or Object.prototype.toString.call
 // to differentiate regular objects from arrays
-typeof [1, 2, 4] === 'object';
+typeof [1, 2, 4] === "object";
 
-typeof new Date() === 'object';
-typeof /regex/ === 'object'; // See Regular expressions section for historical results
+typeof new Date() === "object";
+typeof /regex/ === "object"; // See Regular expressions section for historical results
 
 
 // The following are confusing, dangerous, and wasteful. Avoid them.
-typeof new Boolean(true) === 'object';
-typeof new Number(1) === 'object';
-typeof new String('abc') === 'object';
+typeof new Boolean(true) === "object";
+typeof new Number(1) === "object";
+typeof new String("abc") === "object";
 
 
 // Functions
-typeof function() {} === 'function';
-typeof class C {} === 'function';
-typeof Math.sin === 'function';
+typeof function() {} === "function";
+typeof class C {} === "function";
+typeof Math.sin === "function";
 ```
 
 ### `undefined` vs. `undeclared` vs. `uninitialized`:
@@ -1744,7 +1744,7 @@ We have this marble, and then we take the `value "Suzy"`, and we assign into it,
 
 > The `console.log` is an `identifier` (and it's in `source position`) that we didn't created, but it is an `identifier`. The `JavaScript engine` has that available to us as sort of like an `auto global` (it's already in `global scope`). And when it find it (in `global scope`), and look at the `value` of it, it's an `object`, it has a `method` call `log`, so it can `invoke` it.
 >
-> If `JavaScript engine` look up for `identifier`, first asks for it in current `scope` if it wasn't there, it goes up one level until to `global scope`, that's call the `lexical scope`.
+> If `JavaScript engine` look up for `identifier`, first asks for it in current `scope` if it wasn't there, it goes up one level until it gets to `global scope`, that's call the `lexical scope`.
 
 Now in line 5, `console.log`, there a reference to `identifier`. Not one that we created, but there is an `identifier` (a marble ) on the list. Which is call `console`, that's got to exist somewhere. The `JavaScript engine` has that available to us as sort of like an `auto global`. Not something we created, but it's available nonetheless.
 
@@ -1889,3 +1889,41 @@ So in line 9, hey `global scope` (the red bucket), I have a source reference for
 Now on line 4, hey, blue bucket, I have a `target reference` (because it is receiving an assignment) for `teacher`, ever heard of it? No. So we go up one level. Hey, `global scope`, I have a `target reference` for `teacher` ever heard of it? Yes, here's your red marble (**Important to see that it's a red marble here not a blue marble**).
 
 Even though we're inside of the blue `scope`, we are referencing a red marble. So we get a red marble and when we assign `"Suzy"` to it, we are assigning over the `value` that was currently there (`"Kyle"`), because it's the same marble in this case. This wasn't `shadowed` because we didn't declare `teacher` inside of the `otherClass function`.
+
+![Untitled](https://user-images.githubusercontent.com/37678729/72261540-460ced00-362a-11ea-97e3-399800ea082d.png)
+
+Moving on then to line 5. And, it's gonna process exactly the same, same questions. Hey `scope` of `otherClass`, I have a `target reference` for the `identifier` called `topic`, ever heard of it? No, so we go up one level to `global scope`. A `global scope`, I have a `target reference` for the variable called `topic`. Ever heard of it?
+
+Here we see one of the historical bad parts of JavaScript which is in the early days to be as forgiving as possible for people that didn't understand the language, they instituted this idea of `auto global`'s. So if we try to assign to a `variable` that's never been formally declared. Once we arrive at the `global scope`, if we say hey, `global scope`, we're looking for this marble called `topic`, ever heard of it? And the `global scope` instead of saying nope, sorry error, the `global scope`'s gonna say I just created one for you. And it's gonna hand us a red marble, not a blue marble. Why do we suppose it only hands us a red marble and not a blue marble? Cuz we're talking to the `global scope` now. We've already passed up the `scope` where that would have been formally declared and now we're talking to the `global scope` and it's the `global scope` that gives us the `variable`.
+
+> If we try to assign to a `variable` that's never been formally declared (on that `scope`). Once we go up one level and arrive at the `global scope`, if there wasn't `variable` with that `identifier`, the `global scope`'s gonna created it for us (in a `run-time` or `execution phase`), we call this idea `auto global`.
+>
+> Even when we wrote that `identifier` in the first place inside another `scope` than `global scope`, because the `global scope` created and gives us that `variable`, it is a `global scope` variable (`red marble`).
+>
+> And we should keep it in mind creating a declaration at `compile time` and creating it dynamically during the `run time`, have differences. There are performance differences and other sorts of things but mechanically they are two `global variables` at this point.
+>
+> Never ever under any circumstances did you intentionally `auto-create global`'s like that. Always declare the `variables` that we want to use declare them in whatever `scope` we need them in, but don't `auto-create` them.
+>
+> But we should keep it in mind, if we have `non-declared variable` without assigning to some `value`, we still get `ReferenceError` when we `execute` the code.
+
+So we've created an `auto global` called `topic` which that sounds terrible. But now there's a `global variable` called `topic` and when we get that red marble back and make the assignment on line 5, there's a `global variable` now with the value `"React"` in it.
+
+Q: Do the `auto global` would occur also if `topic="react"` were in the `global scope` under `variable` of `teacher` (for example it was in line 2)?
+
+A: That's true, any assignment to a `variable` that is undeclared at that moment, not declared to any `scope` we have access to. Any undeclared variable is going to end up creating this `auto global`.
+
+Now, the reason why that happens is because we'll notice that this program is not running in `strict mode`. But this is running in the `non-strict mode` or sometimes called, `sloppy mode`. We should be using `strict mode`, and if we were using `strict mode`, we wouldn't see this behavior. But since this code snip it isn't, that's what happens, as we end up creating a `global variable` called `topic`.
+
+> If we use `strict mode` instead of using `non-strict mode` (or sometimes called `sloppy mode`), we wouldn't see this `auto-create global`.
+
+We execute `console.log` the same way as we have before. So `execution` is then done in the `function`. `Execution` moves to line 11. So hey `global scope` (red bucket), I have a `source reference` to a `variable` called `teacher`, ever heard of it? Yes, so we go get that marble and we look for its `value`. And the `value` is `"Suzy"`. Because of line 4, we've overwritten the `value` in that `variable`. It's not a separate `variable` (marble).
+
+So line 12 then, hey `global scope`, I have a `source reference` for `topic`, ever heard of `topic`? Yes, here's your red marble. and the value of that red marble is `"React"`.
+
+Q: If line 11 was actually in line 8, `teacher` would still be `"Kyle"`?
+
+A: Yes, it's correct.
+
+Q: What would happen if line 12 was on line 8?
+
+A: We will get `ReferenceError`. There would be no `identifier`. But because there is an `identifier` on line 12  the `function otherClass` auto created it by assigning to a `non-declared variable`.
