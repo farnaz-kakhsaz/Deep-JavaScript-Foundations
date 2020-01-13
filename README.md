@@ -1926,4 +1926,51 @@ A: Yes, it's correct.
 
 Q: What would happen if line 12 was on line 8?
 
-A: We will get `ReferenceError`. There would be no `identifier`. But because there is an `identifier` on line 12  the `function otherClass` auto created it by assigning to a `non-declared variable`.
+A: We will get `ReferenceError`. There would be no `identifier`. But because there is an `identifier` on line 12 the `function otherClass` auto created it by assigning to a `non-declared variable`.
+
+### Strict Mode:
+
+```JavaScript
+1.  "use strict";
+2.
+3.  var teacher = "Kyle";
+4.
+5.  function otherClass() {
+6.    teacher = "Suzy";
+7.    topic = "React";           // ReferenceError
+8.    console.log("Welcome!"):
+9.  }
+10.
+11. otherClass();
+
+Scope
+```
+
+So now if we flip on `strict mode`, which we do by putting this `strict mode` fragment at the top of any `scope`, preferably at the top of our program, the top of our file, or at the top of any `function`.
+
+If we turn on `strict mode`, all the same processing is going to happen. But when we arrive at line 7 and we say, hey `scope` of `otherClass`, I have this `target reference` for `topic` ever heard of it? No, so we go to the `global scope` and we say, `global scope` have you ever heard of `topic`, and the `global scope` gonna respond with `ReferenceError`, never heard of it.
+
+> Whenever we are in `non-strict mode` (or `sloppy mode`), and we have a `target reference` for a `non-declared variable`, we will `auto create` it (`auto global`) in `run time`.
+>
+> And if in `non-strict mode`, we try to get `non-declared variable` that is in a `source position`, `global scope` throw us a `ReferenceError`.
+
+> If we have any kind of reference (`target` or `source`) for `non-declared variable` in **`strict mode`**, `global scope` throw us a `ReferenceError` (insted of `auto create` it, if `non-declared variable` was in `target position`).
+
+That's what we would like to happen all of the time. It now happens as the result of `strict mode`, we get a `ReferenceError`. So one of the many, many reasons why it would be good for us to be using `strict mode`. It will avoid mistakes like line 7, cuz it almost certainly a mistake, it should not be something we intentionally try to create `global`.
+
+> The difference between `TypeErrors` and `ReferenceErrors` are , `TypeErrors` are when we found the `variable` and the `value` that it is currently holding, is not legal to do whatever we're trying to do with it. Like trying to `execute` or access a `property` on an `undefined` or `null`, things like that, that's `TypeError`.
+> A `ReferenceError` is, when `JavaScript engine` couldn't find that `variable` on any `scope` that we have access to.
+
+
+Q: Is `strict mode` always pretty on `ES6`?
+
+
+A: The `strict mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict mode` in there for us.
+So if we're using transpired code, it was almost a virtual certainty that our code is running in `strict mode`. But JavaScript is not default the `strict mode` because then that would break a bunch of programs. So that were written 20 years ago or something. So because of backwards compatible, we will always have to opt into `strict mode`.
+Another little caveat inside of certain kinds of mechanisms within `ES6` and going forward, it is assumed to be in `strict mode`. So we don't even type it, so inside of a `class`, or inside of `ES6 module`, inside of both of those, `strict mode` is assumed, we don't even have to put the `strict mode`, is just assume that, that code is running in `strict mode`. But as a general rule for JavaScript itself, it's not in `strict mode` unless we opt-in.
+
+> In the `babel` and other transpilers, basically always put the `strict mode` in there for us.
+>
+> By default `ES6 class` and `ES6 module` are executed in the `strict mode`.
+
+So in `stric mode`,  we can't auto create `variables`, you have to declare them.
