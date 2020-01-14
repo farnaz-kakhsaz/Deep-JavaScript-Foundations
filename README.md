@@ -724,7 +724,7 @@ Essentially, memorize the falsy the list, and then always ask is the value on th
 >
 > Converting a value from one type to another is often called `“type casting”`, when done `explicitly`, and `“coercion”` when done `implicitly` (forced by the rules of how a value is used).
 >
->     It may not be obvious, but JavaScript coercions always result in one of the scalar primitive (see Chapter 2) values, like string, number, or boolean. There is no coercion that results in a complex value like object or function. Chapter 3 covers “boxing,” which wraps scalar primitive values in their object counterparts, but this is not really coercion in an accurate sense.
+> > It may not be obvious, but JavaScript coercions always result in one of the scalar primitive (see Chapter 2) values, like string, number, or boolean. There is no coercion that results in a complex value like object or function. Chapter 3 covers “boxing,” which wraps scalar primitive values in their object counterparts, but this is not really coercion in an accurate sense.
 >
 > Another way these terms are often distinguished is as follows: `“type casting”` (or `“type conversion”`) occurs in statically typed languages at compile time, while `“type coercion”` is a runtime conversion for dynamically typed languages.
 >
@@ -1128,10 +1128,15 @@ var workshop1Count = 42;
 var workshop2Count = [42];
 
 // 1- if (workshop1Count == workshop2Count)
-// Because workshop2Count is non-primitive, algorithm invokes toPrimitive on it. (because of that weird array stringification that doesn’t include the brackets. And only accidentally working because there is only one value in the array.)
+// Because workshop2Count is non-primitive, algorithm invokes toPrimitive on it. 
+// (because of that weird array stringification that doesn’t include the brackets.
+// And only accidentally working because there is only one value in the array.)
 
 // 2- if (42 == "4")
-// Now we have two different types, we have a number and a string. There's two options here. We could either make the number into a string and compare the strings, or make the string into a number and compare the numbers. The algorithm prefers numeric comparison. So the string becomes the number.
+// Now we have two different types, we have a number and a string. There's two options here. 
+// We could either make the number into a string and compare the strings, 
+// or make the string into a number and compare the numbers. The algorithm prefers numeric comparison. 
+// So the string becomes the number.
 
 // 3- if (42 === 42)
 // Because the types are now the same, it does a `triple equals` comparison.
@@ -1173,10 +1178,12 @@ var workshop2Students = [];
   // The workshop2Students is an array which is truthy. So if we negate (!) it it becomes false.
 
   // 2- if ([] == false)
-  // Now, we have a non-primitive compared to a primitive. So we need to turn that non-primitive (array) into a primitive. So it becomes the empty string.
+  // Now, we have a non-primitive compared to a primitive. 
+  // So we need to turn that non-primitive (array) into a primitive. So it becomes the empty string.
 
   // 3- if ("" == false)
-  // So now, We have two primitives but they are not of the same type. The algorithm prefers that they both become numbers.
+  // So now, We have two primitives but they are not of the same type. 
+  // The algorithm prefers that they both become numbers.
 
   // if (0 === 0)
   // if (true)
@@ -1807,7 +1814,7 @@ We can think about a `parameter`, like if I had `function ask()` and it took a `
 
 And in the end, it becomes something like this:
 
-![Scope](https://user-images.githubusercontent.com/37678729/72223439-fb389a00-3583-11ea-825d-bd90add1f8da.png)
+![Scope](https://user-images.githubusercontent.com/37678729/72377060-50abad00-3724-11ea-9d5c-408ee5c5cd76.png)
 
 ---
 
@@ -1846,7 +1853,7 @@ Another example with corner cases:
 3.  function otherClass() {
 4.    teacher = "Suzy";
 5.    topic = "React";
-6.    console.log("Welcome!"):
+6.    console.log("Welcome!");
 7.  }
 8.
 9.  otherClass();                    // Welcome!
@@ -1892,7 +1899,7 @@ Now on line 4, hey, blue bucket, I have a `target reference` (because it is rece
 
 Even though we're inside of the blue `scope`, we are referencing a red marble. So we get a red marble and when we assign `"Suzy"` to it, we are assigning over the `value` that was currently there (`"Kyle"`), because it's the same marble in this case. This wasn't `shadowed` because we didn't declare `teacher` inside of the `otherClass function`.
 
-![Scope and Corner Cases](https://user-images.githubusercontent.com/37678729/72261540-460ced00-362a-11ea-97e3-399800ea082d.png)
+![Scope and Corner Cases](https://user-images.githubusercontent.com/37678729/72376864-f3176080-3723-11ea-8057-f7f63011b6fc.png)
 
 Moving on then to line 5. And, it's gonna process exactly the same, same questions. Hey `scope` of `otherClass`, I have a `target reference` for the `identifier` called `topic`, ever heard of it? No, so we go up one level to `global scope`. A `global scope`, I have a `target reference` for the variable called `topic`. Ever heard of it?
 
@@ -1993,7 +2000,7 @@ This is an example of a nested `scope`:
 11. }
 12.
 13. otherClass();                   // Suzy Why?
-14. ask();                          // ReferenceError
+14. ask("???");                     // ReferenceError
 
 Scope
 ```
@@ -2029,7 +2036,7 @@ Q: When we're passing the `"Why?"` to `ask` on line 10, is there behind the scen
 
 A: Sort of, I think conceptually it works to think about `arguments` being assigned to `parameters`. It's not technically that, but it's close enough that it works for this particular narrative exercise.
 
-![Nested Scope](https://user-images.githubusercontent.com/37678729/72357018-812d2000-36ff-11ea-8829-93ad5774b17e.png)
+![Nested Scope](https://user-images.githubusercontent.com/37678729/72377177-818be200-3724-11ea-96ed-bc31666bec80.png)
 
 ---
 
