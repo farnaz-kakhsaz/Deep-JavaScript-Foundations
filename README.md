@@ -1783,7 +1783,7 @@ So we go to that area of memory. We pull the `value` out, which happens to be th
 
 > An `argument`: is a `value` passed to a `function` when the `function` is called. Whenever any `function` is called during the `execution` of the program there are some `values` passed with the `function`. These `values` are called `arguments`. An `argument` when passed with a `function` replaces with those `variables` which were used during the `function` definition and the `function` is then `executed` with these `values`.
 >
-> A `parameter`: is a `variable` used to define a particular `value` during a `function` definition. Whenever we define a `function` we introduce our compiler with some `variables` that are being used in the running of that `function`. These `variables` are often termed as Parameters. The `parameters` and `arguments` mostly have the same `value` but theoretically, are different from each other.
+> A `parameter`: is a `variable` used to define a particular `value` during a `function` definition. Whenever we define a `function` we introduce our compiler with some `variables` that are being used in the running of that `function`. These `variables` are often termed as `Parameters`. The `parameters` and `arguments` mostly have the same `value` but theoretically, are different from each other.
 >
 > | ARGUMENT                                                                                                          | PARAMETER                                                                                                      |
 > | ----------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -1807,7 +1807,7 @@ We can think about a `parameter`, like if I had `function ask()` and it took a `
 
 And in the end, it becomes something like this:
 
-![Untitled](https://user-images.githubusercontent.com/37678729/72223439-fb389a00-3583-11ea-825d-bd90add1f8da.png)
+![Scope](https://user-images.githubusercontent.com/37678729/72223439-fb389a00-3583-11ea-825d-bd90add1f8da.png)
 
 ---
 
@@ -1835,6 +1835,8 @@ The `parser` in `compilation phase` looking for formal declaration (like `var` o
 > If it's not `target` receiving something, it must be a `source`, cuz that's the only two options.
 
 ---
+
+### Dynamic Global Variables:
 
 Another example with corner cases:
 
@@ -1890,7 +1892,7 @@ Now on line 4, hey, blue bucket, I have a `target reference` (because it is rece
 
 Even though we're inside of the blue `scope`, we are referencing a red marble. So we get a red marble and when we assign `"Suzy"` to it, we are assigning over the `value` that was currently there (`"Kyle"`), because it's the same marble in this case. This wasn't `shadowed` because we didn't declare `teacher` inside of the `otherClass function`.
 
-![Untitled](https://user-images.githubusercontent.com/37678729/72261540-460ced00-362a-11ea-97e3-399800ea082d.png)
+![Scope and Corner Cases](https://user-images.githubusercontent.com/37678729/72261540-460ced00-362a-11ea-97e3-399800ea082d.png)
 
 Moving on then to line 5. And, it's gonna process exactly the same, same questions. Hey `scope` of `otherClass`, I have a `target reference` for the `identifier` called `topic`, ever heard of it? No, so we go up one level to `global scope`. A `global scope`, I have a `target reference` for the variable called `topic`. Ever heard of it?
 
@@ -1961,9 +1963,7 @@ That's what we would like to happen all of the time. It now happens as the resul
 > The difference between `TypeErrors` and `ReferenceErrors` are , `TypeErrors` are when we found the `variable` and the `value` that it is currently holding, is not legal to do whatever we're trying to do with it. Like trying to `execute` or access a `property` on an `undefined` or `null`, things like that, that's `TypeError`.
 > A `ReferenceError` is, when `JavaScript engine` couldn't find that `variable` on any `scope` that we have access to.
 
-
 Q: Is `strict mode` always pretty on `ES6`?
-
 
 A: The `strict mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict mode` in there for us.
 So if we're using transpired code, it was almost a virtual certainty that our code is running in `strict mode`. But JavaScript is not default the `strict mode` because then that would break a bunch of programs. So that were written 20 years ago or something. So because of backwards compatible, we will always have to opt into `strict mode`.
@@ -1973,4 +1973,61 @@ Another little caveat inside of certain kinds of mechanisms within `ES6` and goi
 >
 > By default `ES6 class` and `ES6 module` are executed in the `strict mode`.
 
-So in `stric mode`,  we can't auto create `variables`, you have to declare them.
+So in `stric mode`, we can't auto create `variables`, you have to declare them.
+
+### Nested Scope:
+
+This is an example of a nested `scope`:
+
+```JavaScript
+1.  var teacher = "Kyle";
+2.
+3.  function otherClass() {
+4.    var teacher = "Suzy";
+5.
+6.    function ask(question) {
+7.      console.log(teacher, question);
+8.    }
+9.
+10.   ask("Why?");
+11. }
+12.
+13. otherClass();                   // Suzy Why?
+14. ask();                          // ReferenceError
+
+Scope
+```
+
+We start by looking at line 1, that's a formal declaration that makes a red marble. Line 3 is a formal declaration that also creates a red marble. Line 4 and 6 both are the formal declaration that create a blue marble.
+
+
+And now, we are inside of `ask`, in line 7, there is no marbles, but there are reference to marbles. So on line 7 when we reference `teacher`, it's a blue marble. And the `question` in line 7, is a green marble. Because the `question` is a `variable` inside of the `scope` of the `function ask`.
+> The `function declarations` make their `identifier` in their enclosing `scope`.
+
+> We shoud know the `parameters` are `variables` inside of the `scope` of that `function`.
+>
+> Even though it doesn't have a `var` there, a `parameter` is formally creating an `identifier` in that `scope`.
+
+So we'd have a `teacher` being a blue marble and `question` being a green marble.
+
+The `value` of the `question` is `"Why?"`, because on line 10, when we `execute` line 10, we have a `value` there which we might have had to look up, but in this case it's a literal. And  the `"Why?"` gets assigned to the `variable question`, so that `execution` happens at line 10 before `ask` starts `executing`.
+So when we then ask for the marble that we find, which is a green marble and we ask for the value of `question`, it the `"Why?"`.
+
+> Whenever our `function` have `arguments`, the `values` of that `arguments` will be assigned to the `parameters` of that `function` first, and then the `function` itself will be `executed`.
+
+What's gonna happen with line 14? How does line 14 execute?
+Hey `global scope`, I have a `source reference` for an `identifier` called `ask`, ever heard of it? No, so we have a `ReferenceError`.
+
+Even though `ask` exist within the program, it doesn't exist in any `scope` that we have access to at this moment. So it is therefore an `undeclared variable`. Because we're not in `strict mode`, unlike `auto globals` which go ahead and create a marble for us, if we have a `source referenced` to a `variable` that is `undeclared`, it always throws a `ReferenceError`. That's why it's critical to understand the difference between a `target reference` and a `source reference`. At least if you're in `non-strict mode`.
+Once you go to `strict mode`, they both behave exactly the same, so it stops mattering as much `target` versus `reference`.
+
+> If in `non-strict mode`, we have a `source referenced` to a `variable` that is `undeclared` (it doesn't exist in any `scope` that we have access to at that moment), it always throws a `ReferenceError`. And if the `variable` is in the `target reference`, the `global scope` will be auto created it (`auto global`).
+>
+> But in `strict mode`, it doesn't matter `undeclared variable` is in the `source position` or the `target position`, the `JavaScript engine` will always throw us a `Reference Error`.
+
+Q: When we're passing the `"Why?"` to `ask` on line 10, is there behind the scenes, is JavaScript saying `var question = "Why?"` at some point?
+
+A: Sort of, I think conceptually it works to think about `arguments` being assigned to `parameters`. It's not technically that, but it's close enough that it works for this particular narrative exercise.
+
+![Nested Scope](https://user-images.githubusercontent.com/37678729/72357018-812d2000-36ff-11ea-8829-93ad5774b17e.png)
+
