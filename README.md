@@ -2000,8 +2000,8 @@ Scope
 
 We start by looking at line 1, that's a formal declaration that makes a red marble. Line 3 is a formal declaration that also creates a red marble. Line 4 and 6 both are the formal declaration that create a blue marble.
 
-
 And now, we are inside of `ask`, in line 7, there is no marbles, but there are reference to marbles. So on line 7 when we reference `teacher`, it's a blue marble. And the `question` in line 7, is a green marble. Because the `question` is a `variable` inside of the `scope` of the `function ask`.
+
 > The `function declarations` make their `identifier` in their enclosing `scope`.
 
 > We shoud know the `parameters` are `variables` inside of the `scope` of that `function`.
@@ -2010,7 +2010,7 @@ And now, we are inside of `ask`, in line 7, there is no marbles, but there are r
 
 So we'd have a `teacher` being a blue marble and `question` being a green marble.
 
-The `value` of the `question` is `"Why?"`, because on line 10, when we `execute` line 10, we have a `value` there which we might have had to look up, but in this case it's a literal. And  the `"Why?"` gets assigned to the `variable question`, so that `execution` happens at line 10 before `ask` starts `executing`.
+The `value` of the `question` is `"Why?"`, because on line 10, when we `execute` line 10, we have a `value` there which we might have had to look up, but in this case it's a literal. And the `"Why?"` gets assigned to the `variable question`, so that `execution` happens at line 10 before `ask` starts `executing`.
 So when we then ask for the marble that we find, which is a green marble and we ask for the value of `question`, it the `"Why?"`.
 
 > Whenever our `function` have `arguments`, the `values` of that `arguments` will be assigned to the `parameters` of that `function` first, and then the `function` itself will be `executed`.
@@ -2031,3 +2031,16 @@ A: Sort of, I think conceptually it works to think about `arguments` being assig
 
 ![Nested Scope](https://user-images.githubusercontent.com/37678729/72357018-812d2000-36ff-11ea-8829-93ad5774b17e.png)
 
+---
+
+### Undefined vs Undeclared:
+
+What is the difference between `undefined` and `undeclared`?
+
+**Undefiend:** means a `variable` exists but at the moment it has no `value`. It may have never had a `value` or it might have used to have a `value` and it doesn't anymore but there is no other `value` and the vacuum of space it is `undefined`.
+
+**Undeclared:** is actually never formally declared in any `scope` that we have accessed to (we do not have a marble for it). And in `strict mode`, it always results in those `ReferenceErrors`.
+
+Unfortunately, JavaScript tries to mess around with this and pretend that `undeclared` is sort of the same thing as `undefined` and some of its error messages and other outputtings and things and not is historically a really bad idea. We need to keep these two concepts separate. There's a different something being `undeclared` (doesn't exist), and being `undefined` (definitely it does exist, but doesn't have a `value`).
+
+---
