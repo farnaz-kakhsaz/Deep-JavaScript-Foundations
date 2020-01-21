@@ -79,7 +79,7 @@ Let's take a look at the JavaScript specification:
 >   - `Symbol` (added in ES6)
 >   - `BigInt` (future)
 > - and `Object`
->   - `Funcion`
+>   - `Function`
 >   - `Array`
 >
 > [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Data_types)
@@ -1128,14 +1128,14 @@ var workshop1Count = 42;
 var workshop2Count = [42];
 
 // 1- if (workshop1Count == workshop2Count)
-// Because workshop2Count is non-primitive, algorithm invokes toPrimitive on it. 
+// Because workshop2Count is non-primitive, algorithm invokes toPrimitive on it.
 // (because of that weird array stringification that doesn’t include the brackets.
 // And only accidentally working because there is only one value in the array.)
 
 // 2- if (42 == "4")
-// Now we have two different types, we have a number and a string. There's two options here. 
-// We could either make the number into a string and compare the strings, 
-// or make the string into a number and compare the numbers. The algorithm prefers numeric comparison. 
+// Now we have two different types, we have a number and a string. There's two options here.
+// We could either make the number into a string and compare the strings,
+// or make the string into a number and compare the numbers. The algorithm prefers numeric comparison.
 // So the string becomes the number.
 
 // 3- if (42 === 42)
@@ -1178,11 +1178,11 @@ var workshop2Students = [];
   // The workshop2Students is an array which is truthy. So if we negate (!) it it becomes false.
 
   // 2- if ([] == false)
-  // Now, we have a non-primitive compared to a primitive. 
+  // Now, we have a non-primitive compared to a primitive.
   // So we need to turn that non-primitive (array) into a primitive. So it becomes the empty string.
 
   // 3- if ("" == false)
-  // So now, We have two primitives but they are not of the same type. 
+  // So now, We have two primitives but they are not of the same type.
   // The algorithm prefers that they both become numbers.
 
   // if (0 === 0)
@@ -1493,7 +1493,7 @@ But this `processing` that we're talking about is an actual step within JavaScri
 >
 > Examples of common interpreted languages are PHP, Ruby, Python, and JavaScript.
 >
-> [freeCodeCamp.org](https://guide.freecodecamp.org/computer-science/compiled-versus-interpreted-languages/)
+> [freeCodeCamp](https://guide.freecodecamp.org/computer-science/compiled-versus-interpreted-languages/)
 
 > So the JavaScript is, in fact, `compiled`, or at least, as we would say, it's `parsed`.
 >
@@ -2051,3 +2051,60 @@ What is the difference between `undefined` and `undeclared`?
 Unfortunately, JavaScript tries to mess around with this and pretend that `undeclared` is sort of the same thing as `undefined` and some of its error messages and other outputtings and things and not is historically a really bad idea. We need to keep these two concepts separate. There's a different something being `undeclared` (doesn't exist), and being `undefined` (definitely it does exist, but doesn't have a `value`).
 
 ---
+
+## Scope & Function Expressions:
+
+### Function Expressions:
+
+We've been talking about `functions` in the `compilation phase`, adding their `identifier` (as a colored marble) in the enclosing `scope`.
+
+```JavaScript
+1. function teacher() { /* .. */ }
+2.
+3. var myTeacher = function anotherTeacher() {
+4.    console.log(anotherTeacher);
+5. };
+6.
+7. console.log(teacher);
+8. console.log(myTeacher);
+9. console.log(anotherTeacher);                   //ReferenceError
+```
+
+In this example `teacher` in line 1 (`function declaration`), creates a red marble but `anotherTeacher` in line 3 (`function expression`) creates a blue marble.
+
+In line 3 `identifier` called `myTeacher` creates red marble. We do know that there's a `function` called `anotherTeacher` there, so we need to create a bucket for it at least. We need to make a blue bucket. But because that `function` is not a `declaration`, we're not gonna handle its marble color in the same way. The key difference here is that the `anotherTeacher identifier` (line 3), is going to end up as a marble at `compile time` but it's gonna be a different colored marble than we expect. It's not a red marble, it's a blue marble. So the blue `scope` is where the blue marble `anotherTeacher` ends up.
+
+> One if the key differences between `function declarations` and `function expressions`, is that `function declarations` add their name (they attach their marble), to the enclosing `scope`, whereas `function expressions` will add their name (marble) to their own `scope`.
+
+That's why on line 4, we can reference in `anotherTeacher` because there is in fact a blue marble called `anotherTeacher`. But down on line 9, there is no `anotherTeacher`. so when we're out in the `global scope` and we asked `global scope` you ever heard of this red marble, it's gonna say nope, never heard of that red marble and what we're gonna get there, `ReferenceError`.
+
+> So key difference, `function expressions`, put there `identifiers` into their own `scope`.
+>
+> There's a little, also, additional nuance which is not only does that blue marble show up in the blue `scope` but it's also read only.
+> You cannot reassign `anotherTeacher` on line 4, to some other `value`.
+
+### Named Function Expressions:
+
+What is a named `function expression`? That means a `function expression` that's been given a name.
+
+```JavaScript
+1. var clickHandler = function() {
+2.    // ...
+3. };
+4.
+5. var keyHandler = function keyHandler() {
+6.    // ...
+7. };
+```
+
+Why line 1 is a `function expression`?
+Because it's not a `function declaration`.
+
+> How do we know someting is a `function declaration`?
+>
+> If the word `"function"` is literally the first thing in the statement.
+> So if it's not the first thing in the statement, if there's a `variable` or an operator or parentheses or anything, then it's not a `declaration`, it is an `expression`.
+
+So on line 1, we see a `function expression`, but we see no name. So that's called a `anonymous function expression`, whereas the one on line 5 is a `named function expression`.
+
+> We should always, 100%, zero exception, prefer the `named function expression`, over the `anonymous function expression`.
