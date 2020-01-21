@@ -2134,8 +2134,7 @@ A: Yes, it is a case of `shadowing`.
 
 > We should remember, the purpose of code is not to be convenient for us to type. The purpose of code is for us to communicate more clearly our intent.
 
-
-Q: What happens if we assign an `anonymous function` to property, or to a `variable` or something, what happens to the name? 
+Q: What happens if we assign an `anonymous function` to property, or to a `variable` or something, what happens to the name?
 
 A: Well, it's still an `anonymous function`, it still doesn't have a `lexical self-reference` to itself. Could we reference the `variable` in the outer scope? Of course we can, but it's a little less reliable, a little less trustable, and a little less semantic.
 
@@ -2147,3 +2146,10 @@ And if we're gonna go to the trouble to assign it to a `variable` why not just m
 >
 > If we can not come up with a name for the `function`, it probably means that we don't understand that `function` yet. It probably means, that `function` is too complex (means this `function` is doing too much), and needs to be broken down into smaller pieces until such a time as those names are completely self obvious, and then put them there.
 
+> The `arrow functions` are `anonymous`.
+>
+> So Kyle Simpson think we shouldn't use `anonymous function expressions`. And because `arrow functionds` don't have name, the only way that we can figure out what that `arrow function` is doing, is to read it's `function` body. But the name of the `funciton` can tell us the purpose of that `function`.
+
+We can put lots of more information in there that semantically tells the reader of our code what its purpose is, that would not be obvious in the code (names like getPersonId or defaultPersonId).
+
+So don't use `arrow functions` for this purpose. Later we'll see the one and only one exception that we have to the `arrow functions` rule, which is their `lexical` this behavior. But Kyle Simpson does not endorse or recommend or suggest using them as a general replacement for any `function`.
