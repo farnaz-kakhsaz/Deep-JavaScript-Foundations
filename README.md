@@ -2068,6 +2068,8 @@ We've been talking about `functions` in the `compilation phase`, adding their `i
 7. console.log(teacher);
 8. console.log(myTeacher);
 9. console.log(anotherTeacher);                   //ReferenceError
+
+Scope: which scope?
 ```
 
 In this example `teacher` in line 1 (`function declaration`), creates a red marble but `anotherTeacher` in line 3 (`function expression`) creates a blue marble.
@@ -2095,6 +2097,8 @@ What is a named `function expression`? That means a `function expression` that's
 5. var keyHandler = function keyHandler() {
 6.    // ...
 7. };
+
+Named Function Expressions
 ```
 
 Why line 1 is a `function expression`?
@@ -2108,3 +2112,38 @@ Because it's not a `function declaration`.
 So on line 1, we see a `function expression`, but we see no name. So that's called a `anonymous function expression`, whereas the one on line 5 is a `named function expression`.
 
 > We should always, 100%, zero exception, prefer the `named function expression`, over the `anonymous function expression`.
+
+**Why we sould always, always use `named function expressions`?**
+
+- Reliable `function` self-reference (the name produces or creates a reliable self-reference to the `function` from inside of itself).
+  That is useful if we're going to make the `function` recursive, or that `function` is an event handler of some sort and it needs to reference itself to unbind itself. or it's useful if we need to access any properties on that `function object` such as its `length` or its name or other thing of that sort.
+  Anytime we might need a self-reference to the `function`, the single only right answer to that question is, it needs to have a name.
+- More debuggable stack traces. So automatically by naming our functions, we make our code and stack traces more debuggable.
+- More self-documenting code. If we have a `function` that is anonymous, and we look at that `function` to figure out what that `anonymous function` is doing, we have to read the `function` body and we also probably have to read where it's being parsed.
+
+In that previous example, when we had a `variable` name that was in the `global scope`, and then we had our `function expression`. Would it be more or less reliable for us to make a reference to a marble in our own `scope` that is read only, or to reference a marble in an enclosing `scope` that is not read only? If we wanted to reference ourself from inside of the `function`, and we had the choice between referencing ourself with a marble in our own `scope` that is read only (the name of our `function expression`) or self-reference ourself with the `variable` that our `function` had been assigned to in the outer `scope`, which isn't by default read only.
+
+Q: Which one of those two would be the better self-reference?
+
+A: The first one, the one that we own and that is read only is a more reliable self-reference. So if there's any possible chance remotely that you're gonna need a self-reference, it's best to go ahead and name it.
+Even if you don't need it now, you might need it in the future, it's best to go ahead and name it.
+
+Q: When we just name the `function expression` the same thing that we will name the `variable` of the `scope` above, is that a case of `shadowing`?
+
+A: Yes, it is a case of `shadowing`.
+
+> We should remember, the purpose of code is not to be convenient for us to type. The purpose of code is for us to communicate more clearly our intent.
+
+
+Q: What happens if we assign an `anonymous function` to property, or to a `variable` or something, what happens to the name? 
+
+A: Well, it's still an `anonymous function`, it still doesn't have a `lexical self-reference` to itself. Could we reference the `variable` in the outer scope? Of course we can, but it's a little less reliable, a little less trustable, and a little less semantic.
+
+In 99.9% of all cases where people use `anonymous functions expressions` is as callbacks.
+They pass them in line directly to other `functions` (like .map, .then and etc.) and guess what? When we pass a `function expression` in a call position, there's no way to infer any name from it. So we don't get the benefit of that name inference, we have to assign it to a `variable` to get the name inference or to a property.
+And if we're gonna go to the trouble to assign it to a `variable` why not just make it a `declaration`? Why write a `variable` and then have to write the name twice? So we should prefer `function declarations` with names. If we're gonna pass in a `function expression`, put a name on it just like we would have if it were a `function declaration`, give it the same name.
+
+> Every `function` that exists in our program, every single `function` has a purpose. And if every `function` has a purpose, it means every `function` has a name.
+>
+> If we can not come up with a name for the `function`, it probably means that we don't understand that `function` yet. It probably means, that `function` is too complex (means this `function` is doing too much), and needs to be broken down into smaller pieces until such a time as those names are completely self obvious, and then put them there.
+
