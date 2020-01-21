@@ -2153,3 +2153,8 @@ And if we're gonna go to the trouble to assign it to a `variable` why not just m
 We can put lots of more information in there that semantically tells the reader of our code what its purpose is, that would not be obvious in the code (names like getPersonId or defaultPersonId).
 
 So don't use `arrow functions` for this purpose. Later we'll see the one and only one exception that we have to the `arrow functions` rule, which is their `lexical` this behavior. But Kyle Simpson does not endorse or recommend or suggest using them as a general replacement for any `function`.
+
+
+> `(Named) Function Declaration` > `Named Function Expression` > `Anonymous Function Expression`
+>
+> So the `function declaration` has some benefits over the `named function expression`. But then `named function expressions` have huge benefits over the `anonymous function expressions`. 
