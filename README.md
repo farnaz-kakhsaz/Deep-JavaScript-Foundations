@@ -1580,7 +1580,7 @@ And the `compiler` asking this question because if the `scope manager` (here `gl
 
 > (In `processing phase` or `compilation phase`) there's no such thing as redeclaration.
 
-But in this particular case, since it's the first time that the `compiler` would have asked the `global scope` about a `variable` called `teacher`, then the `global scope's` gonna say, nope, never heard of it. But I've created now a red marble for you and, now we just dropped it into the red bucket.
+But in this particular case, since it's the first time that the `compiler` would have asked the `global scope` about a `variable` called `teacher`, then the `global scope`'s gonna say, nope, never heard of it. But I've created now a red marble for you and, now we just dropped it into the red bucket.
 
 > It (the `variable`) hadn't actually been created, that they don't get created for real until `execution`, but conceptually we're creating this plan from what we see in the program.
 >
@@ -2172,6 +2172,43 @@ We have two type of **Scope** model:
 
 The vast majority of all programming languages in existence, and almost certainly all programming languages that we've ever worked with, are in fact **lexically scoped**.
 
-The JavaScript is absolutely, definitely, 100% **lexically scoped**. 
+The JavaScript is absolutely, definitely, 100% **lexically scoped**.
 
 The **Dynamic Scope** is not very common at all, we generally only see this in a few old academic languages and maybe some different modes.
+
+### Lexical Scope and Dynamic Scope in Action:
+
+```JavaScript
+1.  var teacher = "Kyle";
+2.
+3.    function ask(question) {
+2.      console.log(teacher, question);
+5.    }
+6.
+7.  function otherClass() {
+8.    var teacher = "Suzy";
+9.
+10.   ask("Why?");
+11. }
+12.
+13. otherClass();
+14. // Output in Lexically Scoped languages: Kyle Why?
+15. // Output in Dynamically Scoped languages: Suzy Why?
+
+Lexical Scope and Dynamic Scope
+```
+
+We know that **Dynamic Scope** exists in some languages, but it does not exist in JavaScript. So this is a _theoretical_ example.
+
+So in **Lexically Scoped** (JavaScript) language, when we execute the above code, we will see `Kyle Why?` in the console. Because we noticed the `function ask` (on line 3), is making reference to a `variable` called `teacher` that does not exist in its own scope. And we would normally think of it as resolving to that `teacher variable` (on line 1 which equals to `"Kyle"`) because that's how we think **lexically**.
+
+But _theoretically_ in a **Dynamically scoped** language, it wouldn't even consult the **lexical scope** nesting, it would say, where was `ask function` called from? It was called from the scope of `otherClass` and it would end up resolving `teacher` to that `teacher variable` (on line 8 which equals to `"Suzy"`). So when the code execute we will see `Suzy Why?` in the console.
+
+> The idea of a **Dynamic Scope** is the idea that a `function`'s references to its `variables` are depended upon where that `function` was called from. The same `function` called from 100 different places ends up giving 100 different answers to what the `variables` are.
+
+> So in **Dynamic Scope**, it is scope that is determined based upon the conditions at **run-time**, whereas **Lexical Scope** is determined at **author-time** (or **compile-time**). 
+>
+> In a simple way **Lexical Scope** is fixed and predictable.
+> And **Dynamic Scope** is flexible.
+>
+> Even though JavaScript does not have **Dynamic Scope**, it does have a mechanism that gives us this same kind of flexibility.
