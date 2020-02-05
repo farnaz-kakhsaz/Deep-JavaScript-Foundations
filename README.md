@@ -2210,3 +2210,52 @@ But _theoretically_ in a **Dynamically scoped** language, it wouldn't even consu
 > And **Dynamic Scope** is flexible.
 >
 > Even though JavaScript does not have **Dynamic Scope**, it does have a mechanism that gives us this same kind of flexibility.
+
+### Usage of Function Scoping:
+
+In the below, there is a **Name Collision**. And if for resolving the problem, we turn this code:
+
+```JavaScript
+var teacher = "Kyle";
+
+// ..
+
+var teacher = "Suzy";
+cobsole.log(teacher);   // Suzy -- oops
+
+// ..
+
+cobsole.log(teacher);   // Suzy -- oops
+```
+
+Into this one:
+
+```JavaScript
+var teacher = "Kyle";
+
+function anotherTeacher() {
+  var teacher = "Suzy";
+  console.log(teacher);   // Suzy
+}
+
+anotherTeacher();
+
+cobsole.log(teacher);   // Kyle
+```
+
+We still have a **Naming Collision**, we just shifted it to a different variable name (`anotherTeacher`).
+
+**Name Collision:** When two different entities used the **same semantic name** in the **same scope**.
+
+There's a principle within **Software Development**, it's called the principle of **least exposure** or the principle of **least privilege**, that says this:
+_You should default to keeping everything private, and only exposing the minimal necessary._
+
+That's one of the core principles of software engineering, because it essentially sets up a defensive posture. And we can solve **three** main problems by using this defensive posture:
+
+- If we hide something within a scope, or hide something on a namespace or do some other sort of hiding, then we reduce the surface area for **name collisions**. (so number one, we solve naming **collision problems**.)
+- If we hide something, it means that somebody else can't accidentally of intentionally misuse that thing. If we expose it publicly, everybody can use it. (so number two, if we hide something, then we prevent other from accessing it.)
+- If we hide something, like one of those implementation details, or like a variable name, we protect ourself for future refactoring. (so the third one, and probably the most core and important reason for this principle, it's often overlooked.)
+
+But, right now, this usage of a `function` is not really accomplishing that task, because the problem is that now we have a `function` that has a name in that scope.
+It has the name `anotherTeacher`. So we didn't really fix the **naming collision** problem at all, we just shifted it to a different variable name.
+It is true that we now have a new scope, and we can contain any assignments of that scope, but we still have a **naming collision** problem, so we need a better way of using our knowledge of scope.
