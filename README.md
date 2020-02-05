@@ -1,6 +1,6 @@
 # Deep JavaScript Foundations
 
-> **Note:** In this note, I collected some important JavaScript foundations, that most of this information comes from Kyle Simpson's books ([YDKJS](https://github.com/getify/You-Dont-Know-JS) series), [ECMAScript](https://www.ecma-international.org/), [MDN](https://developer.mozilla.org/en-US/) (Mozilla Developer Network) or courses that I took. It did help me a lot to  have a deeper understanding of JavaScript.
+> **Note:** In this note, I collected some important JavaScript foundations, that most of this information comes from Kyle Simpson's books ([YDKJS](https://github.com/getify/You-Dont-Know-JS) series), [ECMAScript](https://www.ecma-international.org/), [MDN](https://developer.mozilla.org/en-US/) (Mozilla Developer Network) or courses that I took. It did help me a lot to have a deeper understanding of JavaScript.
 
 ## Table of Contents
 
@@ -451,7 +451,7 @@ The first abstract operation that we have is called `ToPrimitive`. Now obviously
 
 > If we have a `non-primitive` value, and we need to make it into a `primitive`, there the `abstract operation` is going to be involved in doing that.
 
-By the way, the `abstract operations` they're not like a function that could somehow be called. There may, in fact, be actual methods inside of a `JavaScript engine` or not, they're not like required to be actual things. But when we call them abstract, we mean they're a conceptual operation. So any time you have something that is not a `primitive` and it needs to become a `primitive`, conceptually, what we need to do is this set of algorithmic steps, and that's called `ToPrimitive`, as if it were a function that could be invoked.
+By the way, the **abstract operations** they're not like a function that could somehow be called. There may, in fact, be actual methods inside of a JavaScript engine or not, they're not like required to be actual things. But when we call them abstract, we mean they're a conceptual operation. So any time you have something that is not a `primitive` and it needs to become a `primitive`, conceptually, what we need to do is this set of algorithmic steps, and that's called `ToPrimitive`, as if it were a function that could be invoked.
 
 So the `ToPrimitive` abstract operation takes an optional type hint. So in other words, it says, if you have something that is not a `primitive`, tell what kind of type you would like it to be.
 
@@ -860,7 +860,7 @@ So if my length is zero then it becomes `false` and if my length is anything non
 > For example access a length on a primitive `string` or some method on a primitive `number`.
 >
 > The `boxing` is a form of `implicit` coercion.
-> It's not called out in the same way in the `abstract operations`.
+> It's not called out in the same way in the **abstract operations**.
 
 > This DOM elements value is always a `string`.
 
@@ -1462,18 +1462,18 @@ All `variables` are in one of those two roles in our program:
 1. Receiving the assignment of some `value`
 2. We are retrieving a `value` from the `variable`.
 
-When the `scope` is being processed by the `JavaScript engine`, it's essentially asking two question, when it see this `variable`:
+When the scope is being processed by the JavaScript engine, it's essentially asking two question, when it see this `variable`:
 
 1. What position is it in?
-2. What `scope` does it belong to?
+2. What scope does it belong to?
 
-In other words, this is basically like a game of matching marbles to their color-coded buckets. If you think about the way a `JavaScript engine` processes the code, it's going to find a `variable` and it's gonna say, hmm, this is a green marble so it goes in the green bucket. And this is a red marble, so it goes into the red bucket. So it's fundamentally a game of sorting colored marbles.
+In other words, this is basically like a game of matching marbles to their color-coded buckets. If you think about the way a JavaScript engine processes the code, it's going to find a `variable` and it's gonna say, hmm, this is a green marble so it goes in the green bucket. And this is a red marble, so it goes into the red bucket. So it's fundamentally a game of sorting colored marbles.
 
-But this `processing` that we're talking about is an actual step within JavaScript. It's not simply inlined with the `execution`. It's extremely common for people to think about JavaScript as running top down, line by line, `executing`.
+But this **processing** that we're talking about is an actual step within JavaScript. It's not simply inlined with the **execution**. It's extremely common for people to think about JavaScript as running top down, line by line, executing.
 
-> Because when we think of `interpreted programs`, or `dynamic scripted programs`, we generally think of them as `executing` line by line, top down.
+> Because when we think of **interpreted programs**, or **dynamic scripted programs**, we generally think of them as executing line by line, top down.
 >
-> But it turned out, JavaScript is not an `interpreted language`, but is in fact actually a `compiled language`, that may not fit with our whole mental model because we're probably used to thinking of line-by-line `JavaScript interpretation`.
+> But it turned out, JavaScript is not an **interpreted language**, but is in fact actually a **compiled language**, that may not fit with our whole mental model because we're probably used to thinking of line-by-line **JavaScript interpretation**.
 
 > **Compiled Languages:**
 >
@@ -1493,54 +1493,54 @@ But this `processing` that we're talking about is an actual step within JavaScri
 >
 > [freeCodeCamp](https://guide.freecodecamp.org/computer-science/compiled-versus-interpreted-languages/)
 
-> So the JavaScript is, in fact, `compiled`, or at least, as we would say, it's `parsed`.
+> So the JavaScript is, in fact, **compiled**, or at least, as we would say, it's **parsed**.
 >
-> There's some `processing step` that has to happen before `execution` has occurred.
+> There's some **processing step** that has to happen before **execution** has occurred.
 
 So let me prove to you, if you have ever written a JavaScript, syntax error, left off a comma, had an extra parenthesis, or curly brace somewhere, and then you try to run the program, and you immediately got a syntax error.
 
-That is, say you have a syntax error on line 10, but you immediately get that error reported to you before lines 1 through 9 have `executed`.
+That is, say you have a syntax error on line 10, but you immediately get that error reported to you before lines 1 through 9 have executed.
 
-The question is: How is it possible that JavaScript knew about the syntax error on line 10 before `executing` lines 1 through 9, unless JavaScript actually went through a `processing step` first. As opposed to simply `executing` top down, there was some `processing step`.
+The question is: How is it possible that JavaScript knew about the syntax error on line 10 before executing lines 1 through 9, unless JavaScript actually went through a **processing step** first. As opposed to simply **executing** top down, there was some **processing step**.
 
-What does that `processing step` look like?
+What does that **processing step** look like?
 
 **In compiler theory, there are essentially four stages to a compiler:**
 
 (Sometimes the first two are combined into one stage, sometimes they're separate.)
 
-1. There's `lexing` and `tokenization`.
-2. There's `parsing` (which turns the stream of `tokens` into what's called an `abstract syntax tree`).
-3. The last step is what's called `code generation` (taking an `abstract syntax tree` and producing some kind of other `executable` form of that program).
+1. There's **lexing** and **tokenization**.
+2. There's **parsing** (which turns the stream of **tokens** into what's called an **abstract syntax tree**).
+3. The last step is what's called **code generation** (taking an **abstract syntax tree** and producing some kind of other **executable** form of that program).
 
-This is how our program gets processed from its `textual code` and our `source format` into some kind of representation that can be `executed`.
+This is how our program gets processed from its **textual code** and our **source format** into some kind of representation that can be executed.
 
-Now, a lot of people think, well, JavaScript can't be `compiled` because I don't run a `compiler` on my development machine and then ship off the `compiled code` to some other location.
+Now, a lot of people think, well, JavaScript can't be **compiled** because I don't run a **compiler** on my development machine and then ship off the `compiled code` to some other location.
 
-So in other words, a lot of people think about this difference between `interpreted` and `compiled` as the distribution model for the binary. But that's not really the right axis to be thinking about. The right axis is, is the code processed before it is `executed` or not? We do have languages that exist which generally don't get `processing` before `execution`. for example, `Bash script`.
+So in other words, a lot of people think about this difference between **interpreted** and **compiled** as the distribution model for the binary. But that's not really the right axis to be thinking about. The right axis is, is the code processed before it is executed or not? We do have languages that exist which generally don't get **processing** before **execution**. for example, `Bash script`.
 
 In a `Bash script`, if we write a malformed command on line 4, lines 1, 2, and 3 are gonna run. And when line 4 fails that might screw stuff up, because we wanna undo lines 1, 2, and 3. This is a perpetual problem in something like a true scripting language.
 
 But in JavaScript, if you have a syntax error on line 10 nothing happens on lines 1 through 9. It has to be processed to check that it's a well-formed, correctly formed, program.
 
-So the way that `processing` first happens before we `execute`, is that there is a stage where it goes through all of that `compilation`, It goes through all of that `parsing`, and it produces this `abstract syntax tree`. But it also produces, essentially, a plan for the `lexical environment`. That is, where all the `lexical scopes` are, and what marbles are gonna be in them, what `identifiers`.
-It prepares this plan, and that is the `executable` code that is handed off to be `executed` by the other part of the `JavaScript engine`.
+So the way that **processing** first happens before we execute, is that there is a stage where it goes through all of that **compilation**, It goes through all of that **parsing**, and it produces this **abstract syntax tree**. But it also produces, essentially, a plan for the **lexical environment**. That is, where all the **lexical scopes** are, and what marbles are gonna be in them, what `identifiers`.
+It prepares this plan, and that is the `executable` code that is handed off to be executed by the other part of the JavaScript engine.
 
-Now, some people would say, for example, `Java`, well, that's a `compiled language` because I compile it and then they distribute a bytecode. It turns out, JavaScript does almost the same thing.
+Now, some people would say, for example, `Java`, well, that's a **compiled language** because I compile it and then they distribute a bytecode. It turns out, JavaScript does almost the same thing.
 
-There is a `parser` that `parses` through your JavaScript `source code`, and it produces, in essence, an intermediate representation not that dissimilar from a `bytecode`. And it hands it off to the `JavaScript virtual machine`, which is embedded inside of the same `JavaScript engine`. And it `interprets` all that stuff, and one of the things that it `interprets` is, whenever it enters a `scope` it creates all the marbles according to what the program told it to do.
+There is a **parser** that parses through your JavaScript source code, and it produces, in essence, an intermediate representation not that dissimilar from a `bytecode`. And it hands it off to the **JavaScript virtual machine**, which is embedded inside of the same JavaScript engine. And it **interprets** all that stuff, and one of the things that it **interprets** is, whenever it enters a scope it creates all the marbles according to what the program told it to do.
 
 > We have to think about JavaScript as a two-pass system rather than a single-pass.
 >
-> We are gonna process (`compilation` or `parsing`) the code first, and set up the `scopes`, and then we are gonna `execute` it.
+> We are gonna process (**compilation** or **parsing**) the code first, and set up the scopes, and then we are gonna execute it.
 
-> JavaScript organizes `scopes` with `functions` and `blocks` (ES6).
+> JavaScript organizes **scopes** with **`functions`** and **blocks** (ES6).
 
-So we have `functions` and you have `blocks`, those are the units of `scope`.
+So we have **functions** and you have **blocks**, those are the units of **scope**.
 
 ## Compilation & Scope
 
-In this exercise we try to think more like `JavaScript engine`:
+In this exercise we try to think more like JavaScript engine:
 
 ```JavaScript
 1.  var teacher = "Kyle";         // Red
@@ -1562,102 +1562,102 @@ scope
 ```
 
 After we've set up all those plans
-(`compilation` step which we have two actors on it, the `compiler` and `scope manager` ), then we'll come back and `execute` the code.
+(**compilation** step which we have two actors on it, the **compiler** and **scope manager** ), then we'll come back and execute the code.
 
-There's going to be two actors, two entities that are going to be talking. One is the `compiler`, the thing that's `processing` the JavaScript program.
-The other one is the `scope manager`, that makes buckets, makes marbles, drops the marbles in. It's the `compiler` who says, hey, I have this thing, and it's the `scope manager` who says, I'm gonna make a plan for that, I'm gonna make a plan for a bucket and make a plan for a marble.
+There's going to be two actors, two entities that are going to be talking. One is the **compiler**, the thing that's **processing** the JavaScript program.
+The other one is the **scope manager**, that makes buckets, makes marbles, drops the marbles in. It's the **compiler** who says, hey, I have this thing, and it's the **scope manager** who says, I'm gonna make a plan for that, I'm gonna make a plan for a bucket and make a plan for a marble.
 
-Remember, in our `processing phase` (`compilation phase`), we have a `scope manager` and we have a `compiler`.
+Remember, in our **processing phase** (**compilation phase**), we have a **scope manager** and we have a **compiler**.
 
-Just for the simplicity of our discussion we use the three primary colors. (red bucket represents the `global scope`, blue and green for wherever we have inner buckets or `scopes`)
+Just for the simplicity of our discussion we use the three primary colors. (red bucket represents the `global scope`, blue and green for wherever we have inner buckets or scopes)
 
-On line 1, the `compiler` see a `var` declaration.
-That's a formal declaration. In other words, we're creating a marble. So the `compiler` asks the `global scope` (red bucket), I have a marble here, have you ever heard of this thing called `teacher`?
+On line 1, the **compiler** see a `var` declaration.
+That's a formal declaration. In other words, we're creating a marble. So the **compiler** asks the `global scope` (red bucket), I have a marble here, have you ever heard of this thing called `teacher`?
 
-And the `compiler` asking this question because if the `scope manager` (here `global scope` or red bucket) already knows about an `identifier` of the name `teacher`, it doesn't need to do anything. That's a no-op (no operation).
+And the **compiler** asking this question because if the **scope manager** (here `global scope` or red bucket) already knows about an `identifier` of the name `teacher`, it doesn't need to do anything. That's a no-op (no operation).
 
-> (In `processing phase` or `compilation phase`) there's no such thing as redeclaration.
+> (In **processing phase** or **compilation phase**) there's no such thing as redeclaration.
 
-But in this particular case, since it's the first time that the `compiler` would have asked the `global scope` about a `variable` called `teacher`, then the `global scope`'s gonna say, nope, never heard of it. But I've created now a red marble for you and, now we just dropped it into the red bucket.
+But in this particular case, since it's the first time that the **compiler** would have asked the `global scope` about a `variable` called `teacher`, then the `global scope`'s gonna say, nope, never heard of it. But I've created now a red marble for you and, now we just dropped it into the red bucket.
 
-> It (the `variable`) hadn't actually been created, that they don't get created for real until `execution`, but conceptually we're creating this plan from what we see in the program.
+> It (the `variable`) hadn't actually been created, that they don't get created for real until **execution**, but conceptually we're creating this plan from what we see in the program.
 >
-> Actually what we're (the `compiler`) doing is looking for these formal declarations.
+> Actually what we're (the **compiler**) doing is looking for these formal declarations.
 
-Sometimes the formal declarations look like on line 1 `var teacher`, sometimes they look like line 3, `functions` or another kind of declaration. `Functions` make a marble, in this case, the marble on line 3 would be called `otherClass`. And that needs to get added to some `scope`.
+Sometimes the formal declarations look like on line 1 `var teacher`, sometimes they look like line 3, `functions` or another kind of declaration. `Functions` make a marble, in this case, the marble on line 3 would be called `otherClass`. And that needs to get added to some scope.
 
-So the compiler, on line 3, ask the `scope manager`. I found another formal declaration (`function`), in this case for a marble called `otherClass`. Have you ever heard of that `identifier` before? Nope, never heard of it, but here's another red marble because we're still in the `global scope`.
+So the compiler, on line 3, ask the **scope manager**. I found another formal declaration (`function`), in this case for a marble called `otherClass`. Have you ever heard of that `identifier` before? Nope, never heard of it, but here's another red marble because we're still in the `global scope`.
 
 So now we have two red marbles in the red bucket. That takes care of the `identifier otherClass` as well as the `identifier teacher`.
 
-> When the `compiler` realize a `function`, it knows `function` makes `scopes` (buckets). So when it sees a `function` create both marble and bucket.
+> When the **compiler** realize a `function`, it knows `function` makes scopes (buckets). So when it sees a `function` create both marble and bucket.
 
-Now, the `compiler` is smart enough to realize, oh... that's a special kind of thing, because a `function` makes `scopes`, it makes buckets.
+Now, the **compiler** is smart enough to realize, oh... that's a special kind of thing, because a `function` makes scopes, it makes buckets.
 
-So, the `compiler` tells the `scope manager`, we're gonna need another bucket. Now we're creating a bucket inside of a bucket, so like a giant barrel and then a tiny little bucket inside.
+So, the **compiler** tells the **scope manager**, we're gonna need another bucket. Now we're creating a bucket inside of a bucket, so like a giant barrel and then a tiny little bucket inside.
 
-So `scope manager` says, sure, now we got a blue bucket, and now we are talking about the blue bucket, and let's step into that `function` and talk about it as its own `scope`, since that's `functions` creates `scopes`.
+So **scope manager** says, sure, now we got a blue bucket, and now we are talking about the blue bucket, and let's step into that `function` and talk about it as its own scope, since that's `functions` creates scopes.
 
-So (into that `function`) line 4 has another formal declaration, in this case for a `variable` called `teacher`. So we're gonna say, hey blue bucket (the `scope manager`) for this `otherClass` I have a formal declaration for a marble called `teacher`, ever heard of it? Now the answer to that question might surprise us because we might think, sure, we heard about it on line 1! But remember we're talking to an entire different bucket now. We're talking to the blue bucket, not the red barrel (the `global scope`).
+So (into that `function`) line 4 has another formal declaration, in this case for a `variable` called `teacher`. So we're gonna say, hey blue bucket (the **scope manager**) for this `otherClass` I have a formal declaration for a marble called `teacher`, ever heard of it? Now the answer to that question might surprise us because we might think, sure, we heard about it on line 1! But remember we're talking to an entire different bucket now. We're talking to the blue bucket, not the red barrel (the `global scope`).
 
-So we're saying hey, blue bucket, do you have a marble called `teacher`? And what's the `scope manager` going to say? no so here's your blue marble.
+So we're saying hey, blue bucket, do you have a marble called `teacher`? And what's the **scope manager** going to say? no so here's your blue marble.
 
 Okay, so now there are two marbles in two separate buckets of two different colors, even though they have the same name.
 
-> Having two `variables` with the same name at different `scopes`, that has a term, it's called `shadowing`.
+> Having two `variables` with the same name at different scopes, that has a term, it's called **shadowing**.
 >
-> Because we have two `variables` with the same name there's no possible way that we can reference `lexically` the `variable` from out side a inner `scope`. It just limit us from what we can access. Because those `names`, it would match the nearest one (`identifier`).
+> Because we have two `variables` with the same name there's no possible way that we can reference **lexically** the `variable` from out side a inner scope. It just limit us from what we can access. Because those `names`, it would match the nearest one (`identifier`).
 
-Sounds like sort of like evil or whatever, there's nothing bad about it, `shadowing` is entirely okay. But there is an offshoot of `shadowing`, which is, now that we've created a `variable` called `teacher`, we've created a blue marble called `teacher` in that `otherClass scope`. Well, now there's no possible way that we can reference `lexically` the `variable` from line 1.
+Sounds like sort of like evil or whatever, there's nothing bad about it, **shadowing** is entirely okay. But there is an offshoot of **shadowing**, which is, now that we've created a `variable` called `teacher`, we've created a blue marble called `teacher` in that `otherClass scope`. Well, now there's no possible way that we can reference **lexically** the `variable` from line 1.
 
-We can't reference the red marble because now there's a blue marble of the same name, because of the `shadowing`. It's totally okay, but it does limit us from what we can access. Because those `names`, it would match the nearest one, which in this case would be the blue marble.
+We can't reference the red marble because now there's a blue marble of the same name, because of the **shadowing**. It's totally okay, but it does limit us from what we can access. Because those `names`, it would match the nearest one, which in this case would be the blue marble.
 
-Because we see no more formal declarations. So we're finished with the `otherClass function`. Now we step back out to the red `scope` (`global scope`).
+Because we see no more formal declarations. So we're finished with the `otherClass function`. Now we step back out to the red scope (`global scope`).
 
 But why did we skip over console.log in line 5?
 
-We didn't skip over it from the perspective of `compilation`. The `compiler` would have certainly handled line 5 and done a bunch of `compilation`. It doesn't have any impact on our `scopes`. So we've narrowed our focus of `compiler` theory to preparing our `identifiers` and our `scopes`. Doing our marble bucket sorting thing. So we're just skipping over the uninteresting details at this point. Since line 5 doesn't create or access any `variables` within our `scopes`, we don't need to worry about it.
+We didn't skip over it from the perspective of **compilation**. The **compiler** would have certainly handled line 5 and done a bunch of **compilation**. It doesn't have any impact on our scopes. So we've narrowed our focus of **compiler** theory to preparing our `identifiers` and our scopes. Doing our marble bucket sorting thing. So we're just skipping over the uninteresting details at this point. Since line 5 doesn't create or access any `variables` within our scopes, we don't need to worry about it.
 
-> At this stage (the stage before `executing`), the `compiler` preparing our `identifiers` and our `scopes`.
+> At this stage (the stage before **executing**), the **compiler** preparing our `identifiers` and our scopes.
 >
-> So we're just skipping over the uninteresting details at this point. Since it doesn't create or access any `variables` within our `scopes`, we don't need to worry about it.
+> So we're just skipping over the uninteresting details at this point. Since it doesn't create or access any `variables` within our scopes, we don't need to worry about it.
 
-In the `global scope` we find the next formal decoration on line 8 (the formal `function` declaration for an `identifier` called `ask`). Again the `compiler` aske the `global scope` (red bucket), I have a formal declaration for an `identifier` called `ask`, ever heard of it? Nope, never heard of it. But here's red marble. There's a red marble, because we are in the `global scope`. And that's what color marble matches with the red bucket.
+In the `global scope` we find the next formal decoration on line 8 (the formal `function` declaration for an `identifier` called `ask`). Again the **compiler** aske the `global scope` (red bucket), I have a formal declaration for an `identifier` called `ask`, ever heard of it? Nope, never heard of it. But here's red marble. There's a red marble, because we are in the `global scope`. And that's what color marble matches with the red bucket.
 
-All right, so we just made a red marble called `ask`. And the `compiler` notice that's attached to a `function`. So `scope manager`, make a green bucket (another scope) for us, and now we step into the `scope` of the green bucket, the `function` labeled `ask` here.
+All right, so we just made a red marble called `ask`. And the **compiler** notice that's attached to a `function`. So **scope manager**, make a green bucket (another scope) for us, and now we step into the scope of the green bucket, the `function` labeled `ask` here.
 
-And the `compiler` find the formal declaration (a `var` declaration) on line 9. And it asks the `scope manager` (the green bucket, or `scope` of `ask`) I have a formal declaration for an `identifier` called `question`, ever heard of him? Nope, but here's your green marble. So we get a green marble and we drop it in the green bucket.
+And the **compiler** find the formal declaration (a `var` declaration) on line 9. And it asks the **scope manager** (the green bucket, or scope of `ask`) I have a formal declaration for an `identifier` called `question`, ever heard of him? Nope, but here's your green marble. So we get a green marble and we drop it in the green bucket.
 
-Now, this is critical, because you'll notice on line 10 we have a reference to an `identifier`. This isn't creating marbles, so in this `processing step` we're not gonna worry so much about creating it. But we are going to have to understand where that marble comes from, what color marble that is, when we `execute` the code in the next step.
+Now, this is critical, because you'll notice on line 10 we have a reference to an `identifier`. This isn't creating marbles, so in this **processing step** we're not gonna worry so much about creating it. But we are going to have to understand where that marble comes from, what color marble that is, when we execute the code in the next step.
 
-> Even if the `compiler` sees the reference to an `identifier` (not creating it) the `compiler` needs to find out where that `identifier` comes from (which `scope`) for when we `execute` the code in the next step.
+> Even if the **compiler** sees the reference to an `identifier` (not creating it) the **compiler** needs to find out where that `identifier` comes from (which scope) for when we execute the code in the next step.
 
 So it's critical that we do this marble sorting correctly as we process the code the first time. So we're done with the `ask function`. There's no more formal declarations. And then we step back out to the `global scope`. And we don't find any more formal declarations in the `global scope`.
 
-So that `compiler phase` of this code is finished. And what we are left with is a plan for all the buckets and all the marbles. We've accounted for all the `scopes` that exist and where all the `identifiers` fit into all of those. Including references to them like on line 10, we know what color marble that is.
+So that **compiler phase** of this code is finished. And what we are left with is a plan for all the buckets and all the marbles. We've accounted for all the scopes that exist and where all the `identifiers` fit into all of those. Including references to them like on line 10, we know what color marble that is.
 
-Now it's important to note that when we `execute` the code, there's no more declarations for anything. All the `vars` are gone, essentially, because we don't need to declare anything anymore. We already know what that's gonna do, because we figured that stuff out at `compile-time`.
+Now it's important to note that when we execute the code, there's no more declarations for anything. All the `vars` are gone, essentially, because we don't need to declare anything anymore. We already know what that's gonna do, because we figured that stuff out at **compile-time**.
 
-> In the `compiler phase` we create a plan for all the `scopes` that exist and where all the `identifiers` fit into all of those `scopes`. Including references `identifiers`.
+> In the **compiler phase** we create a plan for all the scopes that exist and where all the `identifiers` fit into all of those scopes. Including references `identifiers`.
 >
-> That is then handed over as part of the `execution` plan so that the `virtual machine` (the `JavaScript engine`), can run this code.
+> That is then handed over as part of the **execution** plan so that the **virtual machine** (the JavaScript engine), can run this code.
 >
-> And when we `execute` the code, there's no more declarations for anything, because we figured that stuff out at `compile-time`.
+> And when we execute the code, there's no more declarations for anything, because we figured that stuff out at **compile-time**.
 
 **It is very important to know:**
 
-> In a `lexically scoped language` (like JavaScript), all of the `scopes` (`lexical scopes`) and `identifiers`, that's all determined at `compile-time`. It's not determined at `run-time`. It is used at `run-time`, but it is determined at `compile-time`.
+> In a **lexically scoped language** (like JavaScript), all of the scopes (**lexical scopes**) and `identifiers`, that's all determined at **compile-time**. It's not determined at **run-time**. It is used at **run-time**, but it is determined at **compile-time**.
 
-And why that matters is, that allows the engine to much more efficiently optimize, because everything is known and it's fixed. Nothing during the `run-time` can determine that this marble is no longer red, now it's blue. Once we've processed through, we already know what color marble it is and we're done with that discussion.
+And why that matters is, that allows the engine to much more efficiently optimize, because everything is known and it's fixed. Nothing during the **run-time** can determine that this marble is no longer red, now it's blue. Once we've processed through, we already know what color marble it is and we're done with that discussion.
 
-> This means the decisions that we've made about `scope` are author time decisions.
-> When we write a `function` or put a `variable` here, it means that `variable` is always gonna be that color marble (inside that `scope`).
+> This means the decisions that we've made about scope are author time decisions.
+> When we write a `function` or put a `variable` here, it means that `variable` is always gonna be that color marble (inside that scope).
 
-So that allows the `JavaScript engine` to be much more efficient at its job. The takeaway that you should have from that is, the decisions that I've made about `scope` are author time decisions. When I write this `function` and we put this `variable` here, it means that `variable` is always gonna be that color marble.
+So that allows the JavaScript engine to be much more efficient at its job. The takeaway that you should have from that is, the decisions that I've made about scope are author time decisions. When I write this `function` and we put this `variable` here, it means that `variable` is always gonna be that color marble.
 
 ## Executing Code
 
-We have all our plan set up. There's no more declaration code, so let's then `execute` this code:
+We have all our plan set up. There's no more declaration code, so let's then execute this code:
 
 ```JavaScript
 1.  var teacher = "Kyle";
@@ -1678,86 +1678,86 @@ We have all our plan set up. There's no more declaration code, so let's then `ex
 scope
 ```
 
-> So even though line 1 looks like one statement, it's actually two separate things. There's the `var teacher` part. That's what the `compiler` handles. And then there's the `teacher = "Kyle"` part, that's what the `execution engine`'s gonna handle.
+> So even though line 1 looks like one statement, it's actually two separate things. There's the `var teacher` part. That's what the **compiler** handles. And then there's the `teacher = "Kyle"` part, that's what the **execution engine's** gonna handle.
 
-Now, remember there's only two roles that a `variable` can play. It can either be the `target` of an assignment, and we can see on line 1, the `teacher` is in that role, it is receiving an assignment, it's the `target`. The only other role that it can play is in the `source position`.
-It's going to give up its `value`. We're going to `retrieve` the `value` from it. That's like what we see on line 10, `question` is in that position.
+Now, remember there's only two roles that a `variable` can play. It can either be the **target** of an assignment, and we can see on line 1, the `teacher` is in that role, it is receiving an assignment, it's the **target**. The only other role that it can play is in the **source position**.
+It's going to give up its `value`. We're going to **retrieve** the `value` from it. That's like what we see on line 10, `question` is in that position.
 
-We used to refer to this (in an old school terminology) as a `left hand side`, an `LHS` and a `RHS`, a `right hand side`. As in left and right hand of an equals. Nowadays, you might call it an `L value`, an `R value`. Maybe just for simple purposes, let's call them `source` and `target`.
+We used to refer to this (in an old school terminology) as a **left hand side**, an **LHS** and a **RHS**, a **right hand side**. As in left and right hand of an equals. Nowadays, you might call it an **L value**, an **R value**. Maybe just for simple purposes, let's call them **source** and **target**.
 
 All `variables` can play two roles in our program:
 
-1. Be the `target` of an assignment (receiving an assignment of `value`, or in an old school terminology: `left hand side` (`LHS`), as in left hand of an equals)
-2. Be in the `source position` (`retrieving` the `value` from it, or in an old school terminology: `right hand side` (`RHS`), as in right hand of an equals).
+1. Be the **target** of an assignment (receiving an assignment of `value`, or in an old school terminology: **left hand side** (**LHS**), as in left hand of an equals)
+2. Be in the **source position** (retrieving the `value` from it, or in an old school terminology: **right hand side** (**RHS**), as in right hand of an equals).
 
-**let's call position of `variables` simply `source position` and `target position`.**
+**let's call position of `variables` simply source position and target position.**
 
-Here on line 1, `teacher`'s in a `target position`. On line 10, `question`, is in a `source position`. That's a piece of information that the `compiler` picked up. Whenever it created that whole `abstract tree` and all that, it knew that each `identifier`, each marble, not only what color it was, but what position it was in.
+Here on line 1, `teacher`'s in a **target position**. On line 10, `question`, is in a **source position**. That's a piece of information that the **compiler** picked up. Whenever it created that whole `abstract tree` and all that, it knew that each `identifier`, each marble, not only what color it was, but what position it was in.
 
-> The `compiler` in `compile-time` (`processing` or `compilation` or `parsing phase`), whenever it created that whole `abstract tree` (`abstract syntax tree`), it knew that each `identifier` (each marble) not only what color it was (not only that it exist), but what position it was in.
+> The **compiler** in **compile-time** (**processing** or **compilation** or **parsing phase**), whenever it created that whole **abstract tree** (**abstract syntax tree**), it knew that each `identifier` (each marble) not only what color it was (not only that it exist), but what position it was in.
 
-It's critical to know that we're dealing with something that's receiving a `value`, it's a `target`, or we're gonna `retrieve` it's `value`.
+It's critical to know that we're dealing with something that's receiving a `value`, it's a **target**, or we're gonna **retrieve** it's `value`.
 
-So let's then `execute` this code the way the `JavaScript engine` would, with all that `execution` plan and `scope` stuff set up.
-Each time we enter a `scope`, all of the plans for the buckets and the marbles will have been created, and so now we're ready to go ahead and `execute`.
+So let's then execute this code the way the JavaScript engine would, with all that **execution** plan and scope stuff set up.
+Each time we enter a scope, all of the plans for the buckets and the marbles will have been created, and so now we're ready to go ahead and execute.
 
-> In `execution phase` we have two people talking, `scope manager`, cuz it's gotta hand out the `identifier` (marbles), and the `virtual machine` (it's the `JavaScript engine` that's `executing` code).
+> In **execution phase** we have two people talking, **scope manager**, cuz it's gotta hand out the `identifier` (marbles), and the **virtual machine** (it's the JavaScript engine that's executing code).
 
-We have two people talking, again. We still have the `scope manager`, cuz he's gotta hand out the marbles. But we also now have a different person talking in the conversation.
-And that's the `virtual machine`, it's the `JavaScript engine` that's `executing` code.
+We have two people talking, again. We still have the **scope manager**, cuz he's gotta hand out the marbles. But we also now have a different person talking in the conversation.
+And that's the **virtual machine**, it's the JavaScript engine that's executing code.
 
-So that conversation on line 1, remember, there's no `var` there, so the `virtual machine` (`JavaScript engine`) asks the `scope manager`, I have a `target` reference for a `variable` called `teacher` (You see in line 1, it's a `target` reference, it's receiving an assignment). Have you ever heard of this marble (`identifier`) called `teacher`? We're talking to the red bucket (`global scope`), remember. And it can only answer yes or no. So the `scope manager` says: yes, why? Because at `compile-time` we formally declared it.
+So that conversation on line 1, remember, there's no `var` there, so the **virtual machine** (JavaScript engine) asks the **scope manager**, I have a **target** reference for a `variable` called `teacher` (You see in line 1, it's a **target** reference, it's receiving an assignment). Have you ever heard of this marble (`identifier`) called `teacher`? We're talking to the red bucket (`global scope`), remember. And it can only answer yes or no. So the **scope manager** says: yes, why? Because at **compile-time** we formally declared it.
 
-Had we not formally declared it, things are different. But because at `compile-time` we formally declared something called `teacher`, now we know, yes, here's your red marble. So it's fundamentally a lookup. We're saying, hey, red bucket, do you have a marble called `teacher`? If so, please give it to me. And here we get the red marble.
+Had we not formally declared it, things are different. But because at **compile-time** we formally declared something called `teacher`, now we know, yes, here's your red marble. So it's fundamentally a lookup. We're saying, hey, red bucket, do you have a marble called `teacher`? If so, please give it to me. And here we get the red marble.
 
 And what are we gonna do with that marble? Well, we're gonna assign a `value` to it. That marble represents an area in memory that needs to get assigned to, essentially. So, we're gonna take the `value` from the right hand side, in this case, the `string "Kyle"`, and assign it to that location represented by the red marble `teacher`.
 
-> In `run-time` (when we `executing` our code) if there were `identifiers`, we assign the `values` to `variables` (if they were in `receiving position` or `target`), or `retrieving` the `values` from it (if they were in `source position`).
+> In **run-time** (when we executing our code) if there were `identifiers`, we assign the `values` to `variables` (if they were in `receiving position` or **target**), or `retrieving` the `values` from it (if they were in **source position**).
 >
-> And also in `run-time` the `variables`, does not have a `var` on them anymore.
+> And also in **run-time** the `variables`, does not have a `var` on them anymore.
 >
 > That `identifier`, represents an area in memory that needs to get assignment of `value` (So, we're gonna take the `value` from the right hand side, and assign it to that location represented by that `identifier`).
 
-Line 3 through 6, and line 8 through 11, those were declarations, they're not there anymore. They've been `compiled` away. So, `execution` would move to line 13. Let's talk about how line 13 `executes`.
+Line 3 through 6, and line 8 through 11, those were declarations, they're not there anymore. They've been **compiled** away. So, execution would move to line 13. Let's talk about how line 13 `executes`.
 
-> In `compile-time`, the `compiler` declared all `identifiers` in line 3 through 6, and line 8 through 11, so in `run-time` (`execution phase`) we move to line 13.
+> In **compile-time**, the **compiler** declared all `identifiers` in line 3 through 6, and line 8 through 11, so in **run-time** (**execution phase**) we move to line 13.
 
-Don't skip just to how the `function` runs inside. We first have to ask how the line 13 itself `executes`. Cuz JavaScript has gotta figure out that and `execute` it.
+Don't skip just to how the `function` runs inside. We first have to ask how the line 13 itself `executes`. Cuz JavaScript has gotta figure out that and execute it.
 
-> The `otherClass identifier` (what we see in `function` call line 13), is in `source position`.
+> The `otherClass identifier` (what we see in `function` call line 13), is in **source position**.
 > We're not assigning something to `otherClass`. So if we're not assigning to it, we are pulling a `value` out. We wanna know what is currently in the `identifier otherClass`. Because, in just a moment, we're about to turn the `executor`. So we need to go get it.
 
-Now the `virtual machine` (`JavaScript engine`), ask `global scope` (`scope manager`), I've got a `source` reference for a marble (`identifier`) called `otherClass`. Have you ever heard of it? Yes, and it give us the marble and the `virtual machine` pulls the `value` out from that location and memory conceptual, but the question is what is that `value` at this moment? It's the `function` that `otherClass` was declared to point at.
+Now the **virtual machine** (JavaScript engine), ask `global scope` (**scope manager**), I've got a **source referenc** for a marble (`identifier`) called `otherClass`. Have you ever heard of it? Yes, and it give us the marble and the **virtual machine** pulls the `value` out from that location and memory conceptual, but the question is what is that `value` at this moment? It's the `function` that `otherClass` was declared to point at.
 
-> When we see an `identifier` for a `function` in `run-time`, the `value`
+> When we see an `identifier` for a `function` in **run-time**, the `value`
 > of that `identifier` is the `function`, that `identifier` was declared to point at.
 >
-> At `compile-time`, the `identifier`, was associated with that `function`. That reference to that `value` is there.
+> At **compile-time**, the `identifier`, was associated with that `function`. That reference to that `value` is there.
 >
-> In the `run-time` the `identifier` that was declared to poit at `function` (`otherClass()`) with those parentheses `()`, they `execute` the thing that we just pulled out of that `variable`.
-> And if we pulled out of that `variable` something that wasn't a `function`, like, `null`, or `undefined`, we get an error called a `TypeError`, because we would have a `value` like `null`, or `undefined`, but that is not a `value` that is legal to `execute` as a `function`.
+> In the **run-time** the `identifier` that was declared to poit at `function` (`otherClass()`) with those parentheses `()`, they execute the thing that we just pulled out of that `variable`.
+> And if we pulled out of that `variable` something that wasn't a `function`, like, `null`, or `undefined`, we get an error called a `TypeError`, because we would have a `value` like `null`, or `undefined`, but that is not a `value` that is legal to execute as a `function`.
 >
-> So we're doing something illegal with that `type`, that's call the `TypeError`, a `run-time` error, where we're doing something with a `value` that's not allowed for that `type`.
+> So we're doing something illegal with that `type`, that's call the `TypeError`, a **run-time** error, where we're doing something with a `value` that's not allowed for that `type`.
 
-So that's a good thing, because then, on line 13, those parentheses `()` that we see there on line 13, they `execute` the thing that we just pulled out of that `variable`.
+So that's a good thing, because then, on line 13, those parentheses `()` that we see there on line 13, they execute the thing that we just pulled out of that `variable`.
 
-In this case, because we got a `function`, so we can `execute` it, and moves to what 4.
-Line 4 does not have a `var` on it anymore but because of an assignment it does have, `target` operation.
+In this case, because we got a `function`, so we can execute it, and moves to what 4.
+Line 4 does not have a `var` on it anymore but because of an assignment it does have, **target** operation.
 
-So that conversation is gonna continue exactly like it did on line 1. Hey, `scope` of `otherClass` (blue bucket), I have a `traget` reference for a marble called `teacher`, ever heard of it? Yes. Here's your marble. So now we have a location in memory, that's a different place than the one from line 1. It's a different location in memory, cuz it's a different `scope`.
-We have this marble, and then we take the `value "Suzy"`, and we assign into it, then line 4 is `executed`.
+So that conversation is gonna continue exactly like it did on line 1. Hey, scope of `otherClass` (blue bucket), I have a **traget reference** for a marble called `teacher`, ever heard of it? Yes. Here's your marble. So now we have a location in memory, that's a different place than the one from line 1. It's a different location in memory, cuz it's a different scope.
+We have this marble, and then we take the `value "Suzy"`, and we assign into it, then line 4 is executed.
 
-> The `console.log` is an `identifier` (and it's in `source position`) that we didn't created, but it is an `identifier`. The `JavaScript engine` has that available to us as sort of like an `auto global` (it's already in `global scope`). And when it find it (in `global scope`), and look at the `value` of it, it's an `object`, it has a `method` call `log`, so it can `invoke` it.
+> The `console.log` is an `identifier` (and it's in **source position**) that we didn't created, but it is an `identifier`. The JavaScript engine has that available to us as sort of like an `auto global` (it's already in `global scope`). And when it find it (in `global scope`), and look at the `value` of it, it's an `object`, it has a `method` call `log`, so it can `invoke` it.
 >
-> If `JavaScript engine` look up for `identifier`, first asks for it in current `scope` if it wasn't there, it goes up one level until it gets to `global scope`, that's call the `lexical scope`.
+> If JavaScript engine look up for `identifier`, first asks for it in current scope if it wasn't there, it goes up one level until it gets to `global scope`, that's call the **lexical scope**.
 
-Now in line 5, `console.log`, there a reference to `identifier`. Not one that we created, but there is an `identifier` (a marble ) on the list. Which is call `console`, that's got to exist somewhere. The `JavaScript engine` has that available to us as sort of like an `auto global`. Not something we created, but it's available nonetheless.
+Now in line 5, `console.log`, there a reference to `identifier`. Not one that we created, but there is an `identifier` (a marble ) on the list. Which is call `console`, that's got to exist somewhere. The JavaScript engine has that available to us as sort of like an `auto global`. Not something we created, but it's available nonetheless.
 
-So the same process, we would basically say, hey `scope` of `otherClass`, have you ever heard of a marble called `console`? Cuz that's in the `source position`. Now, has `otherClass` ever defined a marble called `console`? No, so what's going to happen then, and this is the key to understanding `lexical scope`, is that if we cannot find a `variable` that is referenced within the `scope`, that was declared within the `scope`, we go up one level, in this case to the `global scope`, and we would say, hey, `global scope`, have you ever heard of an `identifier` called `console`? And even though we didn't formally declare it, it's an `auto global`, it's already there, there's already a red marble called `console`.
+So the same process, we would basically say, hey scope of `otherClass`, have you ever heard of a marble called `console`? Cuz that's in the **source position**. Now, has `otherClass` ever defined a marble called `console`? No, so what's going to happen then, and this is the key to understanding **lexical scope**, is that if we cannot find a `variable` that is referenced within the scope, that was declared within the scope, we go up one level, in this case to the `global scope`, and we would say, hey, `global scope`, have you ever heard of an `identifier` called `console`? And even though we didn't formally declare it, it's an `auto global`, it's already there, there's already a red marble called `console`.
 
 So what is `global scope` gonna do? Here's your red marble, and we can look on that marble. It's an `object`, it has a `method` call `log`, and so we can `invoke` it.
 
-> When we reference a `variable` in a `source position`, we have to first look it up, and when you reference a `variable` in a `target position`, we also have to first look it up.
+> When we reference a `variable` in a **source position**, we have to first look it up, and when you reference a `variable` in a **target position**, we also have to first look it up.
 >
 > So there is a look up process involved.
 
@@ -1765,28 +1765,28 @@ So what is `global scope` gonna do? Here's your red marble, and we can look on t
 
 There is a very important takeaway that we should have:
 
-> We discover the `source` versus `target` position at `compile-time`, but we don't use that information until `run-time`.
+> We discover the **source** versus **target** position at **compile-time**, but we don't use that information until **run-time**.
 >
-> Basically think of it like a plan (map), it's like a to do list for every `scope`, that's the `executable code` (what `compiler` outputs). And then when it runs is when it all actually comes into existence.
+> Basically think of it like a plan (map), it's like a to do list for every scope, that's the **executable code** (what **compiler** outputs). And then when it runs is when it all actually comes into existence.
 >
-> Every time we `execute` a `function`, the environment is recreated from scratch.
+> Every time we execute a `function`, the environment is recreated from scratch.
 >
-> So the `compiler` output is not actually reserved `memory`, it's the plan for how to reserve `memory` and make `identifier` (marbles) and all that. And then every time we `execute` that plan is effected into `memory`.
+> So the **compiler** output is not actually reserved **memory**, it's the plan for how to reserve **memory** and make `identifier` (marbles) and all that. And then every time we execute that plan is effected into **memory**.
 
 ---
 
-We have finished `executing` line 5, and `execution` moves back. Now we're on line 14.
+We have finished executing line 5, and execution moves back. Now we're on line 14.
 
-The `JavaScript engine` find a `source` reference for `identifier` called `ask` on line 14. And asks `scope manager` (here `global scope`), do you know about an `identifier` called `ask`? Yes, here's location in memory for that `identifier` called `ask`. so we go to that `identifier` (that location in memory) and it have a `function` (green bucket, the things we declared on line 8), in it.
+The JavaScript engine find a **source reference** for `identifier` called `ask` on line 14. And asks **scope manager** (here `global scope`), do you know about an `identifier` called `ask`? Yes, here's location in memory for that `identifier` called `ask`. so we go to that `identifier` (that location in memory) and it have a `function` (green bucket, the things we declared on line 8), in it.
 
-So now we have a `function`, and that open close parenthesis `executes` the `function`. Now `execution` moves to line 9. Now, there's no more `var`. And now the `JavaScript engine` asks, green bucket (`scope` of `ask`), I have a `target` reference for `identifier` called `question`, ever heard of it? Yes, here your `identifier` location in memory. So we don't care what's in it right now. We go and get the `value` from the right-hand side (`"Why?"`), we assign into that location of memory and line 9 is finished.
+So now we have a `function`, and that open close parenthesis **executes** the `function`. Now execution moves to line 9. Now, there's no more `var`. And now the JavaScript engine asks, green bucket (scope of `ask`), I have a **target** reference for `identifier` called `question`, ever heard of it? Yes, here your `identifier` location in memory. So we don't care what's in it right now. We go and get the `value` from the right-hand side (`"Why?"`), we assign into that location of memory and line 9 is finished.
 
-Now, line 10. We remember how the `console` works. So the `JavaScript engine` doesn't find `console` on that `scope`, it goes to the `global scope`, finds it, finds a `method` called `log`. But before it can execute `log`, it's gotta figure out what's being passed to it. So in line 10, it's a reference to another marble. So we gotta look that up. Again it asks green bucket `scope manager` (`scope` of `ask`), I have a `source` reference for `identifier` called `question`, ever heard of it? Yes, here's your green marble.
+Now, line 10. We remember how the `console` works. So the JavaScript engine doesn't find `console` on that scope, it goes to the `global scope`, finds it, finds a `method` called `log`. But before it can execute `log`, it's gotta figure out what's being passed to it. So in line 10, it's a reference to another marble. So we gotta look that up. Again it asks green bucket **scope manager** (scope of `ask`), I have a **source reference** for `identifier` called `question`, ever heard of it? Yes, here's your green marble.
 
 And now, because we're not assigning to it, now we want the `value` that's currently in it.
 So we go to that area of memory. We pull the `value` out, which happens to be the `string` (`"Why?"`) in this case. And that `argument` is assigned to the `parameter` that `console.log` is receiving. So `arguments` (the things that we pass in) get assigned to the `parameters` that receive them.
 
-> An `argument`: is a `value` passed to a `function` when the `function` is called. Whenever any `function` is called during the `execution` of the program there are some `values` passed with the `function`. These `values` are called `arguments`. An `argument` when passed with a `function` replaces with those `variables` which were used during the `function` definition and the `function` is then `executed` with these `values`.
+> An `argument`: is a `value` passed to a `function` when the `function` is called. Whenever any `function` is called during the **execution** of the program there are some `values` passed with the `function`. These `values` are called `arguments`. An `argument` when passed with a `function` replaces with those `variables` which were used during the `function` definition and the `function` is then executed with these `values`.
 >
 > A `parameter`: is a `variable` used to define a particular `value` during a `function` definition. Whenever we define a `function` we introduce our compiler with some `variables` that are being used in the running of that `function`. These `variables` are often termed as `Parameters`. The `parameters` and `arguments` mostly have the same `value` but theoretically, are different from each other.
 >
@@ -1799,16 +1799,16 @@ So we go to that area of memory. We pull the `value` out, which happens to be th
 >
 > [GeeksforGeeks](https://www.geeksforgeeks.org/argument-vs-parameter-in-java/)
 
-> The `JavaScript engine` before `execute` method (like `log` in `console`), first it's gotta figure out what's being passed to it (if what we passed in is an `identifier`).
+> The JavaScript engine before execute method (like `log` in `console`), first it's gotta figure out what's being passed to it (if what we passed in is an `identifier`).
 >
-> And that `identifier` we passed in to the `console.log` is in a `source position`, so we go to that area of memory, and pull the `value` out. And that `argument` (the `value` we pull it out and passed to the `console.log()`) is assigned to the `parameter` that `console.log` is receiving.
+> And that `identifier` we passed in to the `console.log` is in a **source position**, so we go to that area of memory, and pull the `value` out. And that `argument` (the `value` we pull it out and passed to the `console.log()`) is assigned to the `parameter` that `console.log` is receiving.
 >
 > So `arguments` (the `values` that we pass in) get assigned to the `parameters` that receive them.
 >
-> We can think about a `parameter`, in a `function` definition, like a `variable` that is in `target position`.
-> And `argument` (if we have an `identifier` to passed in to the `function` call) is in a `source position`.
+> We can think about a `parameter`, in a `function` definition, like a `variable` that is in **target position**.
+> And `argument` (if we have an `identifier` to passed in to the `function` call) is in a **source position**.
 
-We can think about a `parameter`, like if I had `function ask()` and it took a `parameter`, the `parameter` is a `target` reference (`variable`). And if we have an `identifier` in an `argument` position like in line 10, is a `source` reference.
+We can think about a `parameter`, like if I had `function ask()` and it took a `parameter`, the `parameter` is a **target** reference (`variable`). And if we have an `identifier` in an `argument` position like in line 10, is a **source reference**.
 
 And in the end, it becomes something like this:
 
@@ -1818,26 +1818,26 @@ And in the end, it becomes something like this:
 
 ### Summary:
 
-The JavaScript is not an `interpreted language` that it goes step by step one line at a time. But rather, we should think about JavaScript as a two pass `processing`.
+The JavaScript is not an **interpreted language** that it goes step by step one line at a time. But rather, we should think about JavaScript as a two pass **processing**.
 
-First pass, we could call it `compilation` (or `parsing`), we're gonna go through the entire code. And there's lots of things that happen during the `parsing` and `compilation`, but the main thing that happens is all of the `scopes` (all of those colored marble buckets, the plan for those all) get created, we figure out where all the `scope` boundaries are.
+First pass, we could call it **compilation** (or **parsing**), we're gonna go through the entire code. And there's lots of things that happen during the **parsing** and **compilation**, but the main thing that happens is all of the scopes (all of those colored marble buckets, the plan for those all) get created, we figure out where all the scope boundaries are.
 
-And indeed, all of the `identifier` references, those are color coded as marbles. And we'll use that information about the color of the marble and what bucket it comes from, in the second pass when we `execute` code.
+And indeed, all of the `identifier` references, those are color coded as marbles. And we'll use that information about the color of the marble and what bucket it comes from, in the second pass when we execute code.
 
-> The first pass is `compilation`, and the second pass is `execution`. In the `compilation phase`, it's the `parser` (or `compiler`) and the `scope manager` , And in `execution phase` (`run-time`), we have `JavaScript virtual machine` (or `JavaScript engine`) and the `scope manager`.
+> The first pass is **compilation**, and the second pass is **execution**. In the **compilation phase**, it's the **parser** (or **compiler**) and the **scope manager** , And in **execution phase** (**run-time**), we have **JavaScript virtual machine** (or JavaScript engine) and the **scope manager**.
 
-> `JavaScript engine` = `execution engine` = `virtual machine` = `VM`
+> **JavaScript engine** = **execution engine** = **virtual machine** = **VM**
 
-The `parser` in `compilation phase` looking for formal declaration (like `var` or `function`), and if the formal declaration there was before, it do nothing. And if there wasn't, the `scope manager` will create that `identifier` on that `scope`.
+The **parser** in **compilation phase** looking for formal declaration (like `var` or `function`), and if the formal declaration there was before, it do nothing. And if there wasn't, the **scope manager** will create that `identifier` on that scope.
 
-> The reason for that chaking or question is, if we'd seen a formal declaration (like `var`) of same `identifier` a couple of times in the same `scope`, we don't need to make multiple `identifiers` (marbles) with the same name.
+> The reason for that chaking or question is, if we'd seen a formal declaration (like `var`) of same `identifier` a couple of times in the same scope, we don't need to make multiple `identifiers` (marbles) with the same name.
 >
-> It only needs to be created once for the same `scope`, and there really is no such thing as recreating it.
+> It only needs to be created once for the same scope, and there really is no such thing as recreating it.
 
-> If the `identifier` pointing to a `function`, besides creating its `identifier`, it also creates a new `scope`.
+> If the `identifier` pointing to a `function`, besides creating its `identifier`, it also creates a new scope.
 
-> Whenever an `identifier` is not in a `target position` (receiving an assignment of `value`), is in `source position`.
-> If it's not `target` receiving something, it must be a `source`, cuz that's the only two options.
+> Whenever an `identifier` is not in a **target position** (receiving an assignment of `value`), is in **source position**.
+> If it's not **target** receiving something, it must be a **source**, cuz that's the only two options.
 
 ---
 
@@ -1862,70 +1862,70 @@ Another example with corner cases:
 Scope
 ```
 
-First Step: `compilation`
+First Step: **compilation**
 
-> In `compilation stage` we looking for formal declarations and create `identifiers` for them, but in `execution stage` we see that `identifiers` is in `source position` or `target position`.
+> In **compilation stage** we looking for formal declarations and create `identifiers` for them, but in **execution stage** we see that `identifiers` is in **source position** or **target position**.
 
-So `processing` begins with the `compiler` talking to the `scope manager`. And the `compiler` says on line 1, hey `scope manager` (`global scope`), we have a formal declaration for `teacher` (in `execution` it will be a `target reference` but, during the `compilation`, we have a formal declaration), ever of it? No, so we go ahead and create red marble.
+So **processing** begins with the **compiler** talking to the **scope manager**. And the **compiler** says on line 1, hey **scope manager** (`global scope`), we have a formal declaration for `teacher` (in **execution** it will be a **target reference** but, during the **compilation**, we have a formal declaration), ever of it? No, so we go ahead and create red marble.
 
-> We will heard of `teacher` in `execution`. but in `compilation stage` we'd never heard of it.
+> We will heard of `teacher` in **execution**. but in **compilation stage** we'd never heard of it.
 
 In line 3 we have the formal declaration. Hey `global scope`, ever heard of formal declaration for an `identifier` called `otherClass`? No, and here's your red marble (and goes in the red bucket).
 
-And because it is a `function`, It needs its own bucket, so the `scope manager` creates blue bucket.
-And now we step into that `scope` and make its plan. And because there is no `var` there, we don't make any blue marbles.
+And because it is a `function`, It needs its own bucket, so the **scope manager** creates blue bucket.
+And now we step into that scope and make its plan. And because there is no `var` there, we don't make any blue marbles.
 
-> If in `compilation stage` there is `identifier`, but without formal declaration (such as `var` or `function`), the `scope manager` didn't create `identifier` for it.
+> If in **compilation stage** there is `identifier`, but without formal declaration (such as `var` or `function`), the **scope manager** didn't create `identifier` for it.
 >
-> But in `execution stage` the `JavaScript engine`, will go up one level until it gets to `global scope` and if it didn't find it there too, it will `auto global` it, which means it will create that `identifier` in `global scope`.
+> But in **execution stage** the JavaScript engine, will go up one level until it gets to `global scope` and if it didn't find it there too, it will `auto global` it, which means it will create that `identifier` in `global scope`.
 
-So from the perspective of the `compiler`, we didn't have any formal declarations, so there's no marbles to create. So we're done with the blue bucket. Effectively it exists, but effectively it has no marbles in it.
+So from the perspective of the **compiler**, we didn't have any formal declarations, so there's no marbles to create. So we're done with the blue bucket. Effectively it exists, but effectively it has no marbles in it.
 
-Now, we step back out to the `global scope`. And there is no more formal declaration. So we're done with `compilation`.
+Now, we step back out to the `global scope`. And there is no more formal declaration. So we're done with **compilation**.
 
-Second Step: `execution`
+Second Step: **execution**
 
-So we remember, there's no formal declarations but there are `executable` statements. Line 1 has an `executable` statement. And so the `JavaScript engine` says, hey, `global scope`, I have a `target reference` for `teacher`, ever heard of it? Yes, here's your red marble. So we take the `value` `"Kyle"`, we assign it into the red marble (`teacher`), and we are complete.
+So we remember, there's no formal declarations but there are executable statements. Line 1 has an executable statement. And so the JavaScript engine says, hey, `global scope`, I have a **target reference** for `teacher`, ever heard of it? Yes, here's your red marble. So we take the `value` `"Kyle"`, we assign it into the red marble (`teacher`), and we are complete.
 
-Now remember, `functions` are declarations, they don't really exist. At least, they're only here symbolically. So we're going to move from the `function` to the next `execution` line of code, which would be line 9.
+Now remember, `functions` are declarations, they don't really exist. At least, they're only here symbolically. So we're going to move from the `function` to the next execution line of code, which would be line 9.
 
-> In `execution stage`, because `functions` and other kind of formal declarations aren't exist (they're only there symbolically), the `JavaScript engine` skip them.
+> In **execution stage**, because `functions` and other kind of formal declarations aren't exist (they're only there symbolically), the JavaScript engine skip them.
 
-So in line 9, hey `global scope` (the red bucket), I have a source reference for an identifier called `otherClass`, have you ever heard of it before? Yes, Here's your red marble. And in red marble is a reference to the `function` which we've called `otherClass` here which has attached to it this blue bucket of `scope`. So we find that `function`, we `execute` it with the parenthesis `()` on line 9, and `execution` moves to line 4.
+So in line 9, hey `global scope` (the red bucket), I have a source reference for an identifier called `otherClass`, have you ever heard of it before? Yes, Here's your red marble. And in red marble is a reference to the `function` which we've called `otherClass` here which has attached to it this blue bucket of scope. So we find that `function`, we execute it with the parenthesis `()` on line 9, and execution moves to line 4.
 
-Now on line 4, hey, blue bucket, I have a `target reference` (because it is receiving an assignment) for `teacher`, ever heard of it? No. So we go up one level. Hey, `global scope`, I have a `target reference` for `teacher` ever heard of it? Yes, here's your red marble (**Important to see that it's a red marble here not a blue marble**).
+Now on line 4, hey, blue bucket, I have a **target reference** (because it is receiving an assignment) for `teacher`, ever heard of it? No. So we go up one level. Hey, `global scope`, I have a **target reference** for `teacher` ever heard of it? Yes, here's your red marble (**Important to see that it's a red marble here not a blue marble**).
 
-Even though we're inside of the blue `scope`, we are referencing a red marble. So we get a red marble and when we assign `"Suzy"` to it, we are assigning over the `value` that was currently there (`"Kyle"`), because it's the same marble in this case. This wasn't `shadowed` because we didn't declare `teacher` inside of the `otherClass function`.
+Even though we're inside of the blue scope, we are referencing a red marble. So we get a red marble and when we assign `"Suzy"` to it, we are assigning over the `value` that was currently there (`"Kyle"`), because it's the same marble in this case. This wasn't `shadowed` because we didn't declare `teacher` inside of the `otherClass function`.
 
 ![Scope and Corner Cases](https://user-images.githubusercontent.com/37678729/72376864-f3176080-3723-11ea-8057-f7f63011b6fc.png)
 
-Moving on then to line 5. And, it's gonna process exactly the same, same questions. Hey `scope` of `otherClass`, I have a `target reference` for the `identifier` called `topic`, ever heard of it? No, so we go up one level to `global scope`. A `global scope`, I have a `target reference` for the variable called `topic`. Ever heard of it?
+Moving on then to line 5. And, it's gonna process exactly the same, same questions. Hey scope of `otherClass`, I have a **target reference** for the `identifier` called `topic`, ever heard of it? No, so we go up one level to `global scope`. A `global scope`, I have a **target reference** for the variable called `topic`. Ever heard of it?
 
-Here we see one of the historical bad parts of JavaScript which is in the early days to be as forgiving as possible for people that didn't understand the language, they instituted this idea of `auto global`'s. So if we try to assign to a `variable` that's never been formally declared. Once we arrive at the `global scope`, if we say hey, `global scope`, we're looking for this marble called `topic`, ever heard of it? And the `global scope` instead of saying nope, sorry error, the `global scope`'s gonna say I just created one for you. And it's gonna hand us a red marble, not a blue marble. Why do we suppose it only hands us a red marble and not a blue marble? Cuz we're talking to the `global scope` now. We've already passed up the `scope` where that would have been formally declared and now we're talking to the `global scope` and it's the `global scope` that gives us the `variable`.
+Here we see one of the historical bad parts of JavaScript which is in the early days to be as forgiving as possible for people that didn't understand the language, they instituted this idea of `auto global`'s. So if we try to assign to a `variable` that's never been formally declared. Once we arrive at the `global scope`, if we say hey, `global scope`, we're looking for this marble called `topic`, ever heard of it? And the `global scope` instead of saying nope, sorry error, the `global scope`'s gonna say I just created one for you. And it's gonna hand us a red marble, not a blue marble. Why do we suppose it only hands us a red marble and not a blue marble? Cuz we're talking to the `global scope` now. We've already passed up the scope where that would have been formally declared and now we're talking to the `global scope` and it's the `global scope` that gives us the `variable`.
 
-> If we try to assign to a `variable` that's never been formally declared (on that `scope`). Once we go up one level and arrive at the `global scope`, if there wasn't `variable` with that `identifier`, the `global scope`'s gonna created it for us (in a `run-time` or `execution phase`), we call this idea `auto global`.
+> If we try to assign to a `variable` that's never been formally declared (on that scope). Once we go up one level and arrive at the `global scope`, if there wasn't `variable` with that `identifier`, the `global scope`'s gonna created it for us (in a **run-time** or **execution phase**), we call this idea `auto global`.
 >
-> Even when we wrote that `identifier` in the first place inside another `scope` than `global scope`, because the `global scope` created and gives us that `variable`, it is a `global scope` variable (`red marble`).
+> Even when we wrote that `identifier` in the first place inside another scope than `global scope`, because the `global scope` created and gives us that `variable`, it is a `global scope` variable (`red marble`).
 >
-> And we should keep it in mind creating a declaration at `compile-time` and creating it dynamically during the `run-time`, have differences. There are performance differences and other sorts of things but mechanically they are two `global variables` at this point.
+> And we should keep it in mind creating a declaration at **compile-time** and creating it dynamically during the **run-time**, have differences. There are performance differences and other sorts of things but mechanically they are two `global variables` at this point.
 >
-> Never ever under any circumstances did you intentionally `auto-create global`'s like that. Always declare the `variables` that we want to use declare them in whatever `scope` we need them in, but don't `auto-create` them.
+> Never ever under any circumstances did you intentionally `auto-create global`'s like that. Always declare the `variables` that we want to use declare them in whatever scope we need them in, but don't `auto-create` them.
 >
-> But we should keep it in mind, if we have `non-declared variable` without assigning to some `value`, we still get `ReferenceError` when we `execute` the code.
+> But we should keep it in mind, if we have `non-declared variable` without assigning to some `value`, we still get `ReferenceError` when we execute the code.
 
 So we've created an `auto global` called `topic` which that sounds terrible. But now there's a `global variable` called `topic` and when we get that red marble back and make the assignment on line 5, there's a `global variable` now with the value `"React"` in it.
 
-Q: Do the `auto global` would occur also if `topic="react"` were in the `global scope` under `variable` of `teacher` (for example it was in line 2)?
+Q: Do the `auto global` would occur also if `topic = "react"` were in the `global scope` under `variable` of `teacher` (for example it was in line 2)?
 
-A: That's true, any assignment to a `variable` that is undeclared at that moment, not declared to any `scope` we have access to. Any undeclared variable is going to end up creating this `auto global`.
+A: That's true, any assignment to a `variable` that is undeclared at that moment, not declared to any scope we have access to. Any undeclared variable is going to end up creating this `auto global`.
 
 Now, the reason why that happens is because we'll notice that this program is not running in `strict mode`. But this is running in the `non-strict mode` or sometimes called, `sloppy mode`. We should be using `strict mode`, and if we were using `strict mode`, we wouldn't see this behavior. But since this code snip it isn't, that's what happens, as we end up creating a `global variable` called `topic`.
 
 > If we use `strict mode` instead of using `non-strict mode` (or sometimes called `sloppy mode`), we wouldn't see this `auto-create global`.
 
-We execute `console.log` the same way as we have before. So `execution` is then done in the `function`. `Execution` moves to line 11. So hey `global scope` (red bucket), I have a `source reference` to a `variable` called `teacher`, ever heard of it? Yes, so we go get that marble and we look for its `value`. And the `value` is `"Suzy"`. Because of line 4, we've overwritten the `value` in that `variable`. It's not a separate `variable` (marble).
+We execute `console.log` the same way as we have before. So execution is then done in the `function`. Execution moves to line 11. So hey `global scope` (red bucket), I have a **source reference** to a `variable` called `teacher`, ever heard of it? Yes, so we go get that marble and we look for its `value`. And the `value` is `"Suzy"`. Because of line 4, we've overwritten the `value` in that `variable`. It's not a separate `variable` (marble).
 
-So line 12 then, hey `global scope`, I have a `source reference` for `topic`, ever heard of `topic`? Yes, here's your red marble. and the value of that red marble is `"React"`.
+So line 12 then, hey `global scope`, I have a **source reference** for `topic`, ever heard of `topic`? Yes, here's your red marble. and the value of that red marble is `"React"`.
 
 Q: If line 11 was actually in line 8, `teacher` would still be `"Kyle"`?
 
@@ -1953,20 +1953,20 @@ A: We will get `ReferenceError`. There would be no `identifier`. But because the
 Scope
 ```
 
-So now if we flip on `strict mode`, which we do by putting this `strict mode` fragment at the top of any `scope`, preferably at the top of our program, the top of our file, or at the top of any `function`.
+So now if we flip on `strict mode`, which we do by putting this `strict mode` fragment at the top of any scope, preferably at the top of our program, the top of our file, or at the top of any `function`.
 
-If we turn on `strict mode`, all the same processing is going to happen. But when we arrive at line 7 and we say, hey `scope` of `otherClass`, I have this `target reference` for `topic` ever heard of it? No, so we go to the `global scope` and we say, `global scope` have you ever heard of `topic`, and the `global scope` gonna respond with `ReferenceError`, never heard of it.
+If we turn on `strict mode`, all the same processing is going to happen. But when we arrive at line 7 and we say, hey scope of `otherClass`, I have this **target reference** for `topic` ever heard of it? No, so we go to the `global scope` and we say, `global scope` have you ever heard of `topic`, and the `global scope` gonna respond with `ReferenceError`, never heard of it.
 
-> Whenever we are in `non-strict mode` (or `sloppy mode`), and we have a `target reference` for a `non-declared variable`, we will `auto create` it (`auto global`) in `run-time`.
+> Whenever we are in `non-strict mode` (or `sloppy mode`), and we have a **target reference** for a `non-declared variable`, we will `auto create` it (`auto global`) in **run-time**.
 >
-> And if in `non-strict mode`, we try to get `non-declared variable` that is in a `source position`, `global scope` throw us a `ReferenceError`.
+> And if in `non-strict mode`, we try to get `non-declared variable` that is in a **source position**, `global scope` throw us a `ReferenceError`.
 
-> If we have any kind of reference (`target` or `source`) for `non-declared variable` in **`strict mode`**, `global scope` throw us a `ReferenceError` (insted of `auto create` it, if `non-declared variable` was in `target position`).
+> If we have any kind of reference (**target** or **source**) for `non-declared variable` in **`strict mode`**, `global scope` throw us a `ReferenceError` (insted of `auto create` it, if `non-declared variable` was in **target position**).
 
 That's what we would like to happen all of the time. It now happens as the result of `strict mode`, we get a `ReferenceError`. So one of the many, many reasons why it would be good for us to be using `strict mode`. It will avoid mistakes like line 7, cuz it almost certainly a mistake, it should not be something we intentionally try to create `global`.
 
-> The difference between `TypeErrors` and `ReferenceErrors` are , `TypeErrors` are when we found the `variable` and the `value` that it is currently holding, is not legal to do whatever we're trying to do with it. Like trying to `execute` or access a `property` on an `undefined` or `null`, things like that, that's `TypeError`.
-> A `ReferenceError` is, when `JavaScript engine` couldn't find that `variable` on any `scope` that we have access to.
+> The difference between `TypeErrors` and `ReferenceErrors` are , `TypeErrors` are when we found the `variable` and the `value` that it is currently holding, is not legal to do whatever we're trying to do with it. Like trying to execute or access a `property` on an `undefined` or `null`, things like that, that's `TypeError`.
+> A `ReferenceError` is, when JavaScript engine couldn't find that `variable` on any scope that we have access to.
 
 Q: Is `strict mode` always pretty on `ES6`?
 
@@ -1982,7 +1982,7 @@ So in `stric mode`, we can't auto create `variables`, you have to declare them.
 
 ### Nested Scope:
 
-This is an example of a nested `scope`:
+This is an example of a nested scope:
 
 ```JavaScript
 1.  var teacher = "Kyle";
@@ -2005,30 +2005,30 @@ Scope
 
 We start by looking at line 1, that's a formal declaration that makes a red marble. Line 3 is a formal declaration that also creates a red marble. Line 4 and 6 both are the formal declaration that create a blue marble.
 
-And now, we are inside of `ask`, in line 7, there is no marbles, but there are reference to marbles. So on line 7 when we reference `teacher`, it's a blue marble. And the `question` in line 7, is a green marble. Because the `question` is a `variable` inside of the `scope` of the `function ask`.
+And now, we are inside of `ask`, in line 7, there is no marbles, but there are reference to marbles. So on line 7 when we reference `teacher`, it's a blue marble. And the `question` in line 7, is a green marble. Because the `question` is a `variable` inside of the scope of the `function ask`.
 
-> The `function declarations` make their `identifier` in their enclosing `scope`.
+> The `function declarations` make their `identifier` in their enclosing scope.
 
-> We shoud know the `parameters` are `variables` inside of the `scope` of that `function`.
+> We shoud know the `parameters` are `variables` inside of the scope of that `function`.
 >
-> Even though it doesn't have a `var` there, a `parameter` is formally creating an `identifier` in that `scope`.
+> Even though it doesn't have a `var` there, a `parameter` is formally creating an `identifier` in that scope.
 
 So we'd have a `teacher` being a blue marble and `question` being a green marble.
 
-The `value` of the `question` is `"Why?"`, because on line 10, when we `execute` line 10, we have a `value` there which we might have had to look up, but in this case it's a literal. And the `"Why?"` gets assigned to the `variable question`, so that `execution` happens at line 10 before `ask` starts `executing`.
+The `value` of the `question` is `"Why?"`, because on line 10, when we execute line 10, we have a `value` there which we might have had to look up, but in this case it's a literal. And the `"Why?"` gets assigned to the `variable question`, so that execution happens at line 10 before `ask` starts executing.
 So when we then ask for the marble that we find, which is a green marble and we ask for the value of `question`, it the `"Why?"`.
 
-> Whenever our `function` have `arguments`, the `values` of that `arguments` will be assigned to the `parameters` of that `function` first, and then the `function` itself will be `executed`.
+> Whenever our `function` have `arguments`, the `values` of that `arguments` will be assigned to the `parameters` of that `function` first, and then the `function` itself will be executed.
 
 What's gonna happen with line 14? How does line 14 execute?
-Hey `global scope`, I have a `source reference` for an `identifier` called `ask`, ever heard of it? No, so we have a `ReferenceError`.
+Hey `global scope`, I have a **source reference** for an `identifier` called `ask`, ever heard of it? No, so we have a `ReferenceError`.
 
-Even though `ask` exist within the program, it doesn't exist in any `scope` that we have access to at this moment. So it is therefore an `undeclared variable`. Because we're not in `strict mode`, unlike `auto globals` which go ahead and create a marble for us, if we have a `source referenced` to a `variable` that is `undeclared`, it always throws a `ReferenceError`. That's why it's critical to understand the difference between a `target reference` and a `source reference`. At least if you're in `non-strict mode`.
-Once you go to `strict mode`, they both behave exactly the same, so it stops mattering as much `target` versus `reference`.
+Even though `ask` exist within the program, it doesn't exist in any scope that we have access to at this moment. So it is therefore an `undeclared variable`. Because we're not in `strict mode`, unlike `auto globals` which go ahead and create a marble for us, if we have a **source referenced** to a `variable` that is `undeclared`, it always throws a `ReferenceError`. That's why it's critical to understand the difference between a **target reference** and a **source reference**. At least if you're in `non-strict mode`.
+Once you go to `strict mode`, they both behave exactly the same, so it stops mattering as much **target** versus **reference**.
 
-> If in `non-strict mode`, we have a `source referenced` to a `variable` that is `undeclared` (it doesn't exist in any `scope` that we have access to at that moment), it always throws a `ReferenceError`. And if the `variable` is in the `target reference`, the `global scope` will be auto created it (`auto global`).
+> If in `non-strict mode`, we have a **source referenced** to a `variable` that is `undeclared` (it doesn't exist in any scope that we have access to at that moment), it always throws a `ReferenceError`. And if the `variable` is in the **target reference**, the `global scope` will be auto created it (`auto global`).
 >
-> But in `strict mode`, it doesn't matter `undeclared variable` is in the `source position` or the `target position`, the `JavaScript engine` will always throw us a `Reference Error`.
+> But in `strict mode`, it doesn't matter `undeclared variable` is in the **source position** or the **target position**, the JavaScript engine will always throw us a `Reference Error`.
 
 Q: When we're passing the `"Why?"` to `ask` on line 10, is there behind the scenes, is JavaScript saying `var question = "Why?"` at some point?
 
@@ -2044,7 +2044,7 @@ What is the difference between `undefined` and `undeclared`?
 
 **Undefiend:** means a `variable` exists but at the moment it has no `value`. It may have never had a `value` or it might have used to have a `value` and it doesn't anymore but there is no other `value` and the vacuum of space it is `undefined`.
 
-**Undeclared:** is actually never formally declared in any `scope` that we have accessed to (we do not have a marble for it). And in `strict mode`, it always results in those `ReferenceErrors`.
+**Undeclared:** is actually never formally declared in any scope that we have accessed to (we do not have a marble for it). And in `strict mode`, it always results in those `ReferenceErrors`.
 
 Unfortunately, JavaScript tries to mess around with this and pretend that `undeclared` is sort of the same thing as `undefined` and some of its error messages and other outputtings and things and not is historically a really bad idea. We need to keep these two concepts separate. There's a different something being `undeclared` (doesn't exist), and being `undefined` (definitely it does exist, but doesn't have a `value`).
 
@@ -2054,7 +2054,7 @@ Unfortunately, JavaScript tries to mess around with this and pretend that `undec
 
 ### Function Expressions:
 
-We've been talking about `functions` in the `compilation phase`, adding their `identifier` (as a colored marble) in the enclosing `scope`.
+We've been talking about `functions` in the **compilation phase**, adding their `identifier` (as a colored marble) in the enclosing scope.
 
 ```JavaScript
 1. function teacher() { /* .. */ }
@@ -2072,15 +2072,15 @@ Scope: which scope?
 
 In this example `teacher` in line 1 (`function declaration`), creates a red marble but `anotherTeacher` in line 3 (`function expression`) creates a blue marble.
 
-In line 3 `identifier` called `myTeacher` creates red marble. We do know that there's a `function` called `anotherTeacher` there, so we need to create a bucket for it at least. We need to make a blue bucket. But because that `function` is not a `declaration`, we're not gonna handle its marble color in the same way. The key difference here is that the `anotherTeacher identifier` (line 3), is going to end up as a marble at `compile-time` but it's gonna be a different colored marble than we expect. It's not a red marble, it's a blue marble. So the blue `scope` is where the blue marble `anotherTeacher` ends up.
+In line 3 `identifier` called `myTeacher` creates red marble. We do know that there's a `function` called `anotherTeacher` there, so we need to create a bucket for it at least. We need to make a blue bucket. But because that `function` is not a `declaration`, we're not gonna handle its marble color in the same way. The key difference here is that the `anotherTeacher identifier` (line 3), is going to end up as a marble at **compile-time** but it's gonna be a different colored marble than we expect. It's not a red marble, it's a blue marble. So the blue scope is where the blue marble `anotherTeacher` ends up.
 
-> One if the key differences between `function declarations` and `function expressions`, is that `function declarations` add their name (they attach their marble), to the enclosing `scope`, whereas `function expressions` will add their name (marble) to their own `scope`.
+> One if the key differences between `function declarations` and `function expressions`, is that `function declarations` add their name (they attach their marble), to the enclosing scope, whereas `function expressions` will add their name (marble) to their own scope.
 
 That's why on line 4, we can reference in `anotherTeacher` because there is in fact a blue marble called `anotherTeacher`. But down on line 9, there is no `anotherTeacher`. so when we're out in the `global scope` and we asked `global scope` you ever heard of this red marble, it's gonna say nope, never heard of that red marble and what we're gonna get there, `ReferenceError`.
 
-> So key difference, `function expressions`, put there `identifiers` into their own `scope`.
+> So key difference, `function expressions`, put there `identifiers` into their own scope.
 >
-> There's a little, also, additional nuance which is not only does that blue marble show up in the blue `scope` but it's also read only.
+> There's a little, also, additional nuance which is not only does that blue marble show up in the blue scope but it's also read only.
 > You cannot reassign `anotherTeacher` on line 4, to some other `value`.
 
 ### Named Function Expressions:
@@ -2119,22 +2119,22 @@ So on line 1, we see a `function expression`, but we see no name. So that's call
 - More debuggable stack traces. So automatically by naming our functions, we make our code and stack traces more debuggable.
 - More self-documenting code. If we have a `function` that is anonymous, and we look at that `function` to figure out what that `anonymous function` is doing, we have to read the `function` body and we also probably have to read where it's being parsed.
 
-In that previous example, when we had a `variable` name that was in the `global scope`, and then we had our `function expression`. Would it be more or less reliable for us to make a reference to a marble in our own `scope` that is read only, or to reference a marble in an enclosing `scope` that is not read only? If we wanted to reference ourself from inside of the `function`, and we had the choice between referencing ourself with a marble in our own `scope` that is read only (the name of our `function expression`) or self-reference ourself with the `variable` that our `function` had been assigned to in the outer `scope`, which isn't by default read only.
+In that previous example, when we had a `variable` name that was in the `global scope`, and then we had our `function expression`. Would it be more or less reliable for us to make a reference to a marble in our own scope that is read only, or to reference a marble in an enclosing scope that is not read only? If we wanted to reference ourself from inside of the `function`, and we had the choice between referencing ourself with a marble in our own scope that is read only (the name of our `function expression`) or self-reference ourself with the `variable` that our `function` had been assigned to in the outer scope, which isn't by default read only.
 
 Q: Which one of those two would be the better self-reference?
 
 A: The first one, the one that we own and that is read only is a more reliable self-reference. So if there's any possible chance remotely that you're gonna need a self-reference, it's best to go ahead and name it.
 Even if you don't need it now, you might need it in the future, it's best to go ahead and name it.
 
-Q: When we just name the `function expression` the same thing that we will name the `variable` of the `scope` above, is that a case of `shadowing`?
+Q: When we just name the `function expression` the same thing that we will name the `variable` of the scope above, is that a case of **shadowing**?
 
-A: Yes, it is a case of `shadowing`.
+A: Yes, it is a case of **shadowing**.
 
 > We should remember, the purpose of code is not to be convenient for us to type. The purpose of code is for us to communicate more clearly our intent.
 
 Q: What happens if we assign an `anonymous function` to property, or to a `variable` or something, what happens to the name?
 
-A: Well, it's still an `anonymous function`, it still doesn't have a `lexical self-reference` to itself. Could we reference the `variable` in the outer scope? Of course we can, but it's a little less reliable, a little less trustable, and a little less semantic.
+A: Well, it's still an `anonymous function`, it still doesn't have a **lexical self-reference** to itself. Could we reference the `variable` in the outer scope? Of course we can, but it's a little less reliable, a little less trustable, and a little less semantic.
 
 In 99.9% of all cases where people use `anonymous functions expressions` is as callbacks.
 They pass them in line directly to other `functions` (like .map, .then and etc.) and guess what? When we pass a `function expression` in a call position, there's no way to infer any name from it. So we don't get the benefit of that name inference, we have to assign it to a `variable` to get the name inference or to a property.
@@ -2150,7 +2150,7 @@ And if we're gonna go to the trouble to assign it to a `variable` why not just m
 
 We can put lots of more information in there that semantically tells the reader of our code what its purpose is, that would not be obvious in the code (names like getPersonId or defaultPersonId).
 
-So don't use `arrow functions` for this purpose. Later we'll see the one and only one exception that we have to the `arrow functions` rule, which is their `lexical` this behavior. But Kyle Simpson does not endorse or recommend or suggest using them as a general replacement for any `function`.
+So don't use `arrow functions` for this purpose. Later we'll see the one and only one exception that we have to the `arrow functions` rule, which is their **lexical** this behavior. But Kyle Simpson does not endorse or recommend or suggest using them as a general replacement for any `function`.
 
 > `(Named) Function Declaration` > `Named Function Expression` > `Anonymous Function Expression`
 >
@@ -2204,7 +2204,7 @@ But _theoretically_ in a **Dynamically scoped** language, it wouldn't even consu
 
 > The idea of a **Dynamic Scope** is the idea that a `function`'s references to its `variables` are depended upon where that `function` was called from. The same `function` called from 100 different places ends up giving 100 different answers to what the `variables` are.
 
-> So in **Dynamic Scope**, it is scope that is determined based upon the conditions at **run-time**, whereas **Lexical Scope** is determined at **author-time** (or **compile-time**). 
+> So in **Dynamic Scope**, it is scope that is determined based upon the conditions at **run-time**, whereas **Lexical Scope** is determined at **author-time** (or **compile-time**).
 >
 > In a simple way **Lexical Scope** is fixed and predictable.
 > And **Dynamic Scope** is flexible.
