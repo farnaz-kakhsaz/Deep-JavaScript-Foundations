@@ -2289,6 +2289,7 @@ It may looks weird, but it still totally works. And the reason it's gonna execut
 So we create **IIFE**. That's where this comes from, using a `function expression` to create a scope, and immediately invoking it. We only need it for that moment, just so we can have a scope. So it runs once and then it kinda goes away.
 
 Q: Why is this not a `function declaration`?
+
 A: Because the word `function` is not the first thing in the statement.
 
 In the below example we make `named function expression` to `anonymous function expression` and just pass in a value to a parameter instead of making an assignment.
@@ -2302,3 +2303,38 @@ var teacher = "Kyle";
 
 cobsole.log(teacher);   // Kyle
 ```
+
+## Block Scoping:
+
+We can get the previous example (**function scope**) and turns it to **block scope** form.
+
+```JavaScript
+var teacher = "Kyle";
+
+{
+  let teacher = "Suzy";
+  console.log(teacher);   // Suzy
+};
+
+cobsole.log(teacher);   // Kyle
+```
+
+The **Block Scoping**, it's scoping that's done with blocks (curly braces `{}`) instead of with `functions`. 
+
+When we use **Block Scoping**, same principle is gonna apply. We wanna put something inside of a block (instead of inside of the enclosing scope), because:
+
+- We wanna hide it, so that it has fewer chances of **name collision**.
+- We wanna protect a detail.
+- We wanna protect future refactoring. 
+
+All the same principle applies. It's just the mechanism we use is now a **Block Scope** declaration instead of an **IIFE** (**`function` scope**), for example.
+
+It's a lot lighter weight. It also has less side effects in the sense it doesn't redefined anything about returns or breaks or any of that other stuff, so blocks are a bit easier and lighter weight to put into places. They're not expressions, so we can't use them in places where we can use expressions.
+But if we have them in a place that's a statement, it's totally okay.
+
+We can't use `var` in this example, because of historically the difference between the **`var`** and **`let`** or **`const`**:
+
+- The **`var`** has been attaching itself to the outer **`function` scope** or **`global scope`**.
+- But with the **`let`** or **`const`** we can make a declaration inside of a block (curly braces `{}`) and it turns that block into a scope. (or in other words, **`let`** and **`const`** attached themselves to their enclosing block)
+
+> **Blocks** are not **Scopes** until they have a `let` or `const` inside of them and then that sort of implicitly makes them a **scope**. 
