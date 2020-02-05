@@ -1961,7 +1961,7 @@ If we turn on `strict mode`, all the same processing is going to happen. But whe
 >
 > And if in `non-strict mode`, we try to get `non-declared variable` that is in a **source position**, `global scope` throw us a `ReferenceError`.
 
-> If we have any kind of reference (**target** or **source**) for `non-declared variable` in **`strict mode`**, `global scope` throw us a `ReferenceError` (insted of `auto create` it, if `non-declared variable` was in **target position**).
+> If we have any kind of reference (**target** or **source**) for `non-declared variable` in **`strict mode`**, `global scope` throw us a `ReferenceError` (instead of `auto create` it, if `non-declared variable` was in **target position**).
 
 That's what we would like to happen all of the time. It now happens as the result of `strict mode`, we get a `ReferenceError`. So one of the many, many reasons why it would be good for us to be using `strict mode`. It will avoid mistakes like line 7, cuz it almost certainly a mistake, it should not be something we intentionally try to create `global`.
 
@@ -2258,4 +2258,47 @@ That's one of the core principles of software engineering, because it essentiall
 
 But, right now, this usage of a `function` is not really accomplishing that task, because the problem is that now we have a `function` that has a name in that scope.
 It has the name `anotherTeacher`. So we didn't really fix the **naming collision** problem at all, we just shifted it to a different variable name.
-It is true that we now have a new scope, and we can contain any assignments of that scope, but we still have a **naming collision** problem, so we need a better way of using our knowledge of scope.
+
+
+## Immediately Invoked Function Expression (IIFE):
+
+This is true that in the previous example, we have a new scope, and we could contain any assignments of that scope, but we still have a **naming collision** problem, so we need a better way of using our knowledge of scope.
+
+We can resolve this problem by using `function expression`:
+
+```JavaScript
+var teacher = "Kyle";
+
+(function anotherTeacher() {
+  var teacher = "Suzy";
+  console.log(teacher);   // Suzy
+})();
+
+cobsole.log(teacher);   // Kyle
+```
+But probably we have seen this code with an `anonymous function expression` form.
+
+Even if we put the called `function's name` inside the parentheses like this:
+
+```JavaScript
+(anotherTeacher)();
+```
+
+It may looks weird, but it still totally works. And the reason it's gonna execute is because it's gonna do the same thing as in the previous slide, which is to go get the value in that `variable` (all the values side the `anotherTeacher`) first, and then the second set the parentheses is gonna execute it.
+
+So we create **IIFE**. That's where this comes from, using a `function expression` to create a scope, and immediately invoking it. We only need it for that moment, just so we can have a scope. So it runs once and then it kinda goes away.
+
+Q: Why is this not a `function declaration`?
+A: Because the word `function` is not the first thing in the statement.
+
+In the below example we make `named function expression` to `anonymous function expression` and just pass in a value to a parameter instead of making an assignment.
+
+```JavaScript
+var teacher = "Kyle";
+
+(function (teacher) {
+  console.log(teacher);   // Suzy
+})("Suzy");
+
+cobsole.log(teacher);   // Kyle
+```
