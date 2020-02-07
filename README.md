@@ -2335,6 +2335,28 @@ But if we have them in a place that's a statement, it's totally okay.
 We can't use `var` in this example, because of historically the difference between the **`var`** and **`let`** or **`const`**:
 
 - The **`var`** has been attaching itself to the outer **`function` scope** or **`global scope`**.
-- But with the **`let`** or **`const`** we can make a declaration inside of a block (curly braces `{}`) and it turns that block into a scope. (or in other words, **`let`** and **`const`** attached themselves to their enclosing block)
+- But with the **`let`** or **`const`** we can make a declaration inside of a block (curly braces `{}`) and it turns that block into a scope(or in other words, **`let`** and **`const`** attached themselves to their enclosing **block scope**).
 
-> **Blocks** are not **Scopes** until they have a `let` or `const` inside of them and then that sort of implicitly makes them a **scope**. 
+> **Blocks** are not **Scopes** until they have a `let` or `const` inside of them and then that sort of implicitly makes them a **scope**.
+
+### Choosing `let` or `var`:
+
+This is an example that shows us where we should use `var` and where we should use `let`:
+
+```JavaScript
+function repeat(fn, n) {
+    var result;
+
+    for (let i = 0; i < n; i++) {
+        result = fn(result, i);
+    }
+    
+    return result;
+}
+
+Block Scoping: let + var
+```
+
+**The `var`**: When we have a variable that belongs to the entire **`function` scope** or needs to escape an unintended block, we use **`var`**. The `var` hoists and attaches itself to the **`function` scope**. The `var` can be reused within a scope, but `let` can not.
+
+**The `let`**: When we have something that is naturally **block scoped**, we use **`let`** (for example in `for` loop).
