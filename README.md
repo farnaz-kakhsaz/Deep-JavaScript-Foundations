@@ -2394,3 +2394,34 @@ Open up a curly brace pair `{}` and create a scope just for those three lines of
 **Q:** Are we making this argument purely for semantics, or is there a performance benefit to doing something like that?.
 
 **A:** It is extremely unlikely that we would ever see or be able to observe any performance difference. There are theoretical performance differences, like theoretically an offthread **garbage collector** could theoretically garbage collect it slightly earlier. Or theoretically it would reduce what was available to a **closure**. There are theoretic reasons, but in practice, you almost certainly would not see a performance difference this way.
+
+### `const`:
+
+This is an example that shows us, what happens when we declare a mutable value like an `array` with `const`. Mutating the value is totally allowed on line 8:
+
+```JavaScript
+var teacher = "Suzy";
+teacher = "Kyle";                      // OK
+
+const myTeacher = teacher;
+myTeacher = "Suzy";                    // TypeError1
+
+const teachers = ["Kyle", "Suzy"];
+teachers[1] = "Brian";                 // Allowed!
+```
+
+**Note:** We should know that the `const` keyword, does not carry its own weight within the language. And this big cost that comes with `const` is not even unique to JavaScript.
+
+**The `const` does not mean that it doesn't change, it means a `variable` that can't be reassigned.**
+
+Maybe when we think of `const`, and we think of the word constant. What we're thinking to ourselves is, a thing that doesn't change. That's not what a programming language designer means by `const`. A programming language designer means a `variable` that can't be reassigned, and those are two entirely different things.
+
+What the `const` keyword is actually saying, from a semantic perspective is, for the rest of this block, I promise it's not gonna get reassigned.
+
+It's better to use `const` when we're assigning a value that is already a `primitive` and therefore **immutable** like `strings`, `booleans`, `numbers`. It used as a semantic placeholder for those literals. That's what `constants` are supposed to be for. They're supposed to give semantic meaning as placeholders. 
+
+So we should default to using `var`.
+Use `let` where it is helpful, use `const` sparingly only with **immutable** `primitive` values.
+
+
+
