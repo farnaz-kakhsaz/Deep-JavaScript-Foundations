@@ -1915,9 +1915,9 @@ Here we see one of the historical bad parts of JavaScript which is in the early 
 
 So we've created an `auto global` called `topic` which that sounds terrible. But now there's a `global variable` called `topic` and when we get that red marble back and make the assignment on line 5, there's a `global variable` now with the value `"React"` in it.
 
-Q: Do the `auto global` would occur also if `topic = "react"` were in the `global scope` under `variable` of `teacher` (for example it was in line 2)?
+**Q:** Do the `auto global` would occur also if `topic = "react"` were in the `global scope` under `variable` of `teacher` (for example it was in line 2)?
 
-A: That's true, any assignment to a `variable` that is undeclared at that moment, not declared to any scope we have access to. Any undeclared variable is going to end up creating this `auto global`.
+**A:** That's true, any assignment to a `variable` that is undeclared at that moment, not declared to any scope we have access to. Any undeclared variable is going to end up creating this `auto global`.
 
 Now, the reason why that happens is because we'll notice that this program is not running in `strict mode`. But this is running in the `non-strict mode` or sometimes called, `sloppy mode`. We should be using `strict mode`, and if we were using `strict mode`, we wouldn't see this behavior. But since this code snip it isn't, that's what happens, as we end up creating a `global variable` called `topic`.
 
@@ -1927,13 +1927,13 @@ We execute `console.log` the same way as we have before. So execution is then do
 
 So line 12 then, hey `global scope`, I have a **source reference** for `topic`, ever heard of `topic`? Yes, here's your red marble. and the value of that red marble is `"React"`.
 
-Q: If line 11 was actually in line 8, `teacher` would still be `"Kyle"`?
+**Q:** If line 11 was actually in line 8, `teacher` would still be `"Kyle"`?
 
-A: Yes, it's correct.
+**A:** Yes, it's correct.
 
-Q: What would happen if line 12 was on line 8?
+**Q:** What would happen if line 12 was on line 8?
 
-A: We will get `ReferenceError`. There would be no `identifier`. But because there is an `identifier` on line 12 the `function otherClass` auto created it by assigning to a `non-declared variable`.
+**A:** We will get `ReferenceError`. There would be no `identifier`. But because there is an `identifier` on line 12 the `function otherClass` auto created it by assigning to a `non-declared variable`.
 
 ### Strict Mode:
 
@@ -1968,9 +1968,9 @@ That's what we would like to happen all of the time. It now happens as the resul
 > The difference between `TypeErrors` and `ReferenceErrors` are , `TypeErrors` are when we found the `variable` and the `value` that it is currently holding, is not legal to do whatever we're trying to do with it. Like trying to execute or access a `property` on an `undefined` or `null`, things like that, that's `TypeError`.
 > A `ReferenceError` is, when JavaScript engine couldn't find that `variable` on any scope that we have access to.
 
-Q: Is `strict mode` always pretty on `ES6`?
+**Q:** Is `strict mode` always pretty on `ES6`?
 
-A: The `strict mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict mode` in there for us.
+**A:** The `strict mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict mode` in there for us.
 So if we're using transpired code, it was almost a virtual certainty that our code is running in `strict mode`. But JavaScript is not default the `strict mode` because then that would break a bunch of programs. So that were written 20 years ago or something. So because of backwards compatible, we will always have to opt into `strict mode`.
 Another little caveat inside of certain kinds of mechanisms within `ES6` and going forward, it is assumed to be in `strict mode`. So we don't even type it, so inside of a `class`, or inside of `ES6 module`, inside of both of those, `strict mode` is assumed, we don't even have to put the `strict mode`, is just assume that, that code is running in `strict mode`. But as a general rule for JavaScript itself, it's not in `strict mode` unless we opt-in.
 
@@ -2030,9 +2030,9 @@ Once you go to `strict mode`, they both behave exactly the same, so it stops mat
 >
 > But in `strict mode`, it doesn't matter `undeclared variable` is in the **source position** or the **target position**, the JavaScript engine will always throw us a `Reference Error`.
 
-Q: When we're passing the `"Why?"` to `ask` on line 10, is there behind the scenes, is JavaScript saying `var question = "Why?"` at some point?
+**Q:** When we're passing the `"Why?"` to `ask` on line 10, is there behind the scenes, is JavaScript saying `var question = "Why?"` at some point?
 
-A: Sort of, I think conceptually it works to think about `arguments` being assigned to `parameters`. It's not technically that, but it's close enough that it works for this particular narrative exercise.
+**A:** Sort of, I think conceptually it works to think about `arguments` being assigned to `parameters`. It's not technically that, but it's close enough that it works for this particular narrative exercise.
 
 ![Nested Scope](https://user-images.githubusercontent.com/37678729/72377177-818be200-3724-11ea-96ed-bc31666bec80.png)
 
@@ -2121,20 +2121,20 @@ So on line 1, we see a `function expression`, but we see no name. So that's call
 
 In that previous example, when we had a `variable` name that was in the `global scope`, and then we had our `function expression`. Would it be more or less reliable for us to make a reference to a marble in our own scope that is read only, or to reference a marble in an enclosing scope that is not read only? If we wanted to reference ourself from inside of the `function`, and we had the choice between referencing ourself with a marble in our own scope that is read only (the name of our `function expression`) or self-reference ourself with the `variable` that our `function` had been assigned to in the outer scope, which isn't by default read only.
 
-Q: Which one of those two would be the better self-reference?
+**Q:** Which one of those two would be the better self-reference?
 
-A: The first one, the one that we own and that is read only is a more reliable self-reference. So if there's any possible chance remotely that you're gonna need a self-reference, it's best to go ahead and name it.
+**A:** The first one, the one that we own and that is read only is a more reliable self-reference. So if there's any possible chance remotely that you're gonna need a self-reference, it's best to go ahead and name it.
 Even if you don't need it now, you might need it in the future, it's best to go ahead and name it.
 
-Q: When we just name the `function expression` the same thing that we will name the `variable` of the scope above, is that a case of **shadowing**?
+**Q:** When we just name the `function expression` the same thing that we will name the `variable` of the scope above, is that a case of **shadowing**?
 
-A: Yes, it is a case of **shadowing**.
+**A:** Yes, it is a case of **shadowing**.
 
 > We should remember, the purpose of code is not to be convenient for us to type. The purpose of code is for us to communicate more clearly our intent.
 
-Q: What happens if we assign an `anonymous function` to property, or to a `variable` or something, what happens to the name?
+**Q:** What happens if we assign an `anonymous function` to property, or to a `variable` or something, what happens to the name?
 
-A: Well, it's still an `anonymous function`, it still doesn't have a **lexical self-reference** to itself. Could we reference the `variable` in the outer scope? Of course we can, but it's a little less reliable, a little less trustable, and a little less semantic.
+**A:** Well, it's still an `anonymous function`, it still doesn't have a **lexical self-reference** to itself. Could we reference the `variable` in the outer scope? Of course we can, but it's a little less reliable, a little less trustable, and a little less semantic.
 
 In 99.9% of all cases where people use `anonymous functions expressions` is as callbacks.
 They pass them in line directly to other `functions` (like .map, .then and etc.) and guess what? When we pass a `function expression` in a call position, there's no way to infer any name from it. So we don't get the benefit of that name inference, we have to assign it to a `variable` to get the name inference or to a property.
@@ -2259,7 +2259,6 @@ That's one of the core principles of software engineering, because it essentiall
 But, right now, this usage of a `function` is not really accomplishing that task, because the problem is that now we have a `function` that has a name in that scope.
 It has the name `anotherTeacher`. So we didn't really fix the **naming collision** problem at all, we just shifted it to a different variable name.
 
-
 ## Immediately Invoked Function Expression (IIFE):
 
 This is true that in the previous example, we have a new scope, and we could contain any assignments of that scope, but we still have a **naming collision** problem, so we need a better way of using our knowledge of scope.
@@ -2276,6 +2275,7 @@ var teacher = "Kyle";
 
 cobsole.log(teacher);   // Kyle
 ```
+
 But probably we have seen this code with an `anonymous function expression` form.
 
 Even if we put the called `function's name` inside the parentheses like this:
@@ -2288,9 +2288,9 @@ It may looks weird, but it still totally works. And the reason it's gonna execut
 
 So we create **IIFE**. That's where this comes from, using a `function expression` to create a scope, and immediately invoking it. We only need it for that moment, just so we can have a scope. So it runs once and then it kinda goes away.
 
-Q: Why is this not a `function declaration`?
+**Q:** Why is this not a `function declaration`?
 
-A: Because the word `function` is not the first thing in the statement.
+**A:** Because the word `function` is not the first thing in the statement.
 
 In the below example we make `named function expression` to `anonymous function expression` and just pass in a value to a parameter instead of making an assignment.
 
@@ -2319,13 +2319,13 @@ var teacher = "Kyle";
 cobsole.log(teacher);   // Kyle
 ```
 
-The **Block Scoping**, it's scoping that's done with blocks (curly braces `{}`) instead of with `functions`. 
+The **Block Scoping**, it's scoping that's done with blocks (curly braces `{}`) instead of with `functions`.
 
 When we use **Block Scoping**, same principle is gonna apply. We wanna put something inside of a block (instead of inside of the enclosing scope), because:
 
 - We wanna hide it, so that it has fewer chances of **name collision**.
 - We wanna protect a detail.
-- We wanna protect future refactoring. 
+- We wanna protect future refactoring.
 
 All the same principle applies. It's just the mechanism we use is now a **Block Scope** declaration instead of an **IIFE** (**`function` scope**), for example.
 
@@ -2350,7 +2350,7 @@ function repeat(fn, n) {
     for (let i = 0; i < n; i++) {
         result = fn(result, i);
     }
-    
+
     return result;
 }
 
@@ -2359,4 +2359,38 @@ Block Scoping: let + var
 
 **The `var`**: When we have a variable that belongs to the entire **`function` scope** or needs to escape an unintended block, we use **`var`**. The `var` hoists and attaches itself to the **`function` scope**. The `var` can be reused within a scope, but `let` can not.
 
-**The `let`**: When we have something that is naturally **block scoped**, we use **`let`** (for example in `for` loop).
+**The `let`**: When we have something that is naturally **block scoped**, we use **`let`** (for example in `for` loop). Or we want to use a `variable` for a few lines of code we create a **block scope** for it and then we only use **`let`** inside it.
+
+### Explicit `let` block:
+
+When we're only going to use a `variable` for a few lines of code, and we should not just throw it into the top level of the scope. What we should do is create a scope for it:
+
+```JavaScript
+function formatStr(str) {
+    { let prefix, rest;
+        prefix = str.slice(0, 3);
+        rest = str.slice(3);
+        str = prefix.toUpperCase() + rest;
+    }
+
+    if (/^FOO:/.test(str)) {
+        return str;
+    }
+
+    return str.slice(4);
+}
+
+Block Scoping: explicit let block
+```
+
+Open up a curly brace pair `{}` and create a scope just for those three lines of code to use the `prefix` and the `rest` variable, and then don't let them exist for any other part of the `function`.
+
+**Don't just say `let prefix`, and `rest` at the top of our `function`, open up a curly brace there.**
+
+> If I have a `variable` that only needs to exist for a couple of lines, the way to do that is to make a block for it (with curly braces `{}`).
+
+**Note:** Putting our declarations on the very same line as the opening curly brace helps to make it super clear to the reader, hey, these two are created for this block, and they exist only for the purpose of the block. As opposed to, we have to go looking for whether or not there are variables in this scope.
+
+**Q:** Are we making this argument purely for semantics, or is there a performance benefit to doing something like that?.
+
+**A:** It is extremely unlikely that we would ever see or be able to observe any performance difference. There are theoretical performance differences, like theoretically an offthread **garbage collector** could theoretically garbage collect it slightly earlier. Or theoretically it would reduce what was available to a **closure**. There are theoretic reasons, but in practice, you almost certainly would not see a performance difference this way.
