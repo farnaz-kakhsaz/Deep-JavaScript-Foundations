@@ -62,7 +62,7 @@ function printRecords(recordIds) {
 
 	// We used .forEach because we don't want to return anything
 	// (like what .map do, return new Array) we just wanna console.log it
-	records.forEach(function printRecords(record) {
+	records.forEach(function printRecord(record) {
 		console.log(`${record.name} (${record.id}): ${record.paid ? "Paid": "Not Paid"}`);
 	});
 }
@@ -77,7 +77,6 @@ function paidStudentsToEnroll() {
 	});
 
 	return [...currentEnrollment , ...idsToEnroll];
-
 }
 
 function remindUnpaid(recordIds) {
@@ -87,7 +86,6 @@ function remindUnpaid(recordIds) {
 	});
 
 	printRecords(unpaidIds);
-
 }
 
 
@@ -164,7 +162,6 @@ var remindUnpaid = recordIds =>
 			studentId => !getStudentById(studentId).paid
 		)
 	);
-
 
 // ********************************
 
