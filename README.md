@@ -2481,3 +2481,38 @@ To use the form of `function` where we only assign it to properties or `variable
 **With using of `function declaration` we can simply put the executable code at the top, and put our `function declarations` at the bottom. But with `function expression` we can't do the same thing.**
 
 > The difference between a **`function declaration`** and a **`function expression`** (including **arrow functions**) is **function declaration** hoisted but **`function expression`** did not.
+
+### Hoisting Example:
+
+This example can trick us if we're not used to thinking about hoisting as a two-pass system:
+
+```JavaScript
+var teacher = "Kyle";
+otherTeacher();                 // undefined
+
+function otherTeacher() {
+    console.log(teacher);
+    var teacher = "Suzy";
+}
+
+Scope: hoisting
+```
+
+When should use hoisting and when not:
+
+```JavaScript
+// var hoisting?
+// usually bad :/
+teacher = "Kyle";
+var teacher;
+
+// function hoisting?
+// IMO actually pretty useful
+getTeacher();                   // Kyle
+
+function getTeacher() {
+    return teacher;
+}
+
+Scope: hoisting
+```
