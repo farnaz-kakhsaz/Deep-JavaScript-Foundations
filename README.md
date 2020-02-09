@@ -2042,7 +2042,7 @@ Once you go to `strict mode`, they both behave exactly the same, so it stops mat
 
 What is the difference between `undefined` and `undeclared`?
 
-**Undefiend:** means a `variable` exists but at the moment it has no `value`. It may have never had a `value` or it might have used to have a `value` and it doesn't anymore but there is no other `value` and the vacuum of space it is `undefined`.
+**Undefined:** means a `variable` exists but at the moment it has no `value`. It may have never had a `value` or it might have used to have a `value` and it doesn't anymore but there is no other `value` and the vacuum of space it is `undefined`.
 
 **Undeclared:** is actually never formally declared in any scope that we have accessed to (we do not have a marble for it). And in `strict mode`, it always results in those `ReferenceErrors`.
 
@@ -2418,10 +2418,66 @@ Maybe when we think of `const`, and we think of the word constant. What we're th
 
 What the `const` keyword is actually saying, from a semantic perspective is, for the rest of this block, I promise it's not gonna get reassigned.
 
-It's better to use `const` when we're assigning a value that is already a `primitive` and therefore **immutable** like `strings`, `booleans`, `numbers`. It used as a semantic placeholder for those literals. That's what `constants` are supposed to be for. They're supposed to give semantic meaning as placeholders. 
+It's better to use `const` when we're assigning a value that is already a **`primitive`** and therefore **immutable** like **`strings`**, **`booleans`**, **`numbers`**. It used as a semantic placeholder for those literals. That's what `constants` are supposed to be for. They're supposed to give semantic meaning as placeholders.
 
 So we should default to using `var`.
 Use `let` where it is helpful, use `const` sparingly only with **immutable** `primitive` values.
 
+## Hoisting:
 
+We should know that, the word **hoist** literally did not even appear in the JavaScript specification. Because turns out that **hoisting is not a real thing**.
 
+**The JavaScript engine does not hoist**, it does not move things around the way it is suggested with hoisting.
+
+**Hoisting is an english language convention that we have made up to discuss the idea of lexical scope, without thinking about lexical scope.**
+
+This very simple piece of code, proves to us why hoisting doesn't actually exist:
+
+```JavaScript
+student;                        // undefined
+teacher;                        // undefined
+var student = "you";
+var teacher = "Kyle";
+
+Scope: hoisting
+```
+
+In **lexical scope** discussion we would first pass through this as the **compiler**, and then we would pass through it as an **execution**.
+
+But people don't think about this in terms of two passes. And that's where hoisting comes from. Cuz hoisting says, well, we could explain what really happens here, if there was this magical behavior called hoisting.
+Which was that any time JavaScript's execution engine entered a scope, it magically looked ahead and found all of the declarations wherever they were in that scope, and made `variables` for them. So it says the JavaScript engine goes and finds those `variable` declarations and moves them to the top of the scope before **execution**.
+That's literally how hoisting is described.
+
+**JavaScript does not actually reorganize our code by moving `variable` declarations up to the top.**
+
+Asking this question proves to us that, that's not really what happens: 
+how are we going to figure out where all the `vars` are? We're gonna do some very sophisticated processing on the tokens that come later in that block until we find the end of the block.
+And then any of those places where a declaration could have occurred, then we can pull those out, and we could theoretically rearrange and move those. And guess what that magical, fancy processing would be called? **That's called parsing**.
+
+**If you wanna find the `variable` declarations further down in the block, the only way you can do that is with parsing.**
+
+Let see what happened in `function`:
+
+```JavaScript
+function teacher() {
+    return "Kyle";
+}
+var otherTeacher;
+
+teacher();                      // Kyle
+otherTeacher();                 // TypeError
+
+otherTeacher = function() {
+    return "Suzy";
+}
+
+Scope: hoisting
+```
+
+For the exact same reason it doesn't move `variables`, it doesn't move `functions`. It handles them during the **first pass**, and then it **executes**.
+
+To use the form of `function` where we only assign it to properties or `variables` (It means `function expression`), we have to have all of our `functions` defined before we call them. Otherwise we get `TypeError` like above example.
+
+**With using of `function declaration` we can simply put the executable code at the top, and put our `function declarations` at the bottom. But with `function expression` we can't do the same thing.**
+
+> The difference between a **`function declaration`** and a **`function expression`** (including **arrow functions**) is **function declaration** hoisted but **`function expression`** did not.
