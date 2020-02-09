@@ -62,7 +62,7 @@ The reason behind why people say everything is an object, is because most of the
 
 Let's take a look at the JavaScript specification:
 
-> ![Untitled2](https://user-images.githubusercontent.com/37678729/71778735-c9916300-2fc6-11ea-9732-e453c03cf75b.png)
+> ![ECMAScript](https://user-images.githubusercontent.com/37678729/71778735-c9916300-2fc6-11ea-9732-e453c03cf75b.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-ecmascript-language-types)
 
@@ -98,7 +98,7 @@ So let's refer to them as value types.
 >
 > [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
 
-> ![Untitled3](https://user-images.githubusercontent.com/37678729/71778767-2b51cd00-2fc7-11ea-88d6-35eec3875d6f.png)
+> ![ECMAScript](https://user-images.githubusercontent.com/37678729/71778767-2b51cd00-2fc7-11ea-88d6-35eec3875d6f.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-ecmascript-overview)
 
@@ -253,11 +253,11 @@ When we said type of V, and we got back quote, `undefined`, V or whatever that v
 >
 > The `undefined` means there's definitely a variable, and at the moment, it has no value.
 >
-> the `uninitialized` or TDZ (Temporal Dead Zone) was introduced with ES6, and the best way to describe this is uninitialized.
+> the `uninitialized` or TDZ (Temporal Dead Zone) was introduced with ES6, and the best way to describe this is uninitialized. Meaning you can't touch it yet.
 
 > The `typeof` operator is the only operator in existence that is able to reference a thing that doesn't exist and not throw an error.
 
-The idea for `uninitialized` is that certain variables, never initially get set to undefined. When something is in an uninitialized state, it is off-limits. You're not allowed to touch it in any way, shape or form, or you'll get an error, and the error you get is the TDZ error.
+The idea for `uninitialized` is that certain variables, never initially get set to undefined. When something is in an uninitialized state, it is off-limits. You're not allowed to touch it in any way, shape or form, or you'll get an error, and the error you get is the **TDZ error**.
 
 We can have a variable that's never been initialized. We can have a variable that's been initialized that is undefined. Or we can have a variable that was never even created, and then it's undeclared. Three different concepts that we need to wrap our brains around.
 
@@ -422,7 +422,7 @@ They can be used with `new` keyword to construct the objects of this form. You s
 
 ## Abstract Operation:
 
-> ![Untitled4](https://user-images.githubusercontent.com/37678729/71778794-8daacd80-2fc7-11ea-81fb-d072db0100ba.png)
+> ![ECMAScript](https://user-images.githubusercontent.com/37678729/71778794-8daacd80-2fc7-11ea-81fb-d072db0100ba.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-operations)
 
@@ -769,7 +769,7 @@ Coercion: number to string
 >
 > Which means, if only one of them is a `string`, it's gonna call a `toString` abstract operation on it, and turn it in to a `string`.
 
-> We could throw a value into an array, just the one value into an array, and then call `.join` on it. And that actually ends up stringify it.
+> We could throw a value into an `array`, just the one value into an `array`, and then call `.join` on it. And that actually ends up stringify it.
 >
 > ```JavaScript
 > console.log([16].join(""));
@@ -993,7 +993,7 @@ So some of the implicit nature of JavaScript's type system is sketchy, but some 
 >
 > [MDN](Equality_comparisons_and_sameness)
 
-> ![Untitled](https://user-images.githubusercontent.com/37678729/71779325-2262fa80-2fcb-11ea-835d-debd2bccb90f.png)
+> ![ECMAScript](https://user-images.githubusercontent.com/37678729/71779325-2262fa80-2fcb-11ea-835d-debd2bccb90f.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-abstract-relational-comparison)
 
@@ -1636,7 +1636,7 @@ So it's critical that we do this marble sorting correctly as we process the code
 
 So that **compiler phase** of this code is finished. And what we are left with is a plan for all the buckets and all the marbles. We've accounted for all the scopes that exist and where all the `identifiers` fit into all of those. Including references to them like on line 10, we know what color marble that is.
 
-Now it's important to note that when we execute the code, there's no more declarations for anything. All the `vars` are gone, essentially, because we don't need to declare anything anymore. We already know what that's gonna do, because we figured that stuff out at **compile-time**.
+Now it's important to note that when we execute the code, there's no more declarations for anything. All the `var`s are gone, essentially, because we don't need to declare anything anymore. We already know what that's gonna do, because we figured that stuff out at **compile-time**.
 
 > In the **compiler phase** we create a plan for all the scopes that exist and where all the `identifiers` fit into all of those scopes. Including references `identifiers`.
 >
@@ -2074,7 +2074,9 @@ In this example `teacher` in line 1 (`function declaration`), creates a red marb
 
 In line 3 `identifier` called `myTeacher` creates red marble. We do know that there's a `function` called `anotherTeacher` there, so we need to create a bucket for it at least. We need to make a blue bucket. But because that `function` is not a `declaration`, we're not gonna handle its marble color in the same way. The key difference here is that the `anotherTeacher identifier` (line 3), is going to end up as a marble at **compile-time** but it's gonna be a different colored marble than we expect. It's not a red marble, it's a blue marble. So the blue scope is where the blue marble `anotherTeacher` ends up.
 
-> One if the key differences between `function declarations` and `function expressions`, is that `function declarations` add their name (they attach their marble), to the enclosing scope, whereas `function expressions` will add their name (marble) to their own scope.
+> One if the key differences between `function declarations` and `function expressions`, is that `function declarations` add their name or `identifier` (they attach their marble), to the enclosing scope, whereas `function expressions` will add their name (marble) to their own scope.
+>
+> Another difference is `function declarations` are hoisted but `function expressions` did not hoisted.
 
 That's why on line 4, we can reference in `anotherTeacher` because there is in fact a blue marble called `anotherTeacher`. But down on line 9, there is no `anotherTeacher`. so when we're out in the `global scope` and we asked `global scope` you ever heard of this red marble, it's gonna say nope, never heard of that red marble and what we're gonna get there, `ReferenceError`.
 
@@ -2395,7 +2397,7 @@ Open up a curly brace pair `{}` and create a scope just for those three lines of
 
 **A:** It is extremely unlikely that we would ever see or be able to observe any performance difference. There are theoretical performance differences, like theoretically an offthread **garbage collector** could theoretically garbage collect it slightly earlier. Or theoretically it would reduce what was available to a **closure**. There are theoretic reasons, but in practice, you almost certainly would not see a performance difference this way.
 
-### `const`:
+### The `const`:
 
 This is an example that shows us, what happens when we declare a mutable value like an `array` with `const`. Mutating the value is totally allowed on line 8:
 
@@ -2450,8 +2452,8 @@ That's literally how hoisting is described.
 
 **JavaScript does not actually reorganize our code by moving `variable` declarations up to the top.**
 
-Asking this question proves to us that, that's not really what happens: 
-how are we going to figure out where all the `vars` are? We're gonna do some very sophisticated processing on the tokens that come later in that block until we find the end of the block.
+Asking this question proves to us that, that's not really what happens:
+how are we going to figure out where all the `var`s are? We're gonna do some very sophisticated processing on the tokens that come later in that block until we find the end of the block.
 And then any of those places where a declaration could have occurred, then we can pull those out, and we could theoretically rearrange and move those. And guess what that magical, fancy processing would be called? **That's called parsing**.
 
 **If you wanna find the `variable` declarations further down in the block, the only way you can do that is with parsing.**
@@ -2481,6 +2483,11 @@ To use the form of `function` where we only assign it to properties or `variable
 **With using of `function declaration` we can simply put the executable code at the top, and put our `function declarations` at the bottom. But with `function expression` we can't do the same thing.**
 
 > The difference between a **`function declaration`** and a **`function expression`** (including **arrow functions**) is **function declaration** hoisted but **`function expression`** did not.
+
+**This is critical to know:**
+> When we assign a `function expression` to a `variable`, the `variables` decoration itself hoisted, but the assignment is a **run-time** thing. Even we have a `function expression`, **compile-time** still handled that `function expression`. It didn't defer handling. What didn't happen is it didn't get at **compile-time**, associated with some `identifier` in the scope, but it still got compiled.
+>
+> All `functions` have a plan for their scope, until, and every time they get executed. So whether it was a `declaration` or an `expression`, when it gets executed is when that whole mapper plan becomes a real thing in memory, and every time it gets executed, that is the case.
 
 ### Hoisting Example:
 
@@ -2516,3 +2523,51 @@ function getTeacher() {
 
 Scope: hoisting
 ```
+
+### Hoisting and `let`:
+
+This example shows us if we use `variable` before it declared (only if it was `let` or `const`), we get a `TDZ error`:
+
+```JavaScript
+{
+    teacher = "Kyle";           // TDZ error!
+    let teacher;
+}
+
+Hoisting: let gotcha
+```
+
+**If we use a `variable` before it declared (with `let` or `const`), we get a `TDZ error` (Temporal Dead Zone error).**
+
+> This statement, "`let` doesn't hoist", is wrong.
+
+This example proves to us, that `let` (and `const`) will be hoist too:
+
+```JavaScript
+1. var = teacher = "Kyle";
+2.
+3. {
+4.     console.log(teacher);    // TDZ error!
+5.     let teacher = "Suzy";
+6. }
+```
+
+In above code, if the `teacher` on line 5 did not host, then line 4 should print out `"Kyle"`. Because there is no `teacher` as of line 4 and it should go to the outer scope and find the `variable` from line 1. But this code still throws a `TDZ error`, and the reason is because **`let` and `const` still hoist**.
+
+**There is a difference between how `var` and `let` or `const` hoist:**
+- **`let` and `const` only hoist to a block, whereas `var` hoists to a `function`.**
+- **When `var` creates its `variable` in the compile-time, it initialize it to `undefined`, but when `let` and `const` hoist and create their `variables`, they do NOT initialize it. It is in an `uninitialized` state.**
+
+**`Uninitialized` being different than `undefined`. `Uninitialized` meaning you can't touch it yet.
+And it doesn't get initialized until in that block you run across the `let` or the `const` declaration.**
+
+> So `let` and `cont` absolutely do **hoist**, which is why we still get a `TDZ error`, it's just that they don't get **initialized**.
+
+The reason `TDZ` exists is not even for `let`, `TDZ` exists because of `const`. 
+
+Imagine `const` being attached inside of a block scope and initialized itself to `undefined`.
+And then on line 1 of a block, we did `console.log` of that `variable` and we saw it `undefined`, and then later we saw it with the value 42 (for example). Technically, that `const` would have had two different values at two different times, which academically violates the concept of a `const`. So they prevent us from accessing a variable earlier in the scope. So `let`'s have a `TDZ`, because `const` academically needed a `TDZ`.
+
+> ![ECMAScript](https://user-images.githubusercontent.com/37678729/74106719-3d063180-4b7e-11ea-9791-f7fc843afd36.png)
+>
+> [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-declarations-and-the-variable-statement)
