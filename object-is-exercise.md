@@ -31,7 +31,6 @@ if (!Object.is) {
 # Solution:
 
 ```JavaScript
-
 // TODO: define polyfill for `Object.is(..)`
 
 if (!Object.is || true) {
@@ -75,5 +74,4 @@ console.log(Object.is("foo","bar") === false);
 console.log(Object.is(false,true) === false);
 console.log(Object.is(null,undefined) === false);
 console.log(Object.is(undefined,null) === false);
-
 ```
