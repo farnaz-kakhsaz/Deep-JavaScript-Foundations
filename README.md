@@ -10,6 +10,7 @@
 4. [Equality](#Equality)
 5. [Static Typing](#Static Typing)
 6. [Scope](#Scope)
+6. [Scope](#Scope)
 
 ## Introduction
 
@@ -2571,3 +2572,22 @@ And then on line 1 of a block, we did `console.log` of that `variable` and we sa
 > ![ECMAScript](https://user-images.githubusercontent.com/37678729/74106719-3d063180-4b7e-11ea-9791-f7fc843afd36.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-declarations-and-the-variable-statement)
+
+# Closure
+
+### Origin of Closure:
+
+The *closure* was introduced in JavaScript in the mid to late 90s.
+
+In 1995, when **Brendan Eich** was hired to go to Netscape, and he was wanting to put **Scheme** in the browser. **Scheme** being an old **functional programming language**.
+That JavaScript is probably, in some respects, related to something like **Scheme**, than even to Java or C++. 
+
+We could say that, the only other language at the time that was really maybe starting to become more consumer-oriented and had closure would have been **Perl**.
+
+> So JavaScript's either the first or nearly the **first language** to move in that direction to have **closure**.
+
+And as things stand today, 25 years later, every single language has closure because it turns out that closure is just that important. 
+
+It's **not** only functional programming that uses closure, but closure is used in lots of different places. It's used for asynchronous AJAX. It's use for all sorts of different things.
+
+The closure as an idea is actually predating **computer science**, it actually comes to us from **lambda calculus**. It even predates the idea of a **programming language** in that sense.
