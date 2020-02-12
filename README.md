@@ -10,7 +10,7 @@
 4. [Equality](#Equality)
 5. [Static Typing](#Static Typing)
 6. [Scope](#Scope)
-6. [Scope](#Scope)
+7. [Scope](#Scope)
 
 ## Introduction
 
@@ -2486,6 +2486,7 @@ To use the form of `function` where we only assign it to properties or `variable
 > The difference between a **`function declaration`** and a **`function expression`** (including **arrow functions**) is **function declaration** hoisted but **`function expression`** did not.
 
 **This is critical to know:**
+
 > When we assign a `function expression` to a `variable`, the `variables` decoration itself hoisted, but the assignment is a **run-time** thing. Even we have a `function expression`, **compile-time** still handled that `function expression`. It didn't defer handling. What didn't happen is it didn't get at **compile-time**, associated with some `identifier` in the scope, but it still got compiled.
 >
 > All `functions` have a plan for their scope, until, and every time they get executed. So whether it was a `declaration` or an `expression`, when it gets executed is when that whole mapper plan becomes a real thing in memory, and every time it gets executed, that is the case.
@@ -2556,6 +2557,7 @@ This example proves to us, that `let` (and `const`) will be hoist too:
 In above code, if the `teacher` on line 5 did not host, then line 4 should print out `"Kyle"`. Because there is no `teacher` as of line 4 and it should go to the outer scope and find the `variable` from line 1. But this code still throws a `TDZ error`, and the reason is because **`let` and `const` still hoist**.
 
 **There is a difference between how `var` and `let` or `const` hoist:**
+
 - **`let` and `const` only hoist to a block, whereas `var` hoists to a `function`.**
 - **When `var` creates its `variable` in the compile-time, it initialize it to `undefined`, but when `let` and `const` hoist and create their `variables`, they do NOT initialize it. It is in an `uninitialized` state.**
 
@@ -2564,7 +2566,7 @@ And it doesn't get initialized until in that block you run across the `let` or t
 
 > So `let` and `cont` absolutely do **hoist**, which is why we still get a `TDZ error`, it's just that they don't get **initialized**.
 
-The reason `TDZ` exists is not even for `let`, `TDZ` exists because of `const`. 
+The reason `TDZ` exists is not even for `let`, `TDZ` exists because of `const`.
 
 Imagine `const` being attached inside of a block scope and initialized itself to `undefined`.
 And then on line 1 of a block, we did `console.log` of that `variable` and we saw it `undefined`, and then later we saw it with the value 42 (for example). Technically, that `const` would have had two different values at two different times, which academically violates the concept of a `const`. So they prevent us from accessing a variable earlier in the scope. So `let`'s have a `TDZ`, because `const` academically needed a `TDZ`.
@@ -2577,17 +2579,76 @@ And then on line 1 of a block, we did `console.log` of that `variable` and we sa
 
 ### Origin of Closure:
 
-The *closure* was introduced in JavaScript in the mid to late 90s.
+The _closure_ was introduced in JavaScript in the mid to late 90s.
 
 In 1995, when **Brendan Eich** was hired to go to Netscape, and he was wanting to put **Scheme** in the browser. **Scheme** being an old **functional programming language**.
-That JavaScript is probably, in some respects, related to something like **Scheme**, than even to Java or C++. 
+That JavaScript is probably, in some respects, related to something like **Scheme**, than even to Java or C++.
 
 We could say that, the only other language at the time that was really maybe starting to become more consumer-oriented and had closure would have been **Perl**.
 
 > So JavaScript's either the first or nearly the **first language** to move in that direction to have **closure**.
 
-And as things stand today, 25 years later, every single language has closure because it turns out that closure is just that important. 
+And as things stand today, 25 years later, every single language has closure because it turns out that closure is just that important.
 
 It's **not** only functional programming that uses closure, but closure is used in lots of different places. It's used for asynchronous AJAX. It's use for all sorts of different things.
 
 The closure as an idea is actually predating **computer science**, it actually comes to us from **lambda calculus**. It even predates the idea of a **programming language** in that sense.
+
+# What is Closure?
+
+As far as I'm concerned, this is the right answer to that question:
+
+> The **Closure** is when a **`function`** is able to **"remember"** and access its **`lexical scope`** (the `variables` outside of itself, so-called **free `variables`**), even when that `function` executes in a **different scope**.
+
+**Important Note:** So this definition has **two part** (without these two parts, we don't have a closure. We have to have both of them.):
+
+- The `function` is able to access its **lexical scope**: We already know that, this is **lexical scope** definition in itself! **lexical scope** is that a `function` can reference `variables` outside of itself and it just goes up the **scope chain** to find it.
+
+- The second part is the critical part. Without the second part, it's just **lexical scope**. With the second part of this definition, which is, even when the `function` is executed in a **different scope**, now we start to see something interesting. Cuz when we take a `function` and we pass it as a callback, or we take a `function` and return it back, the scope that it was originally defined in (at least conceptually), has gone away.
+And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that.
+That doesn't happen by accident. That's not magical, that's **closure**.
+
+The preservation, the linkage back to the original scope where it was defined, no matter where we pass that value, no matter where it executes, it retains that value. It preserves that scope. That's called **closure**.
+
+So let's take a look at some examples of closure:
+
+```JavaScript
+function ask(question) {
+    setTimout(function waitASec() {
+        console.log(question);
+    }, 100);
+}
+
+ask("What is closure?");   // What is colsure?
+
+Closure
+```
+
+At the time that `waitASec function` runs, the `ask function` has already finished, and the `variable question` which it's closed over should have gone away. But it didn't go away because closure preserved it, so-called the `waitASec function` is closed over the `variable question`. That's a **closure**.
+
+Now, academically, they think about closure on a per **`variable-basis`**, meaning only the `variables` that we're closed over, those are the only ones that are preserved. But at least the latest information that we have, JavaScript engines essentially implement closure as a linkage to the **entire scope**, **not** on a per `variable-basis`.
+So it's best to assume that closure, even though academically it's per `variable`, it's best to assume closure is a **scope-based** (a per scope basis) operation.
+
+> To create a closure don't need to do something special, just have to access a `variable` outside and then we have to pass the `function` somewhere.
+
+> If we're in a language that has **first-class `functions`** and **lexical scope**, we're gonna have **closure**, because if we didn't have closure we would pass the `function` somewhere, and all over sudden, it would forget about all its `variables` it wouldn't make sense not to.
+
+Another example of closure:
+
+```JavaScript
+1.  function ask(question) {
+2.      return function holdYourQuestion() {
+3.          console.log(question);
+4.      }
+5.  }
+6.  
+7.  var myQuestion = ask("What is closure?");
+8.
+9.  // ..
+10.
+11. myQuestion();   // What is closure
+
+Closure
+```
+
+Here is the exact same thing. If we returned a `function` here that is closed over the `question variable`, then even though the `ask function` has finished, by line 11, we still have access to that `variable`. Not a snapshot of the `variable`, but the actual `variable` itself. That's called closure.
