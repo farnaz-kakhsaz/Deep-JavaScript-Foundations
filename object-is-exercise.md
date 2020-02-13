@@ -39,7 +39,7 @@ if (!Object.is || true) {
             return v == 0 && (1/v) === -Infinity
         } 
         var isNegetiveA = isNegetive(a);
-        var isNegetiveB =isNegetive(b);
+        var isNegetiveB = isNegetive(b);
 
 
         if(Number.isNaN(a) || Number.isNaN(b)) {

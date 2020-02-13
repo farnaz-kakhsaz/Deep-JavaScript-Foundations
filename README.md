@@ -10,7 +10,7 @@
 4. [Equality](#Equality)
 5. [Static Typing](#Static Typing)
 6. [Scope](#Scope)
-7. [Scope](#Scope)
+7. [Closure](#Closure)
 
 ## Introduction
 
@@ -43,6 +43,7 @@ JavaScript can be divided into three cores (pillars):
   - `Modules`
 
 - Objects (Oriented):
+
   - `this`
   - `class{}`
   - `Prototypes`
@@ -2182,14 +2183,14 @@ The **Dynamic Scope** is not very common at all, we generally only see this in a
 ```JavaScript
 1.  var teacher = "Kyle";
 2.
-3.    function ask(question) {
+3.  function ask(question) {
 2.      console.log(teacher, question);
-5.    }
+5.  }
 6.
 7.  function otherClass() {
-8.    var teacher = "Suzy";
+8.      var teacher = "Suzy";
 9.
-10.   ask("Why?");
+10.     ask("Why?");
 11. }
 12.
 13. otherClass();
@@ -2594,7 +2595,7 @@ It's **not** only functional programming that uses closure, but closure is used 
 
 The closure as an idea is actually predating **computer science**, it actually comes to us from **lambda calculus**. It even predates the idea of a **programming language** in that sense.
 
-# What is Closure?
+## What is Closure?
 
 As far as I'm concerned, this is the right answer to that question:
 
@@ -2605,8 +2606,8 @@ As far as I'm concerned, this is the right answer to that question:
 - The `function` is able to access its **lexical scope**: We already know that, this is **lexical scope** definition in itself! **lexical scope** is that a `function` can reference `variables` outside of itself and it just goes up the **scope chain** to find it.
 
 - The second part is the critical part. Without the second part, it's just **lexical scope**. With the second part of this definition, which is, even when the `function` is executed in a **different scope**, now we start to see something interesting. Cuz when we take a `function` and we pass it as a callback, or we take a `function` and return it back, the scope that it was originally defined in (at least conceptually), has gone away.
-And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that.
-That doesn't happen by accident. That's not magical, that's **closure**.
+  And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that.
+  That doesn't happen by accident. That's not magical, that's **closure**.
 
 The preservation, the linkage back to the original scope where it was defined, no matter where we pass that value, no matter where it executes, it retains that value. It preserves that scope. That's called **closure**.
 
@@ -2641,7 +2642,7 @@ Another example of closure:
 3.          console.log(question);
 4.      }
 5.  }
-6.  
+6.
 7.  var myQuestion = ask("What is closure?");
 8.
 9.  // ..
@@ -2651,4 +2652,105 @@ Another example of closure:
 Closure
 ```
 
-Here is the exact same thing. If we returned a `function` here that is closed over the `question variable`, then even though the `ask function` has finished, by line 11, we still have access to that `variable`. Not a snapshot of the `variable`, but the actual `variable` itself. That's called closure.
+Here is the exact same thing. If we returned a `function` here that is closed over the `question variable`, then even though the `ask function` has finished, by line 11, we still have access to that `variable`.
+
+It's **Not a snapshot of the `variable`**, but the **actual `variable`** itself. That's called closure.
+
+### Closing Over `Variables`:
+
+We maybe think of closure, snapshoting a value, that we're capturing some value at some moment.
+That is **NOT** what closure is. As a matter of fact, closure has not got anything to do with the values at all. We don't close over a value. There's no such thing as closing over a value, **we close over a `variable`**, which means we have a linkage to that `variable`. Means at the time we access it, we're seeing whatever value that `variable` has at that moment, not it had before.
+
+Here's an example that shows us, the value is not a snapshot of `variable`:
+
+```JavaScript
+1. var teacher = "Kyle";
+2.
+3. var myTeacher = function() {
+4.    console.log(teacher);
+5. };
+6.
+7. teacher = "Suzy";
+8.
+9. myTeacher();       // Suzy
+
+Closure: NOT capturing a value
+```
+
+In this example when we create the `myTeacher function` on line 3, at that moment `teacher` has the value `"Kyle"`.
+And then later we change `teacher` to the value `"Suzy"`. And then line 9 when we execute the `function` what's it gonna print? Not `"Kyle"`, we didn't close over the value `"Kyle"`, we closed over the `variable teacher`. And when we execute that `function`, we're gonna access the value of it.
+
+**Don't think of closure as capturing values, think of it as preserving access to `variables`, a live link to all the `variables` that we are closed over.**
+
+This is an example of closure, that bites people the most (creating closures inside of a loop):
+
+```JavaScript
+for (var i = 1; i <= 3; i++) {
+    setTimeout(function() {
+        console.log(`i: ${i}`);
+    }, i * 1000);
+}
+
+// i: 4
+// i: 4
+// i: 4
+
+Closure: loops
+```
+
+This `function`, that is being created in each iteration, it has the appearance that what it's doing is closing over the `i` value in each iteration.
+
+So we're expecting it to print out `1`, `2`, `3`, but when we run it, it prints out `4`, `4`, `4`. Why? Cuz there's only one `i variable`. There's an `i variable` on first line and there's only one of them, and we have three `functions`. If we wanted to have **3 separate values**, we need **3 separate `variables`**. And there's only one, so of course it can only have the one value. And in this case, it's gonna have the value that occurs at the end of the loop, which is the value `4`.
+
+If we wanted to solve this problem, and we analyzed that, we need separate `variables`, we do this:
+
+```JavaScript
+for (var i = 1; i <= 3; i++) {
+    let j = i;
+    setTimeout(function() {
+        console.log(`j: ${j}`);
+    }, i * 1000);
+}
+
+// j: 1
+// j: 2
+// j: 3
+
+Closure: loops
+```
+
+So if we wanna create **more than one variable** with the **same name**, we need to make **new scopes**, right? So we could do an **IIFE** here, but the much more common way now that we have **block-scoping** (ES6), is to just stick a block-scoped declaration in the iteration. So now `let j` is going to run every time the `for` loop iterates. And it's gonna create a **whole new `j`** in that **whole new iteration of the loop**. There are three separate `j`s and therefore we get the values in them `1`, `2`, and `3`.
+
+**In this loop example we can see, the difference between capturing a value and closing over a `variable`.**
+
+But there's an even better way of solving this problem:
+
+```JavaScript
+for (let i = 1; i <= 3; i++) {
+    setTimeout(function() {
+        console.log(`i: ${i}`);
+    }, i * 1000);
+}
+
+// i: 1
+// i: 2
+// i: 3
+
+Closure: loops
+```
+
+Why don't we just go ahead and make it so that if we use a `let` on our `for` loop we'll automatically create a new `i` for each iteration. Instead of creating just one that belongs to the whole `for` loop, here there's gonna be a brand new `i` for each iteration. Which means the closure just magically works.
+
+> The point is if we need multiple **different values** being closed over, we need to closed over multiple **different `variables`**, not try to capture values.
+
+**Q:** So, the `i` is defined actually inside, even though it's written this way, but is it actually then defined inside the block?
+
+**A:** Yes, it is interpreted as if each iteration there's a new declaration of `i`, and JavaScript takes care of assigning it the value that its cousin had at the end of the previous iteration. It wires up all that stuff for you.
+
+**Q:** Is there any other case were that applies as well or is that the only one?
+
+**A:** Yeah, `for`, `for of`, and `for in`, those three syntactic `for loops` automatically make their thing inside of the iteration.
+
+Just as a little tiny detail, not that many people are gonna run across this. But if we did try to use a **`const`** there, we're gonna get an **`error`** because that `i++` is trying to modify the `variable` (me: try to reassign it so we get `error`). So here we would need to use a `let`. 
+
+**So closure is a preservation of the linkage to a `variable`, not the capturing of the value.**
