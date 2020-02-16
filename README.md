@@ -10,6 +10,7 @@
 4. [Equality](#Equality)
 5. [Static Typing](#Static Typing)
 6. [Scope](#Scope)
+7. [Closure](#Closure)
 
 ## Introduction
 
@@ -42,6 +43,7 @@ JavaScript can be divided into three cores (pillars):
   - `Modules`
 
 - Objects (Oriented):
+
   - `this`
   - `class{}`
   - `Prototypes`
@@ -2181,14 +2183,14 @@ The **Dynamic Scope** is not very common at all, we generally only see this in a
 ```JavaScript
 1.  var teacher = "Kyle";
 2.
-3.    function ask(question) {
+3.  function ask(question) {
 2.      console.log(teacher, question);
-5.    }
+5.  }
 6.
 7.  function otherClass() {
-8.    var teacher = "Suzy";
+8.      var teacher = "Suzy";
 9.
-10.   ask("Why?");
+10.     ask("Why?");
 11. }
 12.
 13. otherClass();
@@ -2485,6 +2487,7 @@ To use the form of `function` where we only assign it to properties or `variable
 > The difference between a **`function declaration`** and a **`function expression`** (including **arrow functions**) is **function declaration** hoisted but **`function expression`** did not.
 
 **This is critical to know:**
+
 > When we assign a `function expression` to a `variable`, the `variables` decoration itself hoisted, but the assignment is a **run-time** thing. Even we have a `function expression`, **compile-time** still handled that `function expression`. It didn't defer handling. What didn't happen is it didn't get at **compile-time**, associated with some `identifier` in the scope, but it still got compiled.
 >
 > All `functions` have a plan for their scope, until, and every time they get executed. So whether it was a `declaration` or an `expression`, when it gets executed is when that whole mapper plan becomes a real thing in memory, and every time it gets executed, that is the case.
@@ -2555,6 +2558,7 @@ This example proves to us, that `let` (and `const`) will be hoist too:
 In above code, if the `teacher` on line 5 did not host, then line 4 should print out `"Kyle"`. Because there is no `teacher` as of line 4 and it should go to the outer scope and find the `variable` from line 1. But this code still throws a `TDZ error`, and the reason is because **`let` and `const` still hoist**.
 
 **There is a difference between how `var` and `let` or `const` hoist:**
+
 - **`let` and `const` only hoist to a block, whereas `var` hoists to a `function`.**
 - **When `var` creates its `variable` in the compile-time, it initialize it to `undefined`, but when `let` and `const` hoist and create their `variables`, they do NOT initialize it. It is in an `uninitialized` state.**
 
@@ -2563,7 +2567,7 @@ And it doesn't get initialized until in that block you run across the `let` or t
 
 > So `let` and `cont` absolutely do **hoist**, which is why we still get a `TDZ error`, it's just that they don't get **initialized**.
 
-The reason `TDZ` exists is not even for `let`, `TDZ` exists because of `const`. 
+The reason `TDZ` exists is not even for `let`, `TDZ` exists because of `const`.
 
 Imagine `const` being attached inside of a block scope and initialized itself to `undefined`.
 And then on line 1 of a block, we did `console.log` of that `variable` and we saw it `undefined`, and then later we saw it with the value 42 (for example). Technically, that `const` would have had two different values at two different times, which academically violates the concept of a `const`. So they prevent us from accessing a variable earlier in the scope. So `let`'s have a `TDZ`, because `const` academically needed a `TDZ`.
@@ -2571,3 +2575,387 @@ And then on line 1 of a block, we did `console.log` of that `variable` and we sa
 > ![ECMAScript](https://user-images.githubusercontent.com/37678729/74106719-3d063180-4b7e-11ea-9791-f7fc843afd36.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-declarations-and-the-variable-statement)
+
+# Closure
+
+### Origin of Closure:
+
+The _closure_ was introduced in JavaScript in the mid to late 90s.
+
+In 1995, when **Brendan Eich** was hired to go to Netscape, and he was wanting to put **Scheme** in the browser. **Scheme** being an old **functional programming language**.
+That JavaScript is probably, in some respects, related to something like **Scheme**, than even to Java or C++.
+
+We could say that, the only other language at the time that was really maybe starting to become more consumer-oriented and had closure would have been **Perl**.
+
+> So JavaScript's either the first or nearly the **first language** to move in that direction to have **closure**.
+
+And as things stand today, 25 years later, every single language has closure because it turns out that closure is just that important.
+
+It's **not** only functional programming that uses closure, but closure is used in lots of different places. It's used for asynchronous AJAX. It's use for all sorts of different things.
+
+The closure as an idea is actually predating **computer science**, it actually comes to us from **lambda calculus**. It even predates the idea of a **programming language** in that sense.
+
+## What is Closure?
+
+As far as I'm concerned, this is the right answer to that question:
+
+> The **Closure** is when a **`function`** is able to **"remember"** and access its **`lexical scope`** (the `variables` outside of itself, so-called **free `variables`**), even when that `function` executes in a **different scope**.
+
+**Important Note:** So this definition has **two part** (without these two parts, we don't have a closure. We have to have both of them.):
+
+- The `function` is able to access its **lexical scope**: We already know that, this is **lexical scope** definition in itself! **lexical scope** is that a `function` can reference `variables` outside of itself and it just goes up the **scope chain** to find it.
+
+- The second part is the critical part. Without the second part, it's just **lexical scope**. With the second part of this definition, which is, even when the `function` is executed in a **different scope**, now we start to see something interesting. Cuz when we take a `function` and we pass it as a callback, or we take a `function` and return it back, the scope that it was originally defined in (at least conceptually), has gone away.
+  And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that.
+  That doesn't happen by accident. That's not magical, that's **closure**.
+
+The preservation, the linkage back to the original scope where it was defined, no matter where we pass that value, no matter where it executes, it retains that value. It preserves that scope. That's called **closure**.
+
+So let's take a look at some examples of closure:
+
+```JavaScript
+function ask(question) {
+    setTimout(function waitASec() {
+        console.log(question);
+    }, 100);
+}
+
+ask("What is closure?");   // What is colsure?
+
+Closure
+```
+
+At the time that `waitASec function` runs, the `ask function` has already finished, and the `variable question` which it's closed over should have gone away. But it didn't go away because closure preserved it, so-called the `waitASec function` is closed over the `variable question`. That's a **closure**.
+
+Now, academically, they think about closure on a per **`variable-basis`**, meaning only the `variables` that we're closed over, those are the only ones that are preserved. But at least the latest information that we have, JavaScript engines essentially implement closure as a linkage to the **entire scope**, **not** on a per `variable-basis`.
+So it's best to assume that closure, even though academically it's per `variable`, it's best to assume closure is a **scope-based** (a per scope basis) operation.
+
+> To create a closure don't need to do something special, just have to access a `variable` outside and then we have to pass the `function` somewhere.
+
+> If we're in a language that has **first-class `functions`** and **lexical scope**, we're gonna have **closure**, because if we didn't have closure we would pass the `function` somewhere, and all over sudden, it would forget about all its `variables` it wouldn't make sense not to.
+
+Another example of closure:
+
+```JavaScript
+1.  function ask(question) {
+2.      return function holdYourQuestion() {
+3.          console.log(question);
+4.      }
+5.  }
+6.
+7.  var myQuestion = ask("What is closure?");
+8.
+9.  // ..
+10.
+11. myQuestion();   // What is closure
+
+Closure
+```
+
+Here is the exact same thing. If we returned a `function` here that is closed over the `question variable`, then even though the `ask function` has finished, by line 11, we still have access to that `variable`.
+
+It's **Not a snapshot of the `variable`**, but the **actual `variable`** itself. That's called closure.
+
+### Closing Over `Variables`:
+
+We maybe think of closure, snapshoting a value, that we're capturing some value at some moment.
+That is **NOT** what closure is. As a matter of fact, closure has not got anything to do with the values at all. We don't close over a value. There's no such thing as closing over a value, **we close over a `variable`**, which means we have a linkage to that `variable`. Means at the time we access it, we're seeing whatever value that `variable` has at that moment, not it had before.
+
+Here's an example that shows us, the value is not a snapshot of `variable`:
+
+```JavaScript
+1. var teacher = "Kyle";
+2.
+3. var myTeacher = function() {
+4.    console.log(teacher);
+5. };
+6.
+7. teacher = "Suzy";
+8.
+9. myTeacher();       // Suzy
+
+Closure: NOT capturing a value
+```
+
+In this example when we create the `myTeacher function` on line 3, at that moment `teacher` has the value `"Kyle"`.
+And then later we change `teacher` to the value `"Suzy"`. And then line 9 when we execute the `function` what's it gonna print? Not `"Kyle"`, we didn't close over the value `"Kyle"`, we closed over the `variable teacher`. And when we execute that `function`, we're gonna access the value of it.
+
+**Don't think of closure as capturing values, think of it as preserving access to `variables`, a live link to all the `variables` that we are closed over.**
+
+This is an example of closure, that bites people the most (creating closures inside of a loop):
+
+```JavaScript
+for (var i = 1; i <= 3; i++) {
+    setTimeout(function() {
+        console.log(`i: ${i}`);
+    }, i * 1000);
+}
+
+// i: 4
+// i: 4
+// i: 4
+
+Closure: loops
+```
+
+This `function`, that is being created in each iteration, it has the appearance that what it's doing is closing over the `i` value in each iteration.
+
+So we're expecting it to print out `1`, `2`, `3`, but when we run it, it prints out `4`, `4`, `4`. Why? Cuz there's only one `i variable`. There's an `i variable` on first line and there's only one of them, and we have three `functions`. If we wanted to have **3 separate values**, we need **3 separate `variables`**. And there's only one, so of course it can only have the one value. And in this case, it's gonna have the value that occurs at the end of the loop, which is the value `4`.
+
+If we wanted to solve this problem, and we analyzed that, we need separate `variables`, we do this:
+
+```JavaScript
+for (var i = 1; i <= 3; i++) {
+    let j = i;
+    setTimeout(function() {
+        console.log(`j: ${j}`);
+    }, i * 1000);
+}
+
+// j: 1
+// j: 2
+// j: 3
+
+Closure: loops
+```
+
+So if we wanna create **more than one variable** with the **same name**, we need to make **new scopes**, right? So we could do an **IIFE** here, but the much more common way now that we have **block-scoping** (ES6), is to just stick a block-scoped declaration in the iteration. So now `let j` is going to run every time the `for` loop iterates. And it's gonna create a **whole new `j`** in that **whole new iteration of the loop**. There are three separate `j`s and therefore we get the values in them `1`, `2`, and `3`.
+
+**In this loop example we can see, the difference between capturing a value and closing over a `variable`.**
+
+But there's an even better way of solving this problem:
+
+```JavaScript
+for (let i = 1; i <= 3; i++) {
+    setTimeout(function() {
+        console.log(`i: ${i}`);
+    }, i * 1000);
+}
+
+// i: 1
+// i: 2
+// i: 3
+
+Closure: loops
+```
+
+Why don't we just go ahead and make it so that if we use a `let` on our `for` loop we'll automatically create a new `i` for each iteration. Instead of creating just one that belongs to the whole `for` loop, here there's gonna be a brand new `i` for each iteration. Which means the closure just magically works.
+
+> The point is if we need multiple **different values** being closed over, we need to closed over multiple **different `variables`**, not try to capture values.
+
+**Q:** So, the `i` is defined actually inside, even though it's written this way, but is it actually then defined inside the block?
+
+**A:** Yes, it is interpreted as if each iteration there's a new declaration of `i`, and JavaScript takes care of assigning it the value that its cousin had at the end of the previous iteration. It wires up all that stuff for you.
+
+**Q:** Is there any other case were that applies as well or is that the only one?
+
+**A:** Yeah, `for`, `for of`, and `for in`, those three syntactic `for loops` automatically make their thing inside of the iteration.
+
+Just as a little tiny detail, not that many people are gonna run across this. But if we did try to use a **`const`** there, we're gonna get an **`error`** because that `i++` is trying to modify the `variable` (me: try to reassign it so we get `error`). So here we would need to use a `let`.
+
+**So closure is a preservation of the linkage to a `variable`, not the capturing of the value.**
+
+## Module Pattern:
+
+Before we look at what the **module pattern** is, we need to look at what the **module pattern** is **not**.
+
+This is an extremely common pattern:
+
+```JavaScript
+var workshop = {
+    teacher: "Kyle",
+    ask(question) {
+        console.log(this.teacher, question);
+    }
+};
+
+workshop.ask("Is this a modules?");   // Kyle Is this a module?
+
+Namespace, NOT a module
+```
+
+**Pattern**: A common pattern where we have a set of behavior, like `functions` and a set of data that those `functions` operate on. And we wanna collect them together into some logical **unit**, the simplest way is to just make an `object` and put our data and our `functions` directly on the `object`.
+
+I would say that this has a name, unofficially, but this had a name as a pattern, this is the **Namespace Pattern**.
+
+> **Namespace**: Taking a set of `functions` and data and putting them inside of an `object` (putting them as properties instead of `variables`), it is effectively collecting them into a **namespace**.
+> Not really a syntactic feature of the language, but it's an idiom that we make **namespaces** with `objects`. And for years, people use it as the primitive data structure.
+
+> Nothing wrong with **namespace pattern**. But it is definitely, 100%, positively **not a Module**.
+
+> **Why namespace pattern is not a module?**
+>
+> The reason it's not a module is that the module pattern requires the concept of **encapsulation**. All **encapsulation** really means is, not only have to collected data and behavior (methods) together, which is the **namespace** creates, but need some idea for information **hiding**, or some control over visibility.
+>
+> The idea of a **module**, is that there are things that are **public** (public API), and there are things that are **private**, that's things that nobody on the outside can touch.
+
+There's an idea of visibility, even if the **only** visibility notion is **either public or private**, that is still an incantation of the idea of **encapsulation**.
+
+And in this example, we can clearly see that the properties and `functions` that exist are **public**, therefore it's **Not a Module**.
+
+**So if we wanna have a module, we gotta have encapsulation and data hiding.**
+
+> **The Classic Module Pattern (Revealing Module Pattern):**
+>
+> Modules **Encapsulate** data and behavior (methods) together. The state (data) of a module is held by its methods via **Closure**. In other world classic module patterns, **Encapsulates** data and it does so with **Closure** (that's key).
+
+So we can't have a **module**, if we don't have **closure**. It's just not possible. Even the _ES6 modules_, conceptually, we need to think about them as **closure**.
+
+This is the module pattern that was codified by Doug Crawford-ish in 2001:
+
+```JavaScript
+1.  var workshop = (function Module(teacher) {
+2.      var publicAPI = { ask, };
+3.      return publicAPI;
+4.
+5.      // ***********
+6.
+7.      function ask(question) {
+8.          console.log(teacher, question);
+9.      }
+10. })("Kyle");
+11.
+12  workshop.ask("It's a module, right?");   // Kyle It's a module, right?
+
+Classic/Revealing module pattern
+```
+
+This **Classic Module Pattern (Revealing Module Pattern)** has two components to it:
+
+- Number one, we have an outer enclosing `function` (**`IIFE`** on line 1). And when we run a module as an **`IIFE`**, that's kind of like saying it's a **singleton**. Since we know **`IIFE`s** run once and then they're done, this is sort of like a **singleton**. It runs once, and then it's done, except done only in the air quote sense, because the **closure** is gonna prevent that scope from going away.
+
+- The second component then, is that we have an inner `function` (`ask` on line 7), that is closed over those `variables`, in this case, it is closed over the `teacher variable`. Since it's closed over the `teacher variable`, the `workshop object` on the outside, which has now reference to that `function`, is preserving that inner scope through **closure**. `ask` is closed over `teacher`, and when we say `workshop.ask` on the outside, that's scope didn't get **garbage collected** and go away, that scope is still there, that state is still there.
+
+And that's how we create the idiom of **module pattern** in JavaScript.
+
+We keep our private state private, and we expose things on an `object`, like what we're doing here with the `publicAPI object`, is we're exposing only the `ask function`. But we could have hundreds of other `functions` that were private, that could not be accessed from the outside. And yet the closure `functions` can access them all day long, if they want to, **because of closure**.
+
+So we can say `workshop.ask`, but we can't say `workshop.teacher`, because `teacher` is hidden. That's closure inaction. **We couldn't affect this idea of information hiding of encapsulation without closure**.
+
+> The whole purpose of a module is that this usage of **closure** is actually closing over **`variables`** that are designed to **change state over time**. So if we have a thing that we call a module, and it doesn't have any state, or rather, it doesn't have any state that ever **changes**, **it's not a module**. It's just an over-engineered **Namespace**.
+>
+> The **purpose of a module** is that we have some state that we're closed over, and we are controlling access to it by exposing a minimal public API. Remember that principle of **least exposure privilege**? That's in action here. We're saying keep everything hidden, except minimally expose only what's necessary on the outside. That's the **module pattern**.
+
+> What is **namespacing**?
+>
+> In many programming languages, **namespacing** is a technique employed to avoid **collisions** with other `objects` or `variables` in the **`global namespace`**. Whilst JavaScript doesn't really have built-in support for namespaces like other languages, it does have `objects` and closures which can be used to achieve a similar effect.
+>
+> [addyosmani.com](https://addyosmani.com/blog/essential-js-namespacing/)
+
+> A **Singleton** is an `object` which can only be instantiated one time. Repeated calls to its constructor return the same instance and in this way one can ensure that they don't accidentally create, say, two Users in a single User application.
+>
+> **Formal Definition:** Ensure a class only has one instance, and provide a global point of access to it.
+>
+> While other languages like Java or C# have **namespaces** built in, JavaScript has to emulate them using simple objects.
+> [robdodson.me](https://robdodson.me/javascript-design-patterns-singleton/)
+
+> **Singleton:** A class with only a single instance with global access points.
+>
+> [Learning JavaScript Design Patterns](https://addyosmani.com/resources/essentialjsdesignpatterns/book) (Page 18 | Chapter 8: Design Pattern Categorization)
+
+> **The Singleton Pattern:** In conventional software engineering, the singleton pattern can be implemented by creating a `class` with a method that creates a new instance of the `class` if one doesn't exist. In the event of an instance already existing, it simply returns a reference to that `object`.
+> The singleton pattern is thus known because traditionally, it restricts instantiation of a `class` to a single `object`. With JavaScript, singletons serve as a **namespace** provider which isolate implementation code from the global **namespace** so-as to provide a single point of access for `functions`.
+>
+> [Learning JavaScript Design Patterns](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) (Page 24 | Chapter 9: JavaScript Design Patterns)
+
+> What is a singleton?
+>
+> **Singleton is an object which can only be instantiated once.** A singleton pattern creates a new instance of the class if one doesn’t exist. If an instance already exists, it returns the reference to that `object`.
+>
+> Technically speaking, `object literals` in JavaScript are **singletons**. Think about it! An `object` occupies a unique memory location and once it is created, there can be no other `object` like this. Every time we call the `object`, we are essentially returning a reference to that `object`. Hence, a **singleton**!
+>
+> [Medium](https://codeburst.io/javascript-global-variables-vs-singletons-d825fcab75f9)
+
+The previous example had a module **`IIFE`** (also known as a **module singleton**), but that's not the only way to make modules:
+
+```JavaScript
+1.  function WorkshopModule(teacher) {
+2.      var publicAPI = { ask, };
+3.      return publicAPI;
+4.
+5.      // ***********
+6.
+7.      function ask(question) {
+8.          console.log(teacher, question);
+9.      }
+10. }
+11.
+12. var workshop = WorkshopModule("Kyle");
+13.
+14. workshop.ask("It's a module, right?");   // Kyle It's a module, right?
+
+Module Factory
+```
+
+We can make just regular `functions` that can be called multiple times. And every time a `function` is called, it's gonna produce a new instance of our module. We lovingly refer to those as **Factory Functions**.
+
+This is a `WorkshopModule` **factory function**. We can call it once, like we do on line 12, but we could call it a hundred other times and have a hundred other **separate instances** that all have their own state. They're all separate and they don't mix with each other.
+
+> That is the **module pattern** in a nutshell. The idea that we take some behavior, and data that that behavior operates on, and **encapsulate** it into a data structure, **hide** what we don't need to show, and expose only the minimal necessary API. That's a module.
+
+let's admit that what we learned until now, is sort of a **syntactic hack**, we wouldn't really call this **first class language support for a module**. We would call this **an idiom**, a pattern that we do using the tools in a way that accomplishes some end goal.
+
+## ES6 Modules & Node.js:
+
+For years, there was clamoring that JavaScript, if the modules were so important as a **design pattern**, then we ought to have **first class and syntactic support for modules**. And so we finally added **ES6 modules**.
+
+**ES6 modules** are a work in progress. Unfortunately, **TC39** didn't really talk to **Node.js** about their plans for the module syntax. And Node.js didn't really talk to TC39 about the fact that what they were about to spec was incompatible with Node.js. So the module works in **browsers**, but the single largest code repository ever invented, aka **NPM**, it's completely incompatible.
+
+**To use ES6 modules interchangeably in Node, we're gonna have to use a different file extension, `mjs` instead of `js`.**
+
+But they're expected sometime in Q1 of 2020 to land stable in Node the first phase of three or four phases of module support in Node.
+
+```JavaScript
+            workshop.mjs: (file name in node)
+
+1. var teacher = "Kyle";
+2.
+3. export default function ask(question) {
+4.     console.log(teacher, question);
+5. };
+
+ES6 module pattern
+```
+
+**Somethings we should know about modules:**
+
+- Everything we write inside on module is **privet** (all `variables` and `functions`).
+
+- To make something **public** and accessible from outside, we use the **`export`** keyword.
+
+- Modules are **file-based**. Which means **it is impossible to have more than one ES6 module in the same file.** So for example, without a build process, if we wanted to ship all the modules to a browser, we're gonna have to load a thousand separate files with all the performance implications thereof. People that are currently doing this today are using tools where they author in ES6 modules and they compile back to the old school style module and concatenate them into a file and ship it off.
+
+- Modules are also **singletons**. No matter how many times we import this module into an application, **it only ever runs once**. And every other time that we import it, we just get **another reference to that same instance**. So if we want to have a **factory for our modules** (where people can make multiple instances), we're gonna have to expose on our API, a **factory function** to do that.
+
+To create a module we open up a file and we just start making `variables` and `functions`. And that file, because it's gonna be loaded as a module, is assumed that everything is **private**. We don't need a syntactic wrapper. We can conceptually think of it is being wrapped in a big `function`.
+Wrapped in a scope that is by default private. The way we make something **public** is we use the `export` keyword as we see on line 3. **So anything we export is public, everything that we don't export is private.**
+
+From kyle Simpson perspective: I don't use this syntax quite yet until this whole Node thing settles down. I continue to use the idiom, the classic style. And also because the tools compiled back the ES6 modules into old school style modules I'm just skipping the middleman and keep writing that old syntax.
+
+## ES6 Module Syntax:
+
+There's a bunch of variations import modules, but two major styles:
+
+```JavaScript
+1. import ask from "workshop.mjs";
+2.
+3. ask("It's a default import, right?");   // Kyle It's a default import, right?
+4.
+5. import * as workshop from "workshop.mjs";
+6.
+7. workshop.ask("It's a namespace import, right?");   // Kyle It's a namespace import, right?
+
+ES6 module pattern
+```
+
+There are **two major style of import modules**:
+
+- One is called the **named import syntax** which we see on line 1. We exported it the `default function`, so technically its name is default from the outside, and then we decided to name that default import `ask` on line 1, which means now in our top level scope of where the import happened, we now have an `identifier` called `ask`, which is reference bound to the `ask function` inside of the module. That's what we sort of referred to as the Java style of import where import means literally to import `identifiers` into your scope.
+
+- The second style is referred to generally as the **namespace import** (as we see on line 7), which is to say we wanna get this whole module and collect **all of its contents** onto a **single namespaced `variable`**, in this case called `workshop`.
+
+**A:** When you say you prefer the old module style you mean, the revealing module pattern in one file?
+
+**Q:** Yes, the `function` wrapped around a couple slides ago. Specifically when I'm gonna do a module, I expose my modules as **UMD** (Universal Module Definition) style modules. It's supposed to kind of inter-operate between browsers, module loaders and node. So that's the format I choose to write in.
+
+So whether we use a syntactic support in our language to define our modules, or whether we choose to hack it with the old school revealing module pattern, the same concept applies, which is that we're organizing a set of behavior into a cohesive unit hiding data in it and exposing a minimal necessary API. That's the design pattern that we wanna get. So that somebody can import that behavior into their app and use it. All right, so there you go, there is the module pattern. And with that, we now have a full breadth of understanding of the lexical scope core or the main pillar (the most important pillar), this main pillar of the JavaScript language.
