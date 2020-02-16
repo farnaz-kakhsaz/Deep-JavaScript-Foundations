@@ -2895,7 +2895,7 @@ This is a `WorkshopModule` **factory function**. We can call it once, like we do
 
 let's admit that what we learned until now, is sort of a **syntactic hack**, we wouldn't really call this **first class language support for a module**. We would call this **an idiom**, a pattern that we do using the tools in a way that accomplishes some end goal.
 
-## ES6 Modules & Node.js
+## ES6 Modules & Node.js:
 
 For years, there was clamoring that JavaScript, if the modules were so important as a **design pattern**, then we ought to have **first class and syntactic support for modules**. And so we finally added **ES6 modules**.
 
@@ -2931,3 +2931,31 @@ To create a module we open up a file and we just start making `variables` and `f
 Wrapped in a scope that is by default private. The way we make something **public** is we use the `export` keyword as we see on line 3. **So anything we export is public, everything that we don't export is private.**
 
 From kyle Simpson perspective: I don't use this syntax quite yet until this whole Node thing settles down. I continue to use the idiom, the classic style. And also because the tools compiled back the ES6 modules into old school style modules I'm just skipping the middleman and keep writing that old syntax.
+
+## ES6 Module Syntax:
+
+There's a bunch of variations import modules, but two major styles:
+
+```JavaScript
+1. import ask from "workshop.mjs";
+2.
+3. ask("It's a default import, right?");   // Kyle It's a default import, right?
+4.
+5. import * as workshop from "workshop.mjs";
+6.
+7. workshop.ask("It's a namespace import, right?");   // Kyle It's a namespace import, right?
+
+ES6 module pattern
+```
+
+There are **two major style of import modules**:
+
+- One is called the **named import syntax** which we see on line 1. We exported it the `default function`, so technically its name is default from the outside, and then we decided to name that default import `ask` on line 1, which means now in our top level scope of where the import happened, we now have an `identifier` called `ask`, which is reference bound to the `ask function` inside of the module. That's what we sort of referred to as the Java style of import where import means literally to import `identifiers` into your scope.
+
+- The second style is referred to generally as the **namespace import** (as we see on line 7), which is to say we wanna get this whole module and collect **all of its contents** onto a **single namespaced `variable`**, in this case called `workshop`.
+
+**A:** When you say you prefer the old module style you mean, the revealing module pattern in one file?
+
+**Q:** Yes, the `function` wrapped around a couple slides ago. Specifically when I'm gonna do a module, I expose my modules as **UMD** (Universal Module Definition) style modules. It's supposed to kind of inter-operate between browsers, module loaders and node. So that's the format I choose to write in.
+
+So whether we use a syntactic support in our language to define our modules, or whether we choose to hack it with the old school revealing module pattern, the same concept applies, which is that we're organizing a set of behavior into a cohesive unit hiding data in it and exposing a minimal necessary API. That's the design pattern that we wanna get. So that somebody can import that behavior into their app and use it. All right, so there you go, there is the module pattern. And with that, we now have a full breadth of understanding of the lexical scope core or the main pillar (the most important pillar), this main pillar of the JavaScript language.
