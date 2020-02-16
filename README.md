@@ -2894,3 +2894,40 @@ This is a `WorkshopModule` **factory function**. We can call it once, like we do
 > That is the **module pattern** in a nutshell. The idea that we take some behavior, and data that that behavior operates on, and **encapsulate** it into a data structure, **hide** what we don't need to show, and expose only the minimal necessary API. That's a module.
 
 let's admit that what we learned until now, is sort of a **syntactic hack**, we wouldn't really call this **first class language support for a module**. We would call this **an idiom**, a pattern that we do using the tools in a way that accomplishes some end goal.
+
+## ES6 Modules & Node.js
+
+For years, there was clamoring that JavaScript, if the modules were so important as a **design pattern**, then we ought to have **first class and syntactic support for modules**. And so we finally added **ES6 modules**.
+
+**ES6 modules** are a work in progress. Unfortunately, **TC39** didn't really talk to **Node.js** about their plans for the module syntax. And Node.js didn't really talk to TC39 about the fact that what they were about to spec was incompatible with Node.js. So the module works in **browsers**, but the single largest code repository ever invented, aka **NPM**, it's completely incompatible.
+
+**To use ES6 modules interchangeably in Node, we're gonna have to use a different file extension, `mjs` instead of `js`.**
+
+But they're expected sometime in Q1 of 2020 to land stable in Node the first phase of three or four phases of module support in Node.
+
+```JavaScript
+            workshop.mjs: (file name in node)
+
+1. var teacher = "Kyle";
+2.
+3. export default function ask(question) {
+4.     console.log(teacher, question);
+5. };
+
+ES6 module pattern
+```
+
+**Somethings we should know about modules:**
+
+- Everything we write inside on module is **privet** (all `variables` and `functions`).
+
+- To make something **public** and accessible from outside, we use the **`export`** keyword.
+
+- Modules are **file-based**. Which means **it is impossible to have more than one ES6 module in the same file.** So for example, without a build process, if we wanted to ship all the modules to a browser, we're gonna have to load a thousand separate files with all the performance implications thereof. People that are currently doing this today are using tools where they author in ES6 modules and they compile back to the old school style module and concatenate them into a file and ship it off.
+
+- Modules are also **singletons**. No matter how many times we import this module into an application, **it only ever runs once**. And every other time that we import it, we just get **another reference to that same instance**. So if we want to have a **factory for our modules** (where people can make multiple instances), we're gonna have to expose on our API, a **factory function** to do that.
+
+To create a module we open up a file and we just start making `variables` and `functions`. And that file, because it's gonna be loaded as a module, is assumed that everything is **private**. We don't need a syntactic wrapper. We can conceptually think of it is being wrapped in a big `function`.
+Wrapped in a scope that is by default private. The way we make something **public** is we use the `export` keyword as we see on line 3. **So anything we export is public, everything that we don't export is private.**
+
+From kyle Simpson perspective: I don't use this syntax quite yet until this whole Node thing settles down. I continue to use the idiom, the classic style. And also because the tools compiled back the ES6 modules into old school style modules I'm just skipping the middleman and keep writing that old syntax.
