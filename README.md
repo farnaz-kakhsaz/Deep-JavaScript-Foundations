@@ -2751,6 +2751,146 @@ Why don't we just go ahead and make it so that if we use a `let` on our `for` lo
 
 **A:** Yeah, `for`, `for of`, and `for in`, those three syntactic `for loops` automatically make their thing inside of the iteration.
 
-Just as a little tiny detail, not that many people are gonna run across this. But if we did try to use a **`const`** there, we're gonna get an **`error`** because that `i++` is trying to modify the `variable` (me: try to reassign it so we get `error`). So here we would need to use a `let`. 
+Just as a little tiny detail, not that many people are gonna run across this. But if we did try to use a **`const`** there, we're gonna get an **`error`** because that `i++` is trying to modify the `variable` (me: try to reassign it so we get `error`). So here we would need to use a `let`.
 
 **So closure is a preservation of the linkage to a `variable`, not the capturing of the value.**
+
+## Module Pattern:
+
+Before we look at what the **module pattern** is, we need to look at what the **module pattern** is **not**.
+
+This is an extremely common pattern:
+
+```JavaScript
+var workshop = {
+    teacher: "Kyle",
+    ask(question) {
+        console.log(this.teacher, question);
+    }
+};
+
+workshop.ask("Is this a modules?");   // Kyle Is this a module?
+
+Namespace, NOT a module
+```
+
+**Pattern**: A common pattern where we have a set of behavior, like `functions` and a set of data that those `functions` operate on. And we wanna collect them together into some logical **unit**, the simplest way is to just make an `object` and put our data and our `functions` directly on the `object`.
+
+I would say that this has a name, unofficially, but this had a name as a pattern, this is the **Namespace Pattern**.
+
+> **Namespace**: Taking a set of `functions` and data and putting them inside of an `object` (putting them as properties instead of `variables`), it is effectively collecting them into a **namespace**.
+> Not really a syntactic feature of the language, but it's an idiom that we make **namespaces** with `objects`. And for years, people use it as the primitive data structure.
+
+> Nothing wrong with **namespace pattern**. But it is definitely, 100%, positively **not a Module**.
+
+> **Why namespace pattern is not a module?**
+>
+> The reason it's not a module is that the module pattern requires the concept of **encapsulation**. All **encapsulation** really means is, not only have to collected data and behavior (methods) together, which is the **namespace** creates, but need some idea for information **hiding**, or some control over visibility.
+>
+> The idea of a **module**, is that there are things that are **public** (public API), and there are things that are **private**, that's things that nobody on the outside can touch.
+
+There's an idea of visibility, even if the **only** visibility notion is **either public or private**, that is still an incantation of the idea of **encapsulation**.
+
+And in this example, we can clearly see that the properties and `functions` that exist are **public**, therefore it's **Not a Module**.
+
+**So if we wanna have a module, we gotta have encapsulation and data hiding.**
+
+> **The Classic Module Pattern (Revealing Module Pattern):**
+>
+> Modules **Encapsulate** data and behavior (methods) together. The state (data) of a module is held by its methods via **Closure**. In other world classic module patterns, **Encapsulates** data and it does so with **Closure** (that's key).
+
+So we can't have a **module**, if we don't have **closure**. It's just not possible. Even the _ES6 modules_, conceptually, we need to think about them as **closure**.
+
+This is the module pattern that was codified by Doug Crawford-ish in 2001:
+
+```JavaScript
+1.  var workshop = (function Module(teacher) {
+2.      var publicAPI = { ask, };
+3.      return publicAPI;
+4.
+5.      // ***********
+6.
+7.      function ask(question) {
+8.          console.log(teacher, question);
+9.      }
+10. })("Kyle");
+11.
+12  workshop.ask("It's a module, right?");   // Kyle It's a module, right?
+
+Classic/Revealing module pattern
+```
+
+This **Classic Module Pattern (Revealing Module Pattern)** has two components to it:
+
+- Number one, we have an outer enclosing `function` (**`IIFE`** on line 1). And when we run a module as an **`IIFE`**, that's kind of like saying it's a **singleton**. Since we know **`IIFE`s** run once and then they're done, this is sort of like a **singleton**. It runs once, and then it's done, except done only in the air quote sense, because the **closure** is gonna prevent that scope from going away.
+
+- The second component then, is that we have an inner `function` (`ask` on line 7), that is closed over those `variables`, in this case, it is closed over the `teacher variable`. Since it's closed over the `teacher variable`, the `workshop object` on the outside, which has now reference to that `function`, is preserving that inner scope through **closure**. `ask` is closed over `teacher`, and when we say `workshop.ask` on the outside, that's scope didn't get **garbage collected** and go away, that scope is still there, that state is still there.
+
+And that's how we create the idiom of **module pattern** in JavaScript.
+
+We keep our private state private, and we expose things on an `object`, like what we're doing here with the `publicAPI object`, is we're exposing only the `ask function`. But we could have hundreds of other `functions` that were private, that could not be accessed from the outside. And yet the closure `functions` can access them all day long, if they want to, **because of closure**.
+
+So we can say `workshop.ask`, but we can't say `workshop.teacher`, because `teacher` is hidden. That's closure inaction. **We couldn't affect this idea of information hiding of encapsulation without closure**.
+
+> The whole purpose of a module is that this usage of **closure** is actually closing over **`variables`** that are designed to **change state over time**. So if we have a thing that we call a module, and it doesn't have any state, or rather, it doesn't have any state that ever **changes**, **it's not a module**. It's just an over-engineered **Namespace**.
+>
+> The **purpose of a module** is that we have some state that we're closed over, and we are controlling access to it by exposing a minimal public API. Remember that principle of **least exposure privilege**? That's in action here. We're saying keep everything hidden, except minimally expose only what's necessary on the outside. That's the **module pattern**.
+
+> What is **namespacing**?
+>
+> In many programming languages, **namespacing** is a technique employed to avoid **collisions** with other `objects` or `variables` in the **`global namespace`**. Whilst JavaScript doesn't really have built-in support for namespaces like other languages, it does have `objects` and closures which can be used to achieve a similar effect.
+>
+> [addyosmani.com](https://addyosmani.com/blog/essential-js-namespacing/)
+
+> A **Singleton** is an `object` which can only be instantiated one time. Repeated calls to its constructor return the same instance and in this way one can ensure that they don't accidentally create, say, two Users in a single User application.
+>
+> **Formal Definition:** Ensure a class only has one instance, and provide a global point of access to it.
+>
+> While other languages like Java or C# have **namespaces** built in, JavaScript has to emulate them using simple objects.
+> [robdodson.me](https://robdodson.me/javascript-design-patterns-singleton/)
+
+> **Singleton:** A class with only a single instance with global access points.
+>
+> [Learning JavaScript Design Patterns](https://addyosmani.com/resources/essentialjsdesignpatterns/book) (Page 18 | Chapter 8: Design Pattern Categorization)
+
+> **The Singleton Pattern:** In conventional software engineering, the singleton pattern can be implemented by creating a `class` with a method that creates a new instance of the `class` if one doesn't exist. In the event of an instance already existing, it simply returns a reference to that `object`.
+> The singleton pattern is thus known because traditionally, it restricts instantiation of a `class` to a single `object`. With JavaScript, singletons serve as a **namespace** provider which isolate implementation code from the global **namespace** so-as to provide a single point of access for `functions`.
+>
+> [Learning JavaScript Design Patterns](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#singletonpatternjavascript) (Page 24 | Chapter 9: JavaScript Design Patterns)
+
+> What is a singleton?
+>
+> **Singleton is an object which can only be instantiated once.** A singleton pattern creates a new instance of the class if one doesn’t exist. If an instance already exists, it returns the reference to that `object`.
+>
+> Technically speaking, `object literals` in JavaScript are **singletons**. Think about it! An `object` occupies a unique memory location and once it is created, there can be no other `object` like this. Every time we call the `object`, we are essentially returning a reference to that `object`. Hence, a **singleton**!
+>
+> [Medium](https://codeburst.io/javascript-global-variables-vs-singletons-d825fcab75f9)
+
+The previous example had a module **`IIFE`** (also known as a **module singleton**), but that's not the only way to make modules:
+
+```JavaScript
+1.  function WorkshopModule(teacher) {
+2.      var publicAPI = { ask, };
+3.      return publicAPI;
+4.
+5.      // ***********
+6.
+7.      function ask(question) {
+8.          console.log(teacher, question);
+9.      }
+10. }
+11.
+12. var workshop = WorkshopModule("Kyle");
+13.
+14. workshop.ask("It's a module, right?");   // Kyle It's a module, right?
+
+Module Factory
+```
+
+We can make just regular `functions` that can be called multiple times. And every time a `function` is called, it's gonna produce a new instance of our module. We lovingly refer to those as **Factory Functions**.
+
+This is a `WorkshopModule` **factory function**. We can call it once, like we do on line 12, but we could call it a hundred other times and have a hundred other **separate instances** that all have their own state. They're all separate and they don't mix with each other.
+
+> That is the **module pattern** in a nutshell. The idea that we take some behavior, and data that that behavior operates on, and **encapsulate** it into a data structure, **hide** what we don't need to show, and expose only the minimal necessary API. That's a module.
+
+let's admit that what we learned until now, is sort of a **syntactic hack**, we wouldn't really call this **first class language support for a module**. We would call this **an idiom**, a pattern that we do using the tools in a way that accomplishes some end goal.
