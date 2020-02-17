@@ -11,6 +11,7 @@
 5. [Static Typing](#Static Typing)
 6. [Scope](#Scope)
 7. [Closure](#Closure)
+7. [Object](#Object)
 
 ## Introduction
 
@@ -2959,3 +2960,18 @@ There are **two major style of import modules**:
 **Q:** Yes, the `function` wrapped around a couple slides ago. Specifically when I'm gonna do a module, I expose my modules as **UMD** (Universal Module Definition) style modules. It's supposed to kind of inter-operate between browsers, module loaders and node. So that's the format I choose to write in.
 
 So whether we use a syntactic support in our language to define our modules, or whether we choose to hack it with the old school revealing module pattern, the same concept applies, which is that we're organizing a set of behavior into a cohesive unit hiding data in it and exposing a minimal necessary API. That's the design pattern that we wanna get. So that somebody can import that behavior into their app and use it. All right, so there you go, there is the module pattern. And with that, we now have a full breadth of understanding of the lexical scope core or the main pillar (the most important pillar), this main pillar of the JavaScript language.
+
+# Object
+
+### Objects Overview:
+
+The **objects oriented system** is one of the important of three pillars of the language. The `objects`, the `this` keyword and the `prototypes`, those make up the **objects oriented system**.
+
+**Objects (Oriented)**
+
+- `this`
+- `class {}`
+- Prototypes
+- "Inheritance" vs. "Behavior Delegation" (OO vs. OLOO)
+
+We're deliberately saying **objects oriented** instead of **object oriented**, because this is **not** strictly a **class system**, there is classes that have been layered on top of it, but it is not **inherently a class system**. 
