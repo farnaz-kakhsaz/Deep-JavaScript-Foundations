@@ -11,7 +11,7 @@
 5. [Static Typing](#Static Typing)
 6. [Scope](#Scope)
 7. [Closure](#Closure)
-7. [Object](#Object)
+8. [Object](#Object)
 
 ## Introduction
 
@@ -127,6 +127,8 @@ typeof v;              // "object"
 
 v = Symbol();
 typeof v;              // "symbol"
+
+// Primitive Types: typeof
 ```
 
 > We can think of `undefined` as basically a default value.
@@ -155,6 +157,8 @@ typeof v;                   // "object"      hmmm?
 var v = 42n;
 // or: BigInt(42)
 typeof v;                   // "bigint"
+
+// Primitive Types: typeof
 ```
 
 Why `typeof` null returns object? This is a historical fact from ES1 which essentially indicated to developers that if you wanted to unset a regular value, like a number, you would use undefined. But if you wanted to unset an object reference, you would use null.
@@ -286,6 +290,8 @@ isNaN("my son's age");            // true    OOPS!
 
 Number.isNaN(myCatsAge);          // true
 Number.isNaN("my son's age");     // false
+
+// Special Values: NaN
 ```
 
 It's not appropriate in any way shape or form to think of 0 as being the place holder for absence of numeric value. Doesn't make sense mathematically and doesn't make sense programatically.
@@ -339,6 +345,8 @@ trendRate > 0;                // false
 
 Object.is(trendRate, -0);     // true
 Object.is(trendRate, 0);      //false
+
+// Special Values: -0
 ```
 
 > **Note:** When we `toString()` the `-0` we got `0`.
@@ -368,6 +376,8 @@ sign(-3);              // -1
 sign(3);               // 1
 sign(-0);              // -1
 sign(0);               // 1
+
+// Special Values: -0
 ```
 
 > If we had a `-0` or `0`. Unfortunately the `Math.sign()` return negative zero and zero instead of negative one and one.
@@ -529,7 +539,7 @@ Some examples of things and what they end up producing as a string representatio
             0   "0"
            -0   "0"   // *
 
-Abstract Operations: ToString
+// Abstract Operations: ToString
 ```
 
 Things get a little strange when we look at the negative zero, remember that. We already saw that it lies, the `toString` operation for negative zero lies and produces a quote zero. So that's one of the corner cases.
@@ -557,7 +567,7 @@ So what's gonna look like on some particular `object` like an `array`?
     [[[], [], []], []]   ",,,"
                 [,,,,]   ",,,"
 
-Abstract Operations: ToString(Array)
+// Abstract Operations: ToString(Array)
 ```
 
 Arrays have a default `toString`, which is strange serializes the representation of the `array`. Because they're leaving off the brackets.
@@ -576,7 +586,7 @@ What about on an `objects`:
                            {a: 2}   "[object Object]"
     { toString() { return "X"; }}   "X"
 
-Abstract Operations: ToString(Object)
+// Abstract Operations: ToString(Object)
 ```
 
 > The default `toString` on the `Object.prototype` is to do that whole the square brackets thing, it does a lower case `object` and then it puts in this thing which is called the string tag.
@@ -604,7 +614,7 @@ The `ToNumber` is a bit more interesting cuz there's a lot more corner cases inv
           "."   NaN
        "Oxaf"   175
 
-Abstract Operations: ToNumber
+// Abstract Operations: ToNumber
 ```
 
 ```JavaScript
@@ -613,7 +623,7 @@ Abstract Operations: ToNumber
          null   0   // *
     undefined   NaN
 
-Abstract Operations: ToNumber
+// Abstract Operations: ToNumber
 ```
 
 When we use `ToNumber` on a `non-primitive` (not a `string`, `undefined`, `boolean` or whatever), when we use it in an `object`, remember it invokes the `ToPrimitive` with the `number` hint. That consults first the valueOf, and then it consults the toString.
@@ -655,7 +665,7 @@ So then in your various operations where you were expecting a `primitive`, but y
       [1, 2, 3]   NaN
        [[[[]]]]   0   // *
 
-Coercion: ToNumber(Array)
+// Coercion: ToNumber(Array)
 ```
 
 If the `array` has either `null` or `undefined`, it becomes 0. Because they first become empty `strings`, and then empty `string` becomes `0`. Remember, empty `string` is the root of all coercion evil.
@@ -666,7 +676,7 @@ And if you have an object
                       { .. }   NaN   // means {} or for example {x: 5}
    { valueOf() { return 3;}}   3
 
-Coercion: ToNumber(Object)
+// Coercion: ToNumber(Object)
 ```
 
 And remember what a stringification of an `object` by default is, it's that `[object Object]` thing. Which is definitely not a representation of a number, so we get `NaN`. If you override the `valueOf` for some `object`, you can return whatever thing you want.
@@ -755,7 +765,7 @@ console.log(
 );
 // "There are 16 students."
 
-Coercion: number to string
+// Coercion: number to string
 ```
 
 > Overloaded operator: Defining or redefining how an operator (+, -, \*, /, etc.) acts.
@@ -791,7 +801,7 @@ function addAStudent(numStudents) {
 addAStudent(studentsInputElem.value);
 // "161"   OOPS!
 
-Coercion: string to number
+// Coercion: string to number
 ```
 
 > The plus operator (`+`) with `string` value (`+"6"` for example), invoke `toNumber` abstract operation.
@@ -806,7 +816,7 @@ function addAStudent(numStudents) {
 addAStudent( + studentsInputElem.value);
 // "17"
 
-Coercion: string to number
+// Coercion: string to number
 ```
 
 If we use the minus operator (`-`) that one is only defined for `numbers`.
@@ -823,7 +833,7 @@ function kickStudentOut(numStudents) {
 kickStudentOut(studentsInputElem.value);
 // "15"
 
-Coercion: string to number
+// Coercion: string to number
 ```
 
 But what about `boolean`?
@@ -833,7 +843,7 @@ if (studentsInputElem.value) {
   numStudents = Number(studentsInputElem.value)
 }
 
-Coercion: __ to boolean
+// Coercion: __ to boolean
 ```
 
 If `studentsInputElem.value` as an empty `string` that's gonna be `falsy`, But what if that `string` has just a bunch of white space, now it's gonna be `truthy`.
@@ -844,7 +854,7 @@ while (newStudents.length) {
   enrollStudent(newStudents.pop());
 }
 
-Coercion: __ to boolean
+// Coercion: __ to boolean
 ```
 
 So if my length is zero then it becomes `false` and if my length is anything non zero then it becomes `true`. Because it's not one of the zeros. But what happens when it's `NaN` it becomes `false`.
@@ -924,7 +934,7 @@ studentsInput.value = "   \t\n";
 
 Number(studentsInput.value);            //   0
 
-Coercion: corner cases
+// Coercion: corner cases
 ```
 
 Not only does the empty `string` become zero, but any `string` that's full of white space also becomes zero.
@@ -955,7 +965,7 @@ Number(false);             //   0
 (true) > 1;
 1 > 1;                     //   false
 
-Coercion: corner cases
+// Coercion: corner cases
 ```
 
 ---
@@ -1031,7 +1041,7 @@ if (workshop1 === workshop2) {
   // Nope
 }
 
-Equality: identity, not structure
+// Equality: identity, not structure
 ```
 
 We have two `objects`, they have the same structure and ostensibly and the same value. But they are not the same object.
@@ -1073,7 +1083,7 @@ if (
   // ..
 }
 
-Coercive Equality: null == undefined
+// Coercive Equality: null == undefined
 ```
 
 The reader has not gaining anything readability-wise by being `explicit` between two empty values.
@@ -1107,7 +1117,7 @@ if (workshopEnrollment1 == workshopEnrollment2) {
   // ..
 }
 
-Coercive Equality: perfers numeric comparison
+// Coercive Equality: perfers numeric comparison
 ```
 
 So the abstraction of the `double equals` is helpful there.
@@ -1146,7 +1156,7 @@ if (true) {
   // Yep (hmm...)
 }
 
-Coercive Equality: only primitives
+// Coercive Equality: only primitives
 ```
 
 > We should never use `double equals` to compares a `primitive` with `non-primitive` value.
@@ -1199,7 +1209,7 @@ var workshop2Students = [];
   // if (true)
 }
 
-== Corner Cases: WAT!?
+// == Corner Cases: WAT!?
 ```
 
 Compare the first one in your mind to the more appropriate comparison (the second one), which is to say, I want to check to see if they're not the same `array`.
@@ -1245,7 +1255,9 @@ var workshopStudents = [];
   // if ("" == false)
   // if (0 === 0)
   // if (true)
-== Corner Cases: booleans
+
+
+// == Corner Cases: booleans
 }
 ```
 
@@ -1315,7 +1327,7 @@ teacher = { name: "Kyle"};
 // Error: can't assin object to string
 
 
-Type-Awarw Linting: inferencing
+// Type-Awarw Linting: inferencing
 ```
 
 > `Type inference` refers to the automatic detection of the `data type` of an expression in a programming language.
@@ -1339,7 +1351,7 @@ teacher = { name: "Kyle"};
 // Error: can't assin object to string
 
 
-Type-Awarw Linting: annotating
+// Type-Awarw Linting: annotating
 ```
 
 We can say `teacher` is definitely a `string`. We're gonna get basically the same error, but here we're not guessing at the error. We're literally saying we intended for this thing to only ever hold `strings`, and now we're trying to put something `non-string` to it. In both cases `TypeScript` and `Flow` are gonna throw us an error and say, you're assigning something you shouldn't have.
@@ -1360,7 +1372,7 @@ var firstStudent: student = { name: "Farank"};
 var firstStudentName: string = getName(firstStudent);
 
 
-Type-Aware Linting: custom types & signatures
+// Type-Aware Linting: custom types & signatures
 ```
 
 Here we're defining that an `object` of a `type` that has a property called `name` that is of type `string`, that is a `type`. And then we can pass values of that `type` as parameters. And we can receive values back as parameters. So here we are passing in `studentRec` of the type `student`. we're defining our own `type`. this program doesn't have any errors.
@@ -1383,7 +1395,7 @@ var studentCount: number = 16 - studentName;
 // error: can't substract string
 
 
-Type-Aware Linting: validating operand types
+// Type-Aware Linting: validating operand types
 ```
 
 Because that particular preference is saying don't allow that `coercion`, and in this particular case, that would be a really useful help for us.
@@ -1561,7 +1573,7 @@ In this exercise we try to think more like JavaScript engine:
 13. otherClass();                 // Welcome!
 14. ask();                        // Why?
 
-scope
+// scope
 ```
 
 After we've set up all those plans
@@ -1678,7 +1690,7 @@ We have all our plan set up. There's no more declaration code, so let's then exe
 13. otherClass();                 // Welcome!
 14. ask();                        // Why?
 
-scope
+// scope
 ```
 
 > So even though line 1 looks like one statement, it's actually two separate things. There's the `var teacher` part. That's what the **compiler** handles. And then there's the `teacher = "Kyle"` part, that's what the **execution engine's** gonna handle.
@@ -1862,7 +1874,7 @@ Another example with corner cases:
 11. teacher;                         // "Suzy"
 12. topic;                           // "React"
 
-Scope
+// Scope
 ```
 
 First Step: **compilation**
@@ -1953,7 +1965,7 @@ So line 12 then, hey `global scope`, I have a **source reference** for `topic`, 
 10.
 11. otherClass();
 
-Scope
+// Scope
 ```
 
 So now if we flip on `strict mode`, which we do by putting this `strict mode` fragment at the top of any scope, preferably at the top of our program, the top of our file, or at the top of any `function`.
@@ -2003,7 +2015,7 @@ This is an example of a nested scope:
 13. otherClass();                   // Suzy Why?
 14. ask("???");                     // ReferenceError
 
-Scope
+// Scope
 ```
 
 We start by looking at line 1, that's a formal declaration that makes a red marble. Line 3 is a formal declaration that also creates a red marble. Line 4 and 6 both are the formal declaration that create a blue marble.
@@ -2070,7 +2082,7 @@ We've been talking about `functions` in the **compilation phase**, adding their 
 8. console.log(myTeacher);
 9. console.log(anotherTeacher);                   //ReferenceError
 
-Scope: which scope?
+// Scope: which scope?
 ```
 
 In this example `teacher` in line 1 (`function declaration`), creates a red marble but `anotherTeacher` in line 3 (`function expression`) creates a blue marble.
@@ -2101,7 +2113,7 @@ What is a named `function expression`? That means a `function expression` that's
 6.    // ...
 7. };
 
-Named Function Expressions
+// Named Function Expressions
 ```
 
 Why line 1 is a `function expression`?
@@ -2118,9 +2130,7 @@ So on line 1, we see a `function expression`, but we see no name. So that's call
 
 **Why we sould always, always use `named function expressions`?**
 
-- Reliable `function` self-reference (the name produces or creates a reliable self-reference to the `function` from inside of itself).
-  That is useful if we're going to make the `function` recursive, or that `function` is an event handler of some sort and it needs to reference itself to unbind itself. or it's useful if we need to access any properties on that `function object` such as its `length` or its name or other thing of that sort.
-  Anytime we might need a self-reference to the `function`, the single only right answer to that question is, it needs to have a name.
+- Reliable `function` self-reference (the name produces or creates a reliable self-reference to the `function` from inside of itself). That is useful if we're going to make the `function` recursive, or that `function` is an event handler of some sort and it needs to reference itself to unbind itself. or it's useful if we need to access any properties on that `function object` such as its `length` or its name or other thing of that sort. Anytime we might need a self-reference to the `function`, the single only right answer to that question is, it needs to have a name.
 - More debuggable stack traces. So automatically by naming our functions, we make our code and stack traces more debuggable.
 - More self-documenting code. If we have a `function` that is anonymous, and we look at that `function` to figure out what that `anonymous function` is doing, we have to read the `function` body and we also probably have to read where it's being parsed.
 
@@ -2185,7 +2195,7 @@ The **Dynamic Scope** is not very common at all, we generally only see this in a
 1.  var teacher = "Kyle";
 2.
 3.  function ask(question) {
-2.      console.log(teacher, question);
+4.      console.log(teacher, question);
 5.  }
 6.
 7.  function otherClass() {
@@ -2195,10 +2205,10 @@ The **Dynamic Scope** is not very common at all, we generally only see this in a
 11. }
 12.
 13. otherClass();
-14. // Output in Lexically Scoped languages: Kyle Why?
-15. // Output in Dynamically Scoped languages: Suzy Why?
+14. // Output in Lexically Scoped language: Kyle Why?
+15. // Output in Dynamically Scoped language: Suzy Why?
 
-Lexical Scope and Dynamic Scope
+// Lexical Scope and Dynamic Scope
 ```
 
 We know that **Dynamic Scope** exists in some languages, but it does not exist in JavaScript. So this is a _theoretical_ example.
@@ -2231,6 +2241,8 @@ cobsole.log(teacher);   // Suzy -- oops
 // ..
 
 cobsole.log(teacher);   // Suzy -- oops
+
+// Function Scoping
 ```
 
 Into this one:
@@ -2246,6 +2258,8 @@ function anotherTeacher() {
 anotherTeacher();
 
 cobsole.log(teacher);   // Kyle
+
+// Function Scoping
 ```
 
 We still have a **Naming Collision**, we just shifted it to a different variable name (`anotherTeacher`).
@@ -2279,6 +2293,8 @@ var teacher = "Kyle";
 })();
 
 cobsole.log(teacher);   // Kyle
+
+// Function Scoping: IIFE
 ```
 
 But probably we have seen this code with an `anonymous function expression` form.
@@ -2307,6 +2323,8 @@ var teacher = "Kyle";
 })("Suzy");
 
 cobsole.log(teacher);   // Kyle
+
+// Function Scoping: IIFE
 ```
 
 ## Block Scoping:
@@ -2322,6 +2340,8 @@ var teacher = "Kyle";
 };
 
 cobsole.log(teacher);   // Kyle
+
+// Block Scoping: encapsulation
 ```
 
 The **Block Scoping**, it's scoping that's done with blocks (curly braces `{}`) instead of with `functions`.
@@ -2359,7 +2379,7 @@ function repeat(fn, n) {
     return result;
 }
 
-Block Scoping: let + var
+// Block Scoping: let + var
 ```
 
 **The `var`**: When we have a variable that belongs to the entire **`function` scope** or needs to escape an unintended block, we use **`var`**. The `var` hoists and attaches itself to the **`function` scope**. The `var` can be reused within a scope, but `let` can not.
@@ -2385,7 +2405,7 @@ function formatStr(str) {
     return str.slice(4);
 }
 
-Block Scoping: explicit let block
+// Block Scoping: explicit let block
 ```
 
 Open up a curly brace pair `{}` and create a scope just for those three lines of code to use the `prefix` and the `rest` variable, and then don't let them exist for any other part of the `function`.
@@ -2413,6 +2433,8 @@ myTeacher = "Suzy";                    // TypeError1
 
 const teachers = ["Kyle", "Suzy"];
 teachers[1] = "Brian";                 // Allowed!
+
+// Block Scoping: const(antly confusing)
 ```
 
 **Note:** We should know that the `const` keyword, does not carry its own weight within the language. And this big cost that comes with `const` is not even unique to JavaScript.
@@ -2444,7 +2466,7 @@ teacher;                        // undefined
 var student = "you";
 var teacher = "Kyle";
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 In **lexical scope** discussion we would first pass through this as the **compiler**, and then we would pass through it as an **execution**.
@@ -2476,7 +2498,7 @@ otherTeacher = function() {
     return "Suzy";
 }
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 For the exact same reason it doesn't move `variables`, it doesn't move `functions`. It handles them during the **first pass**, and then it **executes**.
@@ -2506,7 +2528,7 @@ function otherTeacher() {
     var teacher = "Suzy";
 }
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 When should use hoisting and when not:
@@ -2525,7 +2547,7 @@ function getTeacher() {
     return teacher;
 }
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 ### Hoisting and `let`:
@@ -2538,7 +2560,7 @@ This example shows us if we use `variable` before it declared (only if it was `l
     let teacher;
 }
 
-Hoisting: let gotcha
+// Hoisting: let gotcha
 ```
 
 **If we use a `variable` before it declared (with `let` or `const`), we get a `TDZ error` (Temporal Dead Zone error).**
@@ -2554,6 +2576,8 @@ This example proves to us, that `let` (and `const`) will be hoist too:
 4.     console.log(teacher);    // TDZ error!
 5.     let teacher = "Suzy";
 6. }
+
+// Hoisting: let gotcha
 ```
 
 In above code, if the `teacher` on line 5 did not host, then line 4 should print out `"Kyle"`. Because there is no `teacher` as of line 4 and it should go to the outer scope and find the `variable` from line 1. But this code still throws a `TDZ error`, and the reason is because **`let` and `const` still hoist**.
@@ -2606,9 +2630,7 @@ As far as I'm concerned, this is the right answer to that question:
 
 - The `function` is able to access its **lexical scope**: We already know that, this is **lexical scope** definition in itself! **lexical scope** is that a `function` can reference `variables` outside of itself and it just goes up the **scope chain** to find it.
 
-- The second part is the critical part. Without the second part, it's just **lexical scope**. With the second part of this definition, which is, even when the `function` is executed in a **different scope**, now we start to see something interesting. Cuz when we take a `function` and we pass it as a callback, or we take a `function` and return it back, the scope that it was originally defined in (at least conceptually), has gone away.
-  And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that.
-  That doesn't happen by accident. That's not magical, that's **closure**.
+- The second part is the critical part. Without the second part, it's just **lexical scope**. With the second part of this definition, which is, even when the `function` is executed in a **different scope**, now we start to see something interesting. Cuz when we take a `function` and we pass it as a callback, or we take a `function` and return it back, the scope that it was originally defined in (at least conceptually), has gone away. And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that. That doesn't happen by accident. That's not magical, that's **closure**.
 
 The preservation, the linkage back to the original scope where it was defined, no matter where we pass that value, no matter where it executes, it retains that value. It preserves that scope. That's called **closure**.
 
@@ -2623,7 +2645,7 @@ function ask(question) {
 
 ask("What is closure?");   // What is colsure?
 
-Closure
+// Closure
 ```
 
 At the time that `waitASec function` runs, the `ask function` has already finished, and the `variable question` which it's closed over should have gone away. But it didn't go away because closure preserved it, so-called the `waitASec function` is closed over the `variable question`. That's a **closure**.
@@ -2650,7 +2672,7 @@ Another example of closure:
 10.
 11. myQuestion();   // What is closure
 
-Closure
+// Closure
 ```
 
 Here is the exact same thing. If we returned a `function` here that is closed over the `question variable`, then even though the `ask function` has finished, by line 11, we still have access to that `variable`.
@@ -2675,7 +2697,7 @@ Here's an example that shows us, the value is not a snapshot of `variable`:
 8.
 9. myTeacher();       // Suzy
 
-Closure: NOT capturing a value
+// Closure: NOT capturing a value
 ```
 
 In this example when we create the `myTeacher function` on line 3, at that moment `teacher` has the value `"Kyle"`.
@@ -2696,7 +2718,7 @@ for (var i = 1; i <= 3; i++) {
 // i: 4
 // i: 4
 
-Closure: loops
+// Closure: loops
 ```
 
 This `function`, that is being created in each iteration, it has the appearance that what it's doing is closing over the `i` value in each iteration.
@@ -2717,7 +2739,7 @@ for (var i = 1; i <= 3; i++) {
 // j: 2
 // j: 3
 
-Closure: loops
+// Closure: loops
 ```
 
 So if we wanna create **more than one variable** with the **same name**, we need to make **new scopes**, right? So we could do an **IIFE** here, but the much more common way now that we have **block-scoping** (ES6), is to just stick a block-scoped declaration in the iteration. So now `let j` is going to run every time the `for` loop iterates. And it's gonna create a **whole new `j`** in that **whole new iteration of the loop**. There are three separate `j`s and therefore we get the values in them `1`, `2`, and `3`.
@@ -2737,7 +2759,7 @@ for (let i = 1; i <= 3; i++) {
 // i: 2
 // i: 3
 
-Closure: loops
+// Closure: loops
 ```
 
 Why don't we just go ahead and make it so that if we use a `let` on our `for` loop we'll automatically create a new `i` for each iteration. Instead of creating just one that belongs to the whole `for` loop, here there's gonna be a brand new `i` for each iteration. Which means the closure just magically works.
@@ -2772,7 +2794,7 @@ var workshop = {
 
 workshop.ask("Is this a modules?");   // Kyle Is this a module?
 
-Namespace, NOT a module
+// Namespace, NOT a module
 ```
 
 **Pattern**: A common pattern where we have a set of behavior, like `functions` and a set of data that those `functions` operate on. And we wanna collect them together into some logical **unit**, the simplest way is to just make an `object` and put our data and our `functions` directly on the `object`.
@@ -2818,7 +2840,7 @@ This is the module pattern that was codified by Doug Crawford-ish in 2001:
 11.
 12  workshop.ask("It's a module, right?");   // Kyle It's a module, right?
 
-Classic/Revealing module pattern
+// Classic/Revealing module pattern
 ```
 
 This **Classic Module Pattern (Revealing Module Pattern)** has two components to it:
@@ -2885,7 +2907,7 @@ The previous example had a module **`IIFE`** (also known as a **module singleton
 13.
 14. workshop.ask("It's a module, right?");   // Kyle It's a module, right?
 
-Module Factory
+// Module Factory
 ```
 
 We can make just regular `functions` that can be called multiple times. And every time a `function` is called, it's gonna produce a new instance of our module. We lovingly refer to those as **Factory Functions**.
@@ -2915,7 +2937,7 @@ But they're expected sometime in Q1 of 2020 to land stable in Node the first pha
 4.     console.log(teacher, question);
 5. };
 
-ES6 module pattern
+// ES6 module pattern
 ```
 
 **Somethings we should know about modules:**
@@ -2946,7 +2968,7 @@ There's a bunch of variations import modules, but two major styles:
 6.
 7. workshop.ask("It's a namespace import, right?");   // Kyle It's a namespace import, right?
 
-ES6 module pattern
+// ES6 module pattern
 ```
 
 There are **two major style of import modules**:
@@ -2974,4 +2996,75 @@ The **objects oriented system** is one of the important of three pillars of the 
 - Prototypes
 - "Inheritance" vs. "Behavior Delegation" (OO vs. OLOO)
 
-We're deliberately saying **objects oriented** instead of **object oriented**, because this is **not** strictly a **class system**, there is classes that have been layered on top of it, but it is not **inherently a class system**. 
+We're deliberately saying **objects oriented** instead of **object oriented**, because this is **not** strictly a **class system**, there is classes that have been layered on top of it, but it is not **inherently a class system**.
+
+## The `this` keyword:
+
+The first step that needs to take for understanding `this` keyword, is to stop trying to make it like `this` keyword in other languages. Because maybe some other languages behavior holds us back, and make it so harder for us to understand or leverage JavaScript.
+
+Well it turns out that `this` keyword is actually a bit more straightforward and powerful than we would imagine. It's just been explained and taught incorrectly.
+
+> A `function`'s `this` references the **execution context** for that call (a context in which that call was being made), determined entirely by <u>how the `function` was called.</u>
+
+**In other words, if we look at a `function` that has `this` keyword in it, it is assigned based upon how the `function` is called.**
+
+Most people think that we could look at a `function`, and figure out what `this` keyword is gonna point out. But **the definition of the `function` doesn't matter at all**, to determining the `this` keyword. **The only thing that matters is how does that function get invoked.**
+
+> A `this`-aware `function` can thus have a different context each time it's called, which makes it more flexible & reusable.
+
+**So in other words, the `this` keyword is JavaScript's version of <u>dynamic scope</u>. If it's this way of having as flexible, reusable behavior.**
+
+If we recall and remember that we had a `function` that was in a dynamically scoped language:
+
+```JavaScript
+1.  var teacher = "Kyle";
+2.
+3.  function ask(question) {
+4.      console.log(teacher, question);
+5.  }
+6.
+7.  function otherClass() {
+8.      var teacher = "Suzy";
+9.
+10.     ask("Why?");
+11. }
+12.
+13. otherClass();   // Output in Dynamically Scoped language: Suzy Why?
+
+// Recall: dynamic scope
+```
+
+So here with **dynamically scoped language**, on line 4, when it references `teacher`, instead of trying to line 1 to get `teacher`, it goes to line 8. 
+Because `ask` was called from line 10 it was called from the `otherClass` scope, that's what dynamic scope does. 
+
+**In JavaScript we have something very similar (to dynamically scoped language), but it's not based upon scope boundaries, or where something's called from, it's based on <u>how the `function` was called.</u>**
+
+So here we have a version of the `ask function` which is `this`-aware (it uses a `this` keyword, so it's `this`-aware):
+
+```JavaScript
+function ask(question) {
+    console.log(this.teacher, question);
+}
+
+function otherClass() {
+    var myContext = {
+        teacher: "Suzy"  
+    };
+    ask.call(myContext, "Why?");    // Suzy Why?
+}
+
+otherClass();
+
+// Dynamic Context ~= JS's Dynamic Scope
+```
+
+We'll notice that we're calling `ask function` from some other location but (with `this` keyword) that doesn't matter where we call it from, it's how we call it.
+
+If we use `ask.call` here, we're saying use this particular `object` as your `this` keyword, and invoke the `function` in that context. So the `this` keyword in this particular case, will end up pointing at `myContext`.
+
+So we can see that sort of **dynamic flexibility** happening here. So we could call that same `ask function`, lots of different ways, and provide lots of different context `objects` for the `this` keyword point on, **that's the dynamic flexible reusability of the `this` keyword**. That's why it exists by the way, it exists so that we can invoke `functions` in these different contexts.
+
+**In JavaScript there are 4 different ways to invoke a `function`, and each one of them is gonna answer the question, what is the `this` keyword, differently.**
+
+In **lexical scope** land, we start at the current scope, and work our way up to the global scope. Well here (with `this` keyword) we are gonna have a different building involved. **We're gonna to start at the bottom of a building. But the real question is, which building?**
+
