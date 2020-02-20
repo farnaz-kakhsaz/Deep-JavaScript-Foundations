@@ -1665,10 +1665,10 @@ Now it's important to note that when we execute the code, there's no more declar
 
 And why that matters is, that allows the engine to much more efficiently optimize, because everything is known and it's fixed. Nothing during the **run-time** can determine that this marble is no longer red, now it's blue. Once we've processed through, we already know what color marble it is and we're done with that discussion.
 
-> This means the decisions that we've made about scope are author time decisions.
+> This means the decisions that we've made about scope are author-time decisions.
 > When we write a `function` or put a `variable` here, it means that `variable` is always gonna be that color marble (inside that scope).
 
-So that allows the JavaScript engine to be much more efficient at its job. The takeaway that you should have from that is, the decisions that I've made about scope are author time decisions. When I write this `function` and we put this `variable` here, it means that `variable` is always gonna be that color marble.
+So that allows the JavaScript engine to be much more efficient at its job. The takeaway that you should have from that is, the decisions that I've made about scope are author-time decisions. When I write this `function` and we put this `variable` here, it means that `variable` is always gonna be that color marble.
 
 ## Executing Code
 
@@ -2179,7 +2179,7 @@ That's where that name even comes from, that **lex** shares the same root as the
 
 We have two type of **Scope** model:
 
-- **Lexical Scope**: It's an author time decision and all the **scopes** (where the `function` and `variables` written) create in **compile-time**. So when we talk about **Lexical Scope**, we think about something that is **fixed** at author time and it's predictable, it is **not** affected by **run-time** conditions.
+- **Lexical Scope**: It's an author-time decision and all the **scopes** (where the `function` and `variables` written) create in **compile-time**. So when we talk about **Lexical Scope**, we think about something that is **fixed** at author-time and it's predictable, it is **not** affected by **run-time** conditions.
 
 - **Dynamic Scope**: It creates in **run-time**. The `Bash script` is an example of **Dynamic scope** language and it makes sense because `Bach Script` is an **interpreted language** so it has no **run-time** term. So we can say the **Dynamic scope** is the opposite of the **Lexical Scope**, and it implies that the **run-time** (the dynamic) conditions of your program, are going to affect something about the **scoping**.
 
@@ -2638,7 +2638,7 @@ So let's take a look at some examples of closure:
 
 ```JavaScript
 function ask(question) {
-    setTimout(function waitASec() {
+    setTimeout(function waitASec() {
         console.log(question);
     }, 100);
 }
@@ -3034,8 +3034,8 @@ If we recall and remember that we had a `function` that was in a dynamically sco
 // Recall: dynamic scope
 ```
 
-So here with **dynamically scoped language**, on line 4, when it references `teacher`, instead of trying to line 1 to get `teacher`, it goes to line 8. 
-Because `ask` was called from line 10 it was called from the `otherClass` scope, that's what dynamic scope does. 
+So here with **dynamically scoped language**, on line 4, when it references `teacher`, instead of trying to line 1 to get `teacher`, it goes to line 8.
+Because `ask` was called from line 10 it was called from the `otherClass` scope, that's what dynamic scope does.
 
 **In JavaScript we have something very similar (to dynamically scoped language), but it's not based upon scope boundaries, or where something's called from, it's based on <u>how the `function` was called.</u>**
 
@@ -3048,7 +3048,7 @@ function ask(question) {
 
 function otherClass() {
     var myContext = {
-        teacher: "Suzy"  
+        teacher: "Suzy"
     };
     ask.call(myContext, "Why?");    // Suzy Why?
 }
@@ -3068,3 +3068,58 @@ So we can see that sort of **dynamic flexibility** happening here. So we could c
 
 In **lexical scope** land, we start at the current scope, and work our way up to the global scope. Well here (with `this` keyword) we are gonna have a different building involved. **We're gonna to start at the bottom of a building. But the real question is, which building?**
 
+## Implicit & Explicit Binding:
+
+So let's look at those four different ways to invoke a `function`.
+
+### Implicit binding:
+
+The first of them we'll look at is called **implicit binding**.
+
+In this example we called `workshop object` the **namespace pattern** and we're gonna ask how does the `this` keyword behave in that namespace pattern?
+
+![implicit binding](https://user-images.githubusercontent.com/37678729/74843783-ab4ab100-5341-11ea-829f-2570391b1063.png)
+
+When we get the `ask question` invoked, how does it figure out what the `this` keyword should point at? And the answer is **because of the call site**.
+
+Because of the call site, the `this` keyword is gonna end up pointing at the `object` that is used to invoke it, which in this case on line 8 is the `workshop object`. The `workshop.ask` says invoke `ask` with the `this` keyword pointing at `workshop`. That's what the **implicit binding** rule says.
+
+That's exactly how the `this` binding works in other languages. It decides (the `this` keyword inside) the `method` based upon what `object` we call it from.
+
+Here we're defining just one `ask function`, but we're sharing the `ask function` across two different `objects`:
+
+```JavaScript
+1.  function ask(question) {
+2.      console.log(this.teacher, question);
+3.  }
+4.
+5.  var workshop1 = {
+6.      teacher: "Kyle",
+7.      ask: ask
+8.  }
+9.
+10. var workshop2 = {
+11.     teacher: "Suzy",
+12.     ask: ask
+13. }
+14.
+15. workshop1.ask("How do I share a method?");
+16. // Kyle How do I share a method?
+17.
+18. workshop2.ask("How do I share a method?");
+19. // Suzy How do I share a method?
+
+// this: dynamic binding -> sharing
+```
+
+> The idea of having **implicit binding** is useful because this is how we share behavior among different contexts.
+
+The `workshop1` and `workshop2` are two separate `objects` with two separate pieces of data in them. But because on line 7 and line 12 we have a reference to the `ask function` on it. When we use that reference to invoke the `ask function`, the **implicit binding** rule says invoke that one `function` in a different context each time. One `function` used in lots of different contexts.
+
+> If we think back to how we described the idea of **lexical scope**, which was a very **fixed**, **predictable** thing. It's defined at **author-time**, and nothing about the run-time can ever change that.
+>
+> And here with **`this` keyword**, we have something which is **not fixed and predictable**, it's entirely **dynamic**, it's entirely determined at **run-time**. And the trade off here is not accidental, the trade off here is very intentional, that what we really are getting is we're getting the choice between **predictable** and **flexible**.
+
+Here we benefit from the flexibility of being able to share one `function` across different contexts. But there are times when that flexibility is a downside and what we would prefer is to have predictability. It's not that one is right and the other's wrong, it's just that these are different tools and they have different benefits. Here we're seeing the flexibility benefit of the `this` keyword.
+
+But **implicit binding** is only one of the four ways to invoke a `function`, and that's where the extra confusion can come in.
