@@ -3159,3 +3159,62 @@ So on line 13, when we say `.call` and we pass in `workshop1`, it is saying invo
 Now, we're gonna talk about a variation of **explicit binding**, this is the second of the rules that we're looking at. But this isn't a separate rule, but kind of a sub-rule or a sub-part of this rule, which is an extremely common scenario or phenomenon referred to as **losing your `this` binding**.
 
 If we've ever worked with a `function` that we pass around, and all of a sudden, it used to have a `this` binding and now it doesn't have a `this` binding. It's very frustrating when we think of a `this` keyword as being predictable and then we find out oops, actually, **it's not predictable, it's flexible**.
+
+#### Hard Binding:
+
+So variation of explicit binding is called **hard binding**. This is a sub-rule or a sub-part of **explicit binding** which is a second ways of calling a `function`.
+
+```JavaScript
+1.  var workshop = {
+2.      teacher: "Kyle",
+3.      ask(question) {
+4.          console.log(this.teacher, question);
+5.      }
+6.  };
+7.
+8.  setTimeout(workshop.ask, 10, "Lost this?");
+9.  // undefined "Lost this?"
+10.
+11. setTimeout(workshop.ask.bind(workshop, "Hard bound this?"), 10);
+12. // Kyle Lost this?
+
+// this: hard binding
+```
+
+Looking at line 8, if we passed in `workshop.ask`, that method is on the `workshop object`, but that **line 8 is not the call site**. We have to imagine in our head, what would the call site look like for the `function` whenever that timer ran ten milliseconds from now?
+And that call site would look like cb(), or something like that. It's not going to look like `workshop.ask`, and because it doesn't look like that, it's not going to invoke `ask` in a `workshop` context. Which is we've lost our `this` binding, we end up getting `undefined`.
+
+> Actually just as side note, technically, the `setTimeout` utility is defined by HTML, it's not evoking it just with the default call, it actually **explicitly** invokes it with a `.call` in the context of **global**.
+
+So it would actually invoke `workshop.ask` by saying `cb.call(window)`. Invoking it in the **global object** context.
+
+**Q:** Would this be unnecessary if `ask` were defined as an `arrow function`?
+
+**A:** The `ask` here as an `arrow function` would **not** solve the problem.
+
+So line 8, we're losing our `this` binding and it's actually getting rebound to something else, in this case the **global object**. That's not what we want. So a very common solution to this is line 11, passing a **hard bound `function`**. **If we pass in a hard bound `function` using the `.bind` method, it will take away that whole flexibility thing and force it to only use the `this` that we've specified on line 11.**
+It says evoke this `function`, and no matter how you invoke it, always use `workshop` as it's this context.
+
+> In other words the `.bind` method, **doesn't invoke the `function`**, it produces a **new `function`** which is bound to a particular specific `this` context.
+
+So we see a trade-off here:
+
+We see the predictable, flexible `this` binding, but then we see some scenarios where, it's kind of frustrating that it's flexible. And what I'd really like is for it to be super predictable.
+
+**There's a tension here:**
+
+If we were to go to all the trouble to define a bunch of `functions` on some **namespace object**, and have `this.` in front of every property reference and every method access. And then all of our `function` calls use the `.bind`, we would be cutting ourself off at the knees.
+
+Because the whole purpose of this system, **the whole reason that we pay the tax of putting `this.` in front of everything is to get the dynamicism. And then we're going and taking that whole dynamic system and locking it down so that it's completely predictable.**
+
+At that point, wouldn't we be better served simply writing a **module** that uses **closure** and has a **fixed**, **predictable behavior**?
+
+So how do we deal with this tension? We like using the `this` keyword, it can be useful to us, but there are times when we need it to not be so flexible.
+If we go to the trouble to write a `this`-aware set of code, and then most of our core sites are using the flexible dynamism, and every once in a while we have to do something like a **hard binding**. Then we're getting a lot of benefits out of that system, seems like a reasonable trade-off.
+
+On the other hand, if we go to all the trouble to write a `this`-aware system and then everyone or most of our calls sites have to use `.bind`, that's a clue to ous we're doing this the hard way. **We should switch back and use the predictable lexical closure.**
+
+> If we want **flexible dynamism**, use a **`this` keyword**, if we want **predictability**, use **lexical scope** (closures).
+
+So just keep that in mind when we're using the `.bind` method.
+Not that it is bad, not that it is evil, not that it is an anti-pattern. But if we find that happening more often than not, we're probably doing things the hard way.
