@@ -3123,3 +3123,39 @@ The `workshop1` and `workshop2` are two separate `objects` with two separate pie
 Here we benefit from the flexibility of being able to share one `function` across different contexts. But there are times when that flexibility is a downside and what we would prefer is to have predictability. It's not that one is right and the other's wrong, it's just that these are different tools and they have different benefits. Here we're seeing the flexibility benefit of the `this` keyword.
 
 But **implicit binding** is only one of the four ways to invoke a `function`, and that's where the extra confusion can come in.
+
+### Explicit Binding:
+
+There's another way to invoke `functions`:
+
+```JavaScript
+1.  function ask(question) {
+2.      console.log(this.teacher, question);
+3.  }
+4.
+5.  var workshop1 = {
+6.      teacher: "Kyle",
+7.  }
+8.
+9.  var workshop2 = {
+10.     teacher: "Suzy",
+11. }
+12.
+13. ask.call(workshop1, "Can I explicitly set context?");
+14. // Kyle Can I explicitly set context?
+15.
+16. ask.call(workshop2, "Can I explicitly set context?");
+17. // Suzy Can I explicitly set context?
+
+// this: explicit binding
+```
+
+> The `.call` method along with it's cousin, `.apply` method, both of them take, as their first `argument`, a `this` keyword.
+
+So on line 13, when we say `.call` and we pass in `workshop1`, it is saying invoke the `ask function` with the this context of `workshop1`. It's very similar to the previous slide, we are still sharing that `function`, **but here we're doing so explicitly rather than implicitly**. We're saying wherever this `function` comes from, invoke it in a particular context which we're going to specify.
+
+> **So we can use `.call` and `.apply` to explicitly tell JavaScript which context to invoke it in.**
+
+Now, we're gonna talk about a variation of **explicit binding**, this is the second of the rules that we're looking at. But this isn't a separate rule, but kind of a sub-rule or a sub-part of this rule, which is an extremely common scenario or phenomenon referred to as **losing your `this` binding**.
+
+If we've ever worked with a `function` that we pass around, and all of a sudden, it used to have a `this` binding and now it doesn't have a `this` binding. It's very frustrating when we think of a `this` keyword as being predictable and then we find out oops, actually, **it's not predictable, it's flexible**.
