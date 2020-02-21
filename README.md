@@ -2977,9 +2977,9 @@ There are **two major style of import modules**:
 
 - The second style is referred to generally as the **namespace import** (as we see on line 7), which is to say we wanna get this whole module and collect **all of its contents** onto a **single namespaced `variable`**, in this case called `workshop`.
 
-**A:** When you say you prefer the old module style you mean, the revealing module pattern in one file?
+**Q:** When you say you prefer the old module style you mean, the revealing module pattern in one file?
 
-**Q:** Yes, the `function` wrapped around a couple slides ago. Specifically when I'm gonna do a module, I expose my modules as **UMD** (Universal Module Definition) style modules. It's supposed to kind of inter-operate between browsers, module loaders and node. So that's the format I choose to write in.
+**A:** Yes, the `function` wrapped around a couple slides ago. Specifically when I'm gonna do a module, I expose my modules as **UMD** (Universal Module Definition) style modules. It's supposed to kind of inter-operate between browsers, module loaders and node. So that's the format I choose to write in.
 
 So whether we use a syntactic support in our language to define our modules, or whether we choose to hack it with the old school revealing module pattern, the same concept applies, which is that we're organizing a set of behavior into a cohesive unit hiding data in it and exposing a minimal necessary API. That's the design pattern that we wanna get. So that somebody can import that behavior into their app and use it. All right, so there you go, there is the module pattern. And with that, we now have a full breadth of understanding of the lexical scope core or the main pillar (the most important pillar), this main pillar of the JavaScript language.
 
@@ -3096,12 +3096,12 @@ Here we're defining just one `ask function`, but we're sharing the `ask function
 5.  var workshop1 = {
 6.      teacher: "Kyle",
 7.      ask: ask
-8.  }
+8.  };
 9.
 10. var workshop2 = {
 11.     teacher: "Suzy",
 12.     ask: ask
-13. }
+13. };
 14.
 15. workshop1.ask("How do I share a method?");
 16. // Kyle How do I share a method?
@@ -3135,11 +3135,11 @@ There's another way to invoke `functions`:
 4.
 5.  var workshop1 = {
 6.      teacher: "Kyle",
-7.  }
+7.  };
 8.
 9.  var workshop2 = {
 10.     teacher: "Suzy",
-11. }
+11. };
 12.
 13. ask.call(workshop1, "Can I explicitly set context?");
 14. // Kyle Can I explicitly set context?
@@ -3218,3 +3218,53 @@ On the other hand, if we go to all the trouble to write a `this`-aware system an
 
 So just keep that in mind when we're using the `.bind` method.
 Not that it is bad, not that it is evil, not that it is an anti-pattern. But if we find that happening more often than not, we're probably doing things the hard way.
+
+### The `new` Keyword:
+
+The `new` keyword is the third way that we can invoke a `function`:
+
+```JavaScript
+                 "constructor calls"
+
+function ask(question) {
+    console.log(this.teacher, question);
+}
+
+var newEmptyObject = new ask("What is 'new' donig here?");
+// undefined "What is 'new' donig here?"
+
+// this: new binding
+```
+
+> We should know that the **`new` keyword** seems as if it has something to do with invoking **`class constructors`**, **but the `new` keyword has not got anything to do with `classes`.** It's just an unfortunate syntactic trick to make it look like it's dealing with `classes` when it really isn't.
+>
+> But the purpose of the **`new` keyword** is actually to **invoke a `function`** with a `this` keyword pointing at a whole **new empty `object`**.
+
+So far the three ways to invoke a `function`:
+
+- One way is, invoking `functions` and pointing them at a context `object`, like a `workshop.ask`.
+- The second way is to invoke a `function` and givie it a specific `object` with `.call` or `.apply` or force it with `.bind` method.
+- A third way is to invoke a `function` and use a whole **new empty `object`**. And the **`new` keyword** can accomplish that (it also does other stuff too). We can accomplish that same goal by saynig, `function.call({})`. Cuz that would invoke our `function` in the context of a brand new empty `object`.
+
+So in other words, these two statements are equal:
+
+```JavaScript
+ask.call({}) ==== new ask();
+```
+
+So the `new` keyword isn't actually buying ous much except the syntactic sugar of, hey I want this `function` invoked with a new `this` content.
+
+**The `new` keyword does four things when it's used to invoke `function` (or what we should call it with heavy air quotes a `"constructor"` call):**
+
+- Create a brand **new empty `object`** (out of thin air).
+- Link that `object` to another `object` (so it first creates a brand new `object` and then links it somewhere).
+- It calls the `function` with its **`this` keyword pointed at the new `object`** (not the linked `object`, the new `object`).
+- And fourth and finally, the `new` keyword after the `function` call is done, if that `function` does not return its own `object`, the `new` keyword assumes that you meant to **return `this` keyword**.
+
+**So these four things happen every single time a `new` keyword is invoked with a `function`.**
+
+**Q:** When we describe it this way, which of the two entities seems like it's doing all the work? 
+Does it seem like the `new` keyword is doing all the work? 
+Or does it seem like your `"constructor" function's` doing all the work?
+
+**A:** It's really the `new` keyword, isn't it? As a matter of fact, if you put `new` in front of almost any `function`, **even a completely empty `function`**, all four of these things would happen. It’s almost as if the `function` doesn’t even matter. The `new` keyword is just sort of hijacking the `function` so that it can do these four things.
