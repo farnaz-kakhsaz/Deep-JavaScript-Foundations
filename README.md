@@ -1934,9 +1934,9 @@ So we've created an `auto global` called `topic` which that sounds terrible. But
 
 **A:** That's true, any assignment to a `variable` that is undeclared at that moment, not declared to any scope we have access to. Any undeclared variable is going to end up creating this `auto global`.
 
-Now, the reason why that happens is because we'll notice that this program is not running in `strict mode`. But this is running in the `non-strict mode` or sometimes called, `sloppy mode`. We should be using `strict mode`, and if we were using `strict mode`, we wouldn't see this behavior. But since this code snip it isn't, that's what happens, as we end up creating a `global variable` called `topic`.
+Now, the reason why that happens is because we'll notice that this program is not running in `strict-mode`. But this is running in the `non-strict-mode` or sometimes called, `sloppy-mode`. We should be using `strict-mode`, and if we were using `strict-mode`, we wouldn't see this behavior. But since this code snip it isn't, that's what happens, as we end up creating a `global variable` called `topic`.
 
-> If we use `strict mode` instead of using `non-strict mode` (or sometimes called `sloppy mode`), we wouldn't see this `auto-create global`.
+> If we use `strict-mode` instead of using `non-strict-mode` (or sometimes called `sloppy-mode`), we wouldn't see this `auto-create global`.
 
 We execute `console.log` the same way as we have before. So execution is then done in the `function`. Execution moves to line 11. So hey `global scope` (red bucket), I have a **source reference** to a `variable` called `teacher`, ever heard of it? Yes, so we go get that marble and we look for its `value`. And the `value` is `"Suzy"`. Because of line 4, we've overwritten the `value` in that `variable`. It's not a separate `variable` (marble).
 
@@ -1968,30 +1968,30 @@ So line 12 then, hey `global scope`, I have a **source reference** for `topic`, 
 // Scope
 ```
 
-So now if we flip on `strict mode`, which we do by putting this `strict mode` fragment at the top of any scope, preferably at the top of our program, the top of our file, or at the top of any `function`.
+So now if we flip on `strict-mode`, which we do by putting this `strict-mode` fragment at the top of any scope, preferably at the top of our program, the top of our file, or at the top of any `function`.
 
-If we turn on `strict mode`, all the same processing is going to happen. But when we arrive at line 7 and we say, hey scope of `otherClass`, I have this **target reference** for `topic` ever heard of it? No, so we go to the `global scope` and we say, `global scope` have you ever heard of `topic`, and the `global scope` gonna respond with `ReferenceError`, never heard of it.
+If we turn on `strict-mode`, all the same processing is going to happen. But when we arrive at line 7 and we say, hey scope of `otherClass`, I have this **target reference** for `topic` ever heard of it? No, so we go to the `global scope` and we say, `global scope` have you ever heard of `topic`, and the `global scope` gonna respond with `ReferenceError`, never heard of it.
 
-> Whenever we are in `non-strict mode` (or `sloppy mode`), and we have a **target reference** for a `non-declared variable`, we will `auto create` it (`auto global`) in **run-time**.
+> Whenever we are in `non-strict-mode` (or `sloppy-mode`), and we have a **target reference** for a `non-declared variable`, we will `auto create` it (`auto global`) in **run-time**.
 >
-> And if in `non-strict mode`, we try to get `non-declared variable` that is in a **source position**, `global scope` throw us a `ReferenceError`.
+> And if in `non-strict-mode`, we try to get `non-declared variable` that is in a **source position**, `global scope` throw us a `ReferenceError`.
 
-> If we have any kind of reference (**target** or **source**) for `non-declared variable` in **`strict mode`**, `global scope` throw us a `ReferenceError` (instead of `auto create` it, if `non-declared variable` was in **target position**).
+> If we have any kind of reference (**target** or **source**) for `non-declared variable` in **`strict-mode`**, `global scope` throw us a `ReferenceError` (instead of `auto create` it, if `non-declared variable` was in **target position**).
 
-That's what we would like to happen all of the time. It now happens as the result of `strict mode`, we get a `ReferenceError`. So one of the many, many reasons why it would be good for us to be using `strict mode`. It will avoid mistakes like line 7, cuz it almost certainly a mistake, it should not be something we intentionally try to create `global`.
+That's what we would like to happen all of the time. It now happens as the result of `strict-mode`, we get a `ReferenceError`. So one of the many, many reasons why it would be good for us to be using `strict-mode`. It will avoid mistakes like line 7, cuz it almost certainly a mistake, it should not be something we intentionally try to create `global`.
 
 > The difference between `TypeErrors` and `ReferenceErrors` are , `TypeErrors` are when we found the `variable` and the `value` that it is currently holding, is not legal to do whatever we're trying to do with it. Like trying to execute or access a `property` on an `undefined` or `null`, things like that, that's `TypeError`.
 > A `ReferenceError` is, when JavaScript engine couldn't find that `variable` on any scope that we have access to.
 
-**Q:** Is `strict mode` always pretty on `ES6`?
+**Q:** Is `strict-mode` always pretty on `ES6`?
 
-**A:** The `strict mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict mode` in there for us.
-So if we're using transpired code, it was almost a virtual certainty that our code is running in `strict mode`. But JavaScript is not default the `strict mode` because then that would break a bunch of programs. So that were written 20 years ago or something. So because of backwards compatible, we will always have to opt into `strict mode`.
-Another little caveat inside of certain kinds of mechanisms within `ES6` and going forward, it is assumed to be in `strict mode`. So we don't even type it, so inside of a `class`, or inside of `ES6 module`, inside of both of those, `strict mode` is assumed, we don't even have to put the `strict mode`, is just assume that, that code is running in `strict mode`. But as a general rule for JavaScript itself, it's not in `strict mode` unless we opt-in.
+**A:** The `strict-mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict-mode` in there for us.
+So if we're using transpired code, it was almost a virtual certainty that our code is running in `strict-mode`. But JavaScript is not default the `strict-mode` because then that would break a bunch of programs. So that were written 20 years ago or something. So because of backwards compatible, we will always have to opt into `strict-mode`.
+Another little caveat inside of certain kinds of mechanisms within `ES6` and going forward, it is assumed to be in `strict-mode`. So we don't even type it, so inside of a `class`, or inside of `ES6 module`, inside of both of those, `strict-mode` is assumed, we don't even have to put the `strict-mode`, is just assume that, that code is running in `strict-mode`. But as a general rule for JavaScript itself, it's not in `strict-mode` unless we opt-in.
 
-> In the `babel` and other transpilers, basically always put the `strict mode` in there for us.
+> In the `babel` and other transpilers, basically always put the `strict-mode` in there for us.
 >
-> By default `ES6 class` and `ES6 module` are executed in the `strict mode`.
+> By default `ES6 class` and `ES6 module` are executed in the `strict-mode`.
 
 So in `stric mode`, we can't auto create `variables`, you have to declare them.
 
@@ -2038,12 +2038,12 @@ So when we then ask for the marble that we find, which is a green marble and we 
 What's gonna happen with line 14? How does line 14 execute?
 Hey `global scope`, I have a **source reference** for an `identifier` called `ask`, ever heard of it? No, so we have a `ReferenceError`.
 
-Even though `ask` exist within the program, it doesn't exist in any scope that we have access to at this moment. So it is therefore an `undeclared variable`. Because we're not in `strict mode`, unlike `auto globals` which go ahead and create a marble for us, if we have a **source referenced** to a `variable` that is `undeclared`, it always throws a `ReferenceError`. That's why it's critical to understand the difference between a **target reference** and a **source reference**. At least if you're in `non-strict mode`.
-Once you go to `strict mode`, they both behave exactly the same, so it stops mattering as much **target** versus **reference**.
+Even though `ask` exist within the program, it doesn't exist in any scope that we have access to at this moment. So it is therefore an `undeclared variable`. Because we're not in `strict-mode`, unlike `auto globals` which go ahead and create a marble for us, if we have a **source referenced** to a `variable` that is `undeclared`, it always throws a `ReferenceError`. That's why it's critical to understand the difference between a **target reference** and a **source reference**. At least if you're in `non-strict-mode`.
+Once you go to `strict-mode`, they both behave exactly the same, so it stops mattering as much **target** versus **reference**.
 
-> If in `non-strict mode`, we have a **source referenced** to a `variable` that is `undeclared` (it doesn't exist in any scope that we have access to at that moment), it always throws a `ReferenceError`. And if the `variable` is in the **target reference**, the `global scope` will be auto created it (`auto global`).
+> If in `non-strict-mode`, we have a **source referenced** to a `variable` that is `undeclared` (it doesn't exist in any scope that we have access to at that moment), it always throws a `ReferenceError`. And if the `variable` is in the **target reference**, the `global scope` will be auto created it (`auto global`).
 >
-> But in `strict mode`, it doesn't matter `undeclared variable` is in the **source position** or the **target position**, the JavaScript engine will always throw us a `Reference Error`.
+> But in `strict-mode`, it doesn't matter `undeclared variable` is in the **source position** or the **target position**, the JavaScript engine will always throw us a `Reference Error`.
 
 **Q:** When we're passing the `"Why?"` to `ask` on line 10, is there behind the scenes, is JavaScript saying `var question = "Why?"` at some point?
 
@@ -2059,7 +2059,7 @@ What is the difference between `undefined` and `undeclared`?
 
 **Undefined:** means a `variable` exists but at the moment it has no `value`. It may have never had a `value` or it might have used to have a `value` and it doesn't anymore but there is no other `value` and the vacuum of space it is `undefined`.
 
-**Undeclared:** is actually never formally declared in any scope that we have accessed to (we do not have a marble for it). And in `strict mode`, it always results in those `ReferenceErrors`.
+**Undeclared:** is actually never formally declared in any scope that we have accessed to (we do not have a marble for it). And in `strict-mode`, it always results in those `ReferenceErrors`.
 
 Unfortunately, JavaScript tries to mess around with this and pretend that `undeclared` is sort of the same thing as `undefined` and some of its error messages and other outputtings and things and not is historically a really bad idea. We need to keep these two concepts separate. There's a different something being `undeclared` (doesn't exist), and being `undefined` (definitely it does exist, but doesn't have a `value`).
 
@@ -3072,7 +3072,7 @@ In **lexical scope** land, we start at the current scope, and work our way up to
 
 So let's look at those four different ways to invoke a `function`.
 
-### Implicit binding:
+### 1. Implicit binding:
 
 The first of them we'll look at is called **implicit binding**.
 
@@ -3124,7 +3124,7 @@ Here we benefit from the flexibility of being able to share one `function` acros
 
 But **implicit binding** is only one of the four ways to invoke a `function`, and that's where the extra confusion can come in.
 
-### Explicit Binding:
+### 2. Explicit Binding:
 
 There's another way to invoke `functions`:
 
@@ -3160,7 +3160,7 @@ Now, we're gonna talk about a variation of **explicit binding**, this is the sec
 
 If we've ever worked with a `function` that we pass around, and all of a sudden, it used to have a `this` binding and now it doesn't have a `this` binding. It's very frustrating when we think of a `this` keyword as being predictable and then we find out oops, actually, **it's not predictable, it's flexible**.
 
-#### Hard Binding:
+#### 2.1. Hard Binding:
 
 So variation of explicit binding is called **hard binding**. This is a sub-rule or a sub-part of **explicit binding** which is a second ways of calling a `function`.
 
@@ -3219,7 +3219,7 @@ On the other hand, if we go to all the trouble to write a `this`-aware system an
 So just keep that in mind when we're using the `.bind` method.
 Not that it is bad, not that it is evil, not that it is an anti-pattern. But if we find that happening more often than not, we're probably doing things the hard way.
 
-### The `new` Keyword:
+### 3. The `new` Keyword:
 
 The `new` keyword is the third way that we can invoke a `function`:
 
@@ -3263,8 +3263,71 @@ So the `new` keyword isn't actually buying ous much except the syntactic sugar o
 
 **So these four things happen every single time a `new` keyword is invoked with a `function`.**
 
-**Q:** When we describe it this way, which of the two entities seems like it's doing all the work? 
-Does it seem like the `new` keyword is doing all the work? 
+**Q:** When we describe it this way, which of the two entities seems like it's doing all the work?
+Does it seem like the `new` keyword is doing all the work?
 Or does it seem like your `"constructor" function's` doing all the work?
 
 **A:** It's really the `new` keyword, isn't it? As a matter of fact, if you put `new` in front of almost any `function`, **even a completely empty `function`**, all four of these things would happen. It’s almost as if the `function` doesn’t even matter. The `new` keyword is just sort of hijacking the `function` so that it can do these four things.
+
+### 4. Default Binding:
+
+And our fourth and final way of invoking a `function` is the fallback, if none of the other three match, which is called the **default binding**:
+
+```JavaScript
+1.  var teacher = "Kyle";
+2.
+3.  function ask(question) {
+4.      console.log(this.teacher, question);
+5.  }
+6.
+7.  function askAgain(question) {
+8.      "use strict";
+9.      console.log(this.teacher, question);
+10. }
+11.
+12. ask("What's the non-strick-mode default?");
+13. // Kyle What's the non-strick-mode default?
+14.
+15. askAgain("What's the strick-mode default?");
+16. TypeError
+
+// this: default binding
+```
+
+Here we have an `ask function`. And when we call it on line 12, we'll notice that on line 12, we don't have any context `object`. We don't have any `.call`, or a `bind`, or a `new`. It's just a normal `function` call. It doesn't match any of the other rules.
+
+> So since it **doesn't match any of the other rules**, the fallback is defined in the spec as, in **non-strict-mode**, default to the **global**.
+
+So it's why we print `"Kyle"` here, cuz there's a **global `variable`** called `teacher`, with a value `"Kyle"`.
+
+But notice that the `askAgain function` is in **strict-mode**. And when we invoke it, we actually get a `TypeError`.
+
+**Q:** Can anybody guess why there's a `TypeError`?
+
+**A:** Specifically in **strict-mode**, when we invoke it with no other `this` bindings, the default behavior is to leave `this`, `undefined`. So we're now trying to access a property on the `undefined` value, which is a `TypeError`.
+
+> In **strict-mode**, when we invoke a `function` with no other `this` bindings rules, the default behavior is to leave `this`, **`undefined`**.
+
+Now, why do they chose in **strict-mode** to make `this`, `undefined`, so that it would create a `TypeError`?
+It's because it is almost certainly an `error` on our part to define a `this`-aware `function`, and invoke it without it any `this`. That's a terrible idea, that's almost as bad as **auto-creating globals**. Which nobody would ever do, right? **That's a terrible idea to invoke a `this`-aware `function` using the default binding**.
+
+And in **non-strict** (so-called **sloppy-mode**), it ends up using the **global object**, which is almost never what we would want, in exactly the same way that it's almost never the case that we wanna **auto-create globals**. But **strict-mode** fixes that up for us and it says, hey, you've made an `error`.
+
+Our `error` is not that we're doing a `this.` reference. Our `error` is that we've invoked the `function` without giving it a `this`. We need to use one of the other three ways. Use a `new` keyword, use a `.call`, or `.apply`, or a `.bind`, or use a context `object`.
+
+So there we go, four ways to invoke a `function`. Those are the only four ways, by the way. That's it, just those four.
+**These four ways are all we need to learn to be able to understand how the `this` keyword get bound.** But let's reset our mind back. The question that we set out to ask is:
+
+**Q:** If we have a `this`-aware `function`, how do we know what its `this` keyword points at?
+
+**A:** And our strong temptation is, we wanna assume that we can just answer that by looking at the `function`. And what we've now seen is, **there's no way to look at the `function` to answer that question. We have to look at the call site. We have to look at how the function's being called.**
+Because every time it gets called, the how of the call controls what the `this` keyboard will point at.
+
+### **Summary:**
+
+So far the three ways to invoke a `function`:
+
+- One way is, invoking `functions` and pointing them at a **context `object`**, like a `workshop.ask` (**implicit binding**).
+- The second way is to invoke a `function` and givie it a specific `object` with `.call` or `.apply` (**explicit binding**) or force it with `.bind` method (**hard binding:**).
+- A third way is to invoke a `function` and use a whole **new empty `object`**. And the **`new` keyword** can accomplish that (it also does other stuff too). We can accomplish that same goal by saynig, `function.call({})`. Cuz that would invoke our `function` in the context of a brand new empty `object` (**the `new` Keyword**).
+- And our fourth and final way of invoking a `function` is the fallback, if none of the other three match, which is called the **default binding**. Since it doesn't match any of the other rules, `this` in **non-strict** (so-called **sloppy-mode**), ends up using the **global object**.  But in **strict-mode** the default behavior is to leave `this`, **`undefined`**.
