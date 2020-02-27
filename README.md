@@ -3329,5 +3329,36 @@ So far the three ways to invoke a `function`:
 
 - One way is, invoking `functions` and pointing them at a **context `object`**, like a `workshop.ask` (**implicit binding**).
 - The second way is to invoke a `function` and givie it a specific `object` with `.call` or `.apply` (**explicit binding**) or force it with `.bind` method (**hard binding:**).
-- A third way is to invoke a `function` and use a whole **new empty `object`**. And the **`new` keyword** can accomplish that (it also does other stuff too). We can accomplish that same goal by saynig, `function.call({})`. Cuz that would invoke our `function` in the context of a brand new empty `object` (**the `new` Keyword**).
-- And our fourth and final way of invoking a `function` is the fallback, if none of the other three match, which is called the **default binding**. Since it doesn't match any of the other rules, `this` in **non-strict** (so-called **sloppy-mode**), ends up using the **global object**.  But in **strict-mode** the default behavior is to leave `this`, **`undefined`**.
+- A third way is to invoke a `function` and use a whole **new empty `object`**. And the **`new` keyword** can accomplish that (it also does other stuff too). We can accomplish that same goal by saynig, `function.call({})`. Cuz that would invoke our `function` in the context of a brand new empty `object` (**the `new` keyword**).
+- And our fourth and final way of invoking a `function` is the fallback, if none of the other three match, which is called the **default binding**. Since it doesn't match any of the other rules, `this` in **non-strict** (so-called **sloppy-mode**), ends up using the **global object**. But in **strict-mode** the default behavior is to leave `this`, **`undefined`**.
+
+## Binding Precedence:
+
+What if we have a really crazy call site like line 8?
+
+```JavaScript
+1. var workshop = {
+2.     teacher: "Kyle",
+3.     ask: function ask(question) {
+4.     console.log(this.teacher, question);
+5.     }
+6. };
+7.
+8. new (workshop.ask.bind(workshop))("What does this do?");
+9. // undefined "What does this do?"
+
+// this: binding rule precedence?
+```
+
+On line 8, we have a `new` keyword, we have a `workshop.ask` (so we have a context `object`), and we have `.bind` (which under the covers, of course, using `apply`). We have three of our four rules matched on the same call site. By the way we should not ever write a call site like that, but it does actually work.
+
+So from here forward, if we ever need to ask ourself what is our `this` keyword gonna point out, when this `function` gets invoked, this is how we determine that.
+
+**This precedence that shows us, if we have more than one rule matches a call site, what is our `this` keyword gonna point out when the `function` gets invoked :**
+
+1. **Is the `function` called by `new`? If so, the newly created `object` will be the `this` keyword.**
+2. **Is the `function` called by `call` or `apply()`? (And by the way `bind()` is a sub of that rule because it also uses `apply()`). If so, the context `object` that is specified will be used.**
+3. **Is the `function` called on a context `object` (like `workshop.ask`)? If so, use that `object`.**
+4. **DEFAULT: global object (except strict mode), if none of those three have applied, then we fallback to the default.**
+
+That's it, just those four rules in that order, and it'll perfectly and completely answer every question that we may have about what does my `this` keyword point at?
