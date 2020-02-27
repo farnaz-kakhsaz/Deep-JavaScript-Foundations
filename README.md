@@ -3192,7 +3192,7 @@ So it would actually invoke `workshop.ask` by saying `cb.call(window)`. Invoking
 
 **A:** The `ask` here as an `arrow function` would **not** solve the problem.
 
-So line 8, we're losing our `this` binding and it's actually getting rebound to something else, in this case the **global object**. That's not what we want. So a very common solution to this is line 11, passing a **hard bound `function`**. **If we pass in a hard bound `function` using the `.bind` method, it will take away that whole flexibility thing and force it to only use the `this` that we've specified on line 11.**
+So line 8, we're losing our `this` binding and it's actually getting rebound to something else, in this case the **global object**. That's not what we want. So a very common solution to this is line 11, passing a **hard-bound `function`**. **If we pass in a hard-bound `function` using the `.bind` method, it will take away that whole flexibility thing and force it to only use the `this` that we've specified on line 11.**
 It says evoke this `function`, and no matter how you invoke it, always use `workshop` as it's this context.
 
 > In other words the `.bind` method, **doesn't invoke the `function`**, it produces a **new `function`** which is bound to a particular specific `this` context.
@@ -3362,3 +3362,38 @@ So from here forward, if we ever need to ask ourself what is our `this` keyword 
 4. **DEFAULT: global object (except strict mode), if none of those three have applied, then we fallback to the default.**
 
 That's it, just those four rules in that order, and it'll perfectly and completely answer every question that we may have about what does my `this` keyword point at?
+
+## Arrow Functions & Lexical `this`:
+
+Let's examine the arrow `functions` within the context of what we've just discussed, which is the `this` keyword:
+
+![this: arrow functions](https://user-images.githubusercontent.com/37678729/75470429-e7b38800-59a5-11ea-9ba3-2714a6e00f14.png)
+
+Here we'll notice that the `this` keyword, when the arrow `function` is invoked, is correctly is pointing at the `workshop object`.
+
+**This is what we refer to as lexical `this` behavior.**
+
+So let's explain what **Lexical `this`** means:
+
+> Many people have in their minds a mental model that a arrow `function` is essentially a hard-bound `function` to the parents `this`, **that is not accurate**.
+>
+> The proper way to think about what an arrow `function` is, **an arrow `function` does not define a `this` keyword at all. There is no such thing as a `this` keyword in an arrow `function`.**
+>
+> Which means if we put a **`this` keyword** inside of an **arrow `function`**, **it's gonna behave exactly like any other `variable`**. Which means it's going to **lexically** resolve to some enclosing scope that does define of `this` keyword.
+
+So in this particular case, on line 5, when we say `this.` there is no `this` in that arrow `function` no matter how it gets invoked, so we lexically go up one level of scope which is, which `function`? The `ask function`.
+
+It goes up from the callback `function` (the arrow `function`, that scope), to the enclosing scope, which is? `ask`. And what is `ask`s definition of the `this` keyword? What line of code controls what the `this` keyword will point out inside of `ask`? Line 10, because the `ask function`s `this` keyword gets set by the call site.
+
+And then when that callback gets later invoked, it’s essentially closed over, that parent scope that had a `this` keyword pointing at the `workshop object`. That's what we mean by **lexical `this`**.
+
+**Arrow `function` is not a hard-bound `function`. It's a `function` that doesn't have a `this` at all. And so it revolves lexically. That means if it had to go up, five levels because we had five nested arrow `functions`, it just keeps going and going and going up the building elevator until it finds a `function` that defines a `this` keyword.
+And whatever the `this` keyword points at for that `function`, that's what it uses.**
+
+> So this is **not the correct explanation**: An arrow `function` is `this-`bound (aka `.bind()`) to its parent `function`.
+
+And here is the spec:
+
+> ![ECMAScript](https://user-images.githubusercontent.com/37678729/75474747-c99d5600-59ac-11ea-8af7-1d672d0238aa.png)
+>
+> [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-arrow-function-definitions-runtime-semantics-evaluation)
