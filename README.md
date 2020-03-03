@@ -3397,3 +3397,37 @@ And here is the spec:
 > ![ECMAScript](https://user-images.githubusercontent.com/37678729/75474747-c99d5600-59ac-11ea-8af7-1d672d0238aa.png)
 >
 > [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-arrow-function-definitions-runtime-semantics-evaluation)
+
+### Resolving `this` in Arrow Functions:
+
+Here's a place where it is perpetually frustrating that we have **overloaded operators**. We tend to think that curly braces `{}` must be scopes. They're blocks, they're `function` bodies, they must be scopes. But they're not!
+
+What's gonna happen when we define an arrow `function` on line three?
+
+![this: arrow functions](https://user-images.githubusercontent.com/37678729/75797114-e5787180-5d89-11ea-87c1-d019e39164e8.png)
+
+What is the parent lexical scope from which that arrow `function` will go up one level to resolve the `this` keyword? It is the global.
+
+It is not the `workshop object` because, guess what? Just cuz there's **curly braces `{}` around that `object` doesn't make it a scope. Objects are not scopes.** So this is a very common mistake that people have, where people are saying, why is the arrow `function` not getting my `workshop` as my content?
+Well, **because `workshop object's` not a scope. We have to think about an `arrow` function as not having of `this` and resolving it lexically.** So what is the parent scope? There's only two scopes in this program. The scope of the `ask function`, which is an arrow, and the global scope. There's no intervening scope in between.
+
+> It is unfortunate that we've overloaded the curly brace `{}` that confuses us into thinking it's a scope, but it isn't.
+
+The downside is that arrow `functions` are anonymous and so they're a bit harder to debug at times, they don't explain themselves well. If we take the entire context, Kyle Simpson perception is that **the only time we should ever use an arrow `function` is when we're gonna benefit from lexical `this` behavior.**
+
+Because the alternative to lexical `this` behavior is a hack like the `var self = this` this days. Let me just say, `var self = this` is the worst possible name anybody ever could have come up with. **Because `this` keyword never, ever, ever, under any circumstances, points at the `function` itself, it points at a context.**
+**So if we absolutely must do the `var self = this` hack, we should do `var context = this`. Cuz that's what `this` keyword is, is a context.**
+
+> But this arrow `function` lexical `this` behavior is a much better way of doing it than, a `var self = this`. And even better than doing the `function.bind()`.
+>
+> It is a much better way because it actually matches the mental model of what we want. We want the `this` keyword to behave lexically here. We don't want for the arrow `function` to have some magical `this` behavior to it. We want it to just adopt the `this` keyword of some parent scope.
+
+**Q:** When we would be parsing this example, `workshop` is going into the red bucket, it’s getting the global scope. The `teacher` property, though, would be scoped to ...
+
+**A:** Properties aren't scoped, properties aren't lexical identifiers. It's a member on an `object` value. It's not participating in lexical scope at all.
+
+If we gonna use an arrow `function` to get our lexical `this`, we need to combat those three downsides that we talked about with anonymous `function`. We need to combat the downside that, anonymous `functions` don't have a self reference, in case we need to do recursion or unbinding.
+We need to combat the fact that they don't have a name. Use it in some way so that it's gonna get a name inference, like, assign it to a `variable` or a property. Because it's gonna show up as anonymous otherwise.
+And we need to have some way of making it clear and obvious to the reader. What is the purpose of this `function`? Don't make them read the `function` body to figure that out.
+
+> The only thing we ever need to do to understand the `this` keyword is look for the call site of a `function` that defines the this keyword, and ask those four rules.
