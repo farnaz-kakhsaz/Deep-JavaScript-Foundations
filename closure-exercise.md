@@ -102,7 +102,7 @@ function defineWorkshop() {
 
     function enrollPaidStudents() {
         currentEnrollment = paidStudentsToEnroll();
-        printRecords(currentEnrollment);
+        printCurrentEnrollment();
     }
 
     function remindUnpaidStudents() {
@@ -127,14 +127,14 @@ function defineWorkshop() {
         records.forEach(printRecord);
     }
 
-    function printRecord(record) {
-        console.log(`${record.name} (${record.id}): ${record.paid ? "Paid": "Not Paid"}`);
-    }
-
     function sortByNameAsc(record1, record2) {
         if (record1.name < record2.name) return -1;
         else if (record1.name > record2.name) return 1;
         else return 0;
+    }
+
+    function printRecord(record) {
+        console.log(`${record.name} (${record.id}): ${record.paid ? "Paid": "Not Paid"}`);
     }
 
     function paidStudentsToEnroll() {
@@ -145,12 +145,12 @@ function defineWorkshop() {
         return [...currentEnrollment , ...idsToEnroll];
     }
 
-    function getStudentId(record) {
-        return record.id;
-    }
-
     function needToEnroll(record) {
         return (record.paid && !currentEnrollment.includes(record.id));
+    }
+
+    function getStudentId(record) {
+        return record.id;
     }
 
     function remindUnpaid(recordIds) {
