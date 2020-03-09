@@ -3431,3 +3431,151 @@ We need to combat the fact that they don't have a name. Use it in some way so th
 And we need to have some way of making it clear and obvious to the reader. What is the purpose of this `function`? Don't make them read the `function` body to figure that out.
 
 > The only thing we ever need to do to understand the `this` keyword is look for the call site of a `function` that defines the this keyword, and ask those four rules.
+
+## ES6 `class` Keyword
+
+> The `class` keyword is ostensibly **syntactic sugar** layered on top of the **prototype system**.
+>
+> By the way, this is a little know fact. `classes` don't have to be statements, `classes` can be **expressions**, and they can be **anonymous**.
+
+The `classes` can be defined with or without an `extends` clause. Here, we're just defining a `class` that doesn't extend anything, so it's the top level `class`.
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. var deepJS = new Workshop("Kyle");
+11. var reactJS = new Workshop("Suzy");
+12.
+13. deepJS.ask("Is 'class' a class?");
+14. // Kyle Is 'class' a class?
+15.
+16. reactJS.ask("Is this class OK?");
+17. // Suzy Is this class OK?
+
+// ES6 class
+```
+
+We can choose to define a `constructor` if we want, like we're doing on line 2, and we can add methods.
+
+And look on line 4, we don't even need commas in between them. They did a fantastic job of just dribbling all kinds of syntactic sugar on this feature. It's very attractive. Then we look at line 10, it looks exactly like instantiating classes in any other class-oriented language.
+
+We just say `new`, capital W `Workshop`, and we get an instance. And we call `deepJS.ask` and the method call works. And there's a `this` context that works. So that's what the `class` syntax looks like.
+
+**If we want to extend one `class` into another `class`, we use the `extends` clause**. Like here on line 10:
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. class AnotherWorkshop extends Workshop {
+11.     speakUp(msg) {
+12.         this.ask(msg);
+13.     }
+14. }
+15.
+16. var JSRecentParts = new AnotherWorkshop("Kyle");
+17.
+18. JSRecentParts.speakUp("Are classes getting better?");
+19. // Kyle Are classes getting better?
+
+// ES6 class: extends (inheritance)
+```
+
+We don't have to redefine any other methods that are already defined because they'll be so-called **inherited**. So we can define new methods like the `speakUp` method here on line 11 and when we instantiate that child `class`, we can invoke that method, `.speakUp` (line 18), exactly like it was on the `object`.
+
+In the below, is a example of relative polymorphism in `classes`:
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. class AnotherWorkshop extends Workshop {
+11.     ask(msg) {
+12.         super.ask(msg.toUpperCase());
+13.     }
+14. }
+15.
+16. var JSRecentParts = new AnotherWorkshop("Kyle");
+17.
+18. JSRecentParts.ask("Are classes getting better?");
+19. // Kyle ARE CLASSES GETTING BETTER?
+
+// ES6 class: extends (relative polymorphism)
+```
+
+> The `class` system also now has a **`super` keyword** in it, which allows us to do **relative polymorphism**. If we have a child `class` that defines a method of the **same name** as a parent `class` (so-called **shadowing**), we can refer to the parent from the child by saying `super.` like we see on line 12.
+
+**By the way, this is an example of extension beyond syntactic sugar because prior to ES6 `classes`, there was essentially no way to do relative polymorphism. There was no equivalent of the `super` keyword.**
+
+Not saying that's a bad thing, just saying, when people say, it's just syntactic sugar anyway, no, it isn't. It's its whole own mechanism, with its own set of complexities. It's like a language within a language at this point, **`classes` are not just syntactic sugar**, but that is a useful, mental model for these simplest of examples.
+
+It's need to say that even though there's a bunch of syntactic sugar, **they didn't change anything fundamentally about how `function` calls work and how that `this` keyword gets bound.** So, even if we define a method on a `class` instance, if we pass it into a `setTimeout`, guess what?
+It's gonna lose its `this` binding.
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. var deepJS = new Workshop("Kyle");
+11.
+12. setTimeout(deepJS.ask, 100, "Still losing 'this'?");
+13. // undefined "Still losing 'this'?"
+
+// ES6 class: still dynamic this
+```
+
+They're not somehow magically auto bound. Those methods on `class` instances, behave just like any other `function`.
+
+And that idea of having an autobound `this` method is why in this interim period for the last several years, we have seen an explosion of patterns where people want hardbound or autobound methods and they aren't automatically.
+
+So what we see a lot happening is something like line 4 in below example:
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.          this.ask = question => {
+5.              console.log(this.teacher, question);
+6.          };
+7.      }
+8.  }
+9.
+10. var deepJS = new Workshop("Kyle");
+11.
+12. setTimeout(deepJS.ask, 100, "Is 'this' fixed?");
+13. // Kyle Is 'this' fixed?
+
+// ES6 class: "fixing" this?
+```
+
+**Where instead of defining a method on the `prototype`, we added into the `constructor` and use a hardbound method or use an arrow `function`.**
+
+This deeply troubles to see this propagation of this idiom. This idea that it's got to be hard bound and don't want any dynamism to it all, so I'm gonna use a lexical `this` from an arrow `function` or I'm gonna use a hard bound `function` to accomplish that.
+
+Because we are essentially betraying the entire system that `classes` has built upon. **The entire `class` system is built upon this idea that our methods don't exist on our instances, they exist on our prototypes.** And guess what happens when we say `this.ask` and we assign it a `function`? **It's no longer on the `prototype` anymore, it's on our instance. So every single time we instantiate a `function`, we're getting a whole separate copy of all those `functions` added to every single instance.**
+
