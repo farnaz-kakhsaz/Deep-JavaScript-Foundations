@@ -11,6 +11,7 @@
 5. [Static Typing](#Static Typing)
 6. [Scope](#Scope)
 7. [Closure](#Closure)
+8. [Object](#Object)
 
 ## Introduction
 
@@ -126,6 +127,8 @@ typeof v;              // "object"
 
 v = Symbol();
 typeof v;              // "symbol"
+
+// Primitive Types: typeof
 ```
 
 > We can think of `undefined` as basically a default value.
@@ -154,6 +157,8 @@ typeof v;                   // "object"      hmmm?
 var v = 42n;
 // or: BigInt(42)
 typeof v;                   // "bigint"
+
+// Primitive Types: typeof
 ```
 
 Why `typeof` null returns object? This is a historical fact from ES1 which essentially indicated to developers that if you wanted to unset a regular value, like a number, you would use undefined. But if you wanted to unset an object reference, you would use null.
@@ -285,6 +290,8 @@ isNaN("my son's age");            // true    OOPS!
 
 Number.isNaN(myCatsAge);          // true
 Number.isNaN("my son's age");     // false
+
+// Special Values: NaN
 ```
 
 It's not appropriate in any way shape or form to think of 0 as being the place holder for absence of numeric value. Doesn't make sense mathematically and doesn't make sense programatically.
@@ -338,6 +345,8 @@ trendRate > 0;                // false
 
 Object.is(trendRate, -0);     // true
 Object.is(trendRate, 0);      //false
+
+// Special Values: -0
 ```
 
 > **Note:** When we `toString()` the `-0` we got `0`.
@@ -367,6 +376,8 @@ sign(-3);              // -1
 sign(3);               // 1
 sign(-0);              // -1
 sign(0);               // 1
+
+// Special Values: -0
 ```
 
 > If we had a `-0` or `0`. Unfortunately the `Math.sign()` return negative zero and zero instead of negative one and one.
@@ -528,7 +539,7 @@ Some examples of things and what they end up producing as a string representatio
             0   "0"
            -0   "0"   // *
 
-Abstract Operations: ToString
+// Abstract Operations: ToString
 ```
 
 Things get a little strange when we look at the negative zero, remember that. We already saw that it lies, the `toString` operation for negative zero lies and produces a quote zero. So that's one of the corner cases.
@@ -556,7 +567,7 @@ So what's gonna look like on some particular `object` like an `array`?
     [[[], [], []], []]   ",,,"
                 [,,,,]   ",,,"
 
-Abstract Operations: ToString(Array)
+// Abstract Operations: ToString(Array)
 ```
 
 Arrays have a default `toString`, which is strange serializes the representation of the `array`. Because they're leaving off the brackets.
@@ -575,7 +586,7 @@ What about on an `objects`:
                            {a: 2}   "[object Object]"
     { toString() { return "X"; }}   "X"
 
-Abstract Operations: ToString(Object)
+// Abstract Operations: ToString(Object)
 ```
 
 > The default `toString` on the `Object.prototype` is to do that whole the square brackets thing, it does a lower case `object` and then it puts in this thing which is called the string tag.
@@ -603,7 +614,7 @@ The `ToNumber` is a bit more interesting cuz there's a lot more corner cases inv
           "."   NaN
        "Oxaf"   175
 
-Abstract Operations: ToNumber
+// Abstract Operations: ToNumber
 ```
 
 ```JavaScript
@@ -612,7 +623,7 @@ Abstract Operations: ToNumber
          null   0   // *
     undefined   NaN
 
-Abstract Operations: ToNumber
+// Abstract Operations: ToNumber
 ```
 
 When we use `ToNumber` on a `non-primitive` (not a `string`, `undefined`, `boolean` or whatever), when we use it in an `object`, remember it invokes the `ToPrimitive` with the `number` hint. That consults first the valueOf, and then it consults the toString.
@@ -654,7 +665,7 @@ So then in your various operations where you were expecting a `primitive`, but y
       [1, 2, 3]   NaN
        [[[[]]]]   0   // *
 
-Coercion: ToNumber(Array)
+// Coercion: ToNumber(Array)
 ```
 
 If the `array` has either `null` or `undefined`, it becomes 0. Because they first become empty `strings`, and then empty `string` becomes `0`. Remember, empty `string` is the root of all coercion evil.
@@ -665,7 +676,7 @@ And if you have an object
                       { .. }   NaN   // means {} or for example {x: 5}
    { valueOf() { return 3;}}   3
 
-Coercion: ToNumber(Object)
+// Coercion: ToNumber(Object)
 ```
 
 And remember what a stringification of an `object` by default is, it's that `[object Object]` thing. Which is definitely not a representation of a number, so we get `NaN`. If you override the `valueOf` for some `object`, you can return whatever thing you want.
@@ -754,7 +765,7 @@ console.log(
 );
 // "There are 16 students."
 
-Coercion: number to string
+// Coercion: number to string
 ```
 
 > Overloaded operator: Defining or redefining how an operator (+, -, \*, /, etc.) acts.
@@ -790,7 +801,7 @@ function addAStudent(numStudents) {
 addAStudent(studentsInputElem.value);
 // "161"   OOPS!
 
-Coercion: string to number
+// Coercion: string to number
 ```
 
 > The plus operator (`+`) with `string` value (`+"6"` for example), invoke `toNumber` abstract operation.
@@ -805,7 +816,7 @@ function addAStudent(numStudents) {
 addAStudent( + studentsInputElem.value);
 // "17"
 
-Coercion: string to number
+// Coercion: string to number
 ```
 
 If we use the minus operator (`-`) that one is only defined for `numbers`.
@@ -822,7 +833,7 @@ function kickStudentOut(numStudents) {
 kickStudentOut(studentsInputElem.value);
 // "15"
 
-Coercion: string to number
+// Coercion: string to number
 ```
 
 But what about `boolean`?
@@ -832,7 +843,7 @@ if (studentsInputElem.value) {
   numStudents = Number(studentsInputElem.value)
 }
 
-Coercion: __ to boolean
+// Coercion: __ to boolean
 ```
 
 If `studentsInputElem.value` as an empty `string` that's gonna be `falsy`, But what if that `string` has just a bunch of white space, now it's gonna be `truthy`.
@@ -843,7 +854,7 @@ while (newStudents.length) {
   enrollStudent(newStudents.pop());
 }
 
-Coercion: __ to boolean
+// Coercion: __ to boolean
 ```
 
 So if my length is zero then it becomes `false` and if my length is anything non zero then it becomes `true`. Because it's not one of the zeros. But what happens when it's `NaN` it becomes `false`.
@@ -923,7 +934,7 @@ studentsInput.value = "   \t\n";
 
 Number(studentsInput.value);            //   0
 
-Coercion: corner cases
+// Coercion: corner cases
 ```
 
 Not only does the empty `string` become zero, but any `string` that's full of white space also becomes zero.
@@ -954,7 +965,7 @@ Number(false);             //   0
 (true) > 1;
 1 > 1;                     //   false
 
-Coercion: corner cases
+// Coercion: corner cases
 ```
 
 ---
@@ -1030,7 +1041,7 @@ if (workshop1 === workshop2) {
   // Nope
 }
 
-Equality: identity, not structure
+// Equality: identity, not structure
 ```
 
 We have two `objects`, they have the same structure and ostensibly and the same value. But they are not the same object.
@@ -1072,7 +1083,7 @@ if (
   // ..
 }
 
-Coercive Equality: null == undefined
+// Coercive Equality: null == undefined
 ```
 
 The reader has not gaining anything readability-wise by being `explicit` between two empty values.
@@ -1106,7 +1117,7 @@ if (workshopEnrollment1 == workshopEnrollment2) {
   // ..
 }
 
-Coercive Equality: perfers numeric comparison
+// Coercive Equality: perfers numeric comparison
 ```
 
 So the abstraction of the `double equals` is helpful there.
@@ -1145,7 +1156,7 @@ if (true) {
   // Yep (hmm...)
 }
 
-Coercive Equality: only primitives
+// Coercive Equality: only primitives
 ```
 
 > We should never use `double equals` to compares a `primitive` with `non-primitive` value.
@@ -1198,7 +1209,7 @@ var workshop2Students = [];
   // if (true)
 }
 
-== Corner Cases: WAT!?
+// == Corner Cases: WAT!?
 ```
 
 Compare the first one in your mind to the more appropriate comparison (the second one), which is to say, I want to check to see if they're not the same `array`.
@@ -1244,7 +1255,9 @@ var workshopStudents = [];
   // if ("" == false)
   // if (0 === 0)
   // if (true)
-== Corner Cases: booleans
+
+
+// == Corner Cases: booleans
 }
 ```
 
@@ -1314,7 +1327,7 @@ teacher = { name: "Kyle"};
 // Error: can't assin object to string
 
 
-Type-Awarw Linting: inferencing
+// Type-Awarw Linting: inferencing
 ```
 
 > `Type inference` refers to the automatic detection of the `data type` of an expression in a programming language.
@@ -1338,7 +1351,7 @@ teacher = { name: "Kyle"};
 // Error: can't assin object to string
 
 
-Type-Awarw Linting: annotating
+// Type-Awarw Linting: annotating
 ```
 
 We can say `teacher` is definitely a `string`. We're gonna get basically the same error, but here we're not guessing at the error. We're literally saying we intended for this thing to only ever hold `strings`, and now we're trying to put something `non-string` to it. In both cases `TypeScript` and `Flow` are gonna throw us an error and say, you're assigning something you shouldn't have.
@@ -1359,7 +1372,7 @@ var firstStudent: student = { name: "Farank"};
 var firstStudentName: string = getName(firstStudent);
 
 
-Type-Aware Linting: custom types & signatures
+// Type-Aware Linting: custom types & signatures
 ```
 
 Here we're defining that an `object` of a `type` that has a property called `name` that is of type `string`, that is a `type`. And then we can pass values of that `type` as parameters. And we can receive values back as parameters. So here we are passing in `studentRec` of the type `student`. we're defining our own `type`. this program doesn't have any errors.
@@ -1382,7 +1395,7 @@ var studentCount: number = 16 - studentName;
 // error: can't substract string
 
 
-Type-Aware Linting: validating operand types
+// Type-Aware Linting: validating operand types
 ```
 
 Because that particular preference is saying don't allow that `coercion`, and in this particular case, that would be a really useful help for us.
@@ -1560,7 +1573,7 @@ In this exercise we try to think more like JavaScript engine:
 13. otherClass();                 // Welcome!
 14. ask();                        // Why?
 
-scope
+// scope
 ```
 
 After we've set up all those plans
@@ -1652,10 +1665,10 @@ Now it's important to note that when we execute the code, there's no more declar
 
 And why that matters is, that allows the engine to much more efficiently optimize, because everything is known and it's fixed. Nothing during the **run-time** can determine that this marble is no longer red, now it's blue. Once we've processed through, we already know what color marble it is and we're done with that discussion.
 
-> This means the decisions that we've made about scope are author time decisions.
+> This means the decisions that we've made about scope are author-time decisions.
 > When we write a `function` or put a `variable` here, it means that `variable` is always gonna be that color marble (inside that scope).
 
-So that allows the JavaScript engine to be much more efficient at its job. The takeaway that you should have from that is, the decisions that I've made about scope are author time decisions. When I write this `function` and we put this `variable` here, it means that `variable` is always gonna be that color marble.
+So that allows the JavaScript engine to be much more efficient at its job. The takeaway that you should have from that is, the decisions that I've made about scope are author-time decisions. When I write this `function` and we put this `variable` here, it means that `variable` is always gonna be that color marble.
 
 ## Executing Code
 
@@ -1677,7 +1690,7 @@ We have all our plan set up. There's no more declaration code, so let's then exe
 13. otherClass();                 // Welcome!
 14. ask();                        // Why?
 
-scope
+// scope
 ```
 
 > So even though line 1 looks like one statement, it's actually two separate things. There's the `var teacher` part. That's what the **compiler** handles. And then there's the `teacher = "Kyle"` part, that's what the **execution engine's** gonna handle.
@@ -1861,7 +1874,7 @@ Another example with corner cases:
 11. teacher;                         // "Suzy"
 12. topic;                           // "React"
 
-Scope
+// Scope
 ```
 
 First Step: **compilation**
@@ -1921,9 +1934,9 @@ So we've created an `auto global` called `topic` which that sounds terrible. But
 
 **A:** That's true, any assignment to a `variable` that is undeclared at that moment, not declared to any scope we have access to. Any undeclared variable is going to end up creating this `auto global`.
 
-Now, the reason why that happens is because we'll notice that this program is not running in `strict mode`. But this is running in the `non-strict mode` or sometimes called, `sloppy mode`. We should be using `strict mode`, and if we were using `strict mode`, we wouldn't see this behavior. But since this code snip it isn't, that's what happens, as we end up creating a `global variable` called `topic`.
+Now, the reason why that happens is because we'll notice that this program is not running in `strict-mode`. But this is running in the `non-strict-mode` or sometimes called, `sloppy-mode`. We should be using `strict-mode`, and if we were using `strict-mode`, we wouldn't see this behavior. But since this code snip it isn't, that's what happens, as we end up creating a `global variable` called `topic`.
 
-> If we use `strict mode` instead of using `non-strict mode` (or sometimes called `sloppy mode`), we wouldn't see this `auto-create global`.
+> If we use `strict-mode` instead of using `non-strict-mode` (or sometimes called `sloppy-mode`), we wouldn't see this `auto-create global`.
 
 We execute `console.log` the same way as we have before. So execution is then done in the `function`. Execution moves to line 11. So hey `global scope` (red bucket), I have a **source reference** to a `variable` called `teacher`, ever heard of it? Yes, so we go get that marble and we look for its `value`. And the `value` is `"Suzy"`. Because of line 4, we've overwritten the `value` in that `variable`. It's not a separate `variable` (marble).
 
@@ -1952,33 +1965,33 @@ So line 12 then, hey `global scope`, I have a **source reference** for `topic`, 
 10.
 11. otherClass();
 
-Scope
+// Scope
 ```
 
-So now if we flip on `strict mode`, which we do by putting this `strict mode` fragment at the top of any scope, preferably at the top of our program, the top of our file, or at the top of any `function`.
+So now if we flip on `strict-mode`, which we do by putting this `strict-mode` fragment at the top of any scope, preferably at the top of our program, the top of our file, or at the top of any `function`.
 
-If we turn on `strict mode`, all the same processing is going to happen. But when we arrive at line 7 and we say, hey scope of `otherClass`, I have this **target reference** for `topic` ever heard of it? No, so we go to the `global scope` and we say, `global scope` have you ever heard of `topic`, and the `global scope` gonna respond with `ReferenceError`, never heard of it.
+If we turn on `strict-mode`, all the same processing is going to happen. But when we arrive at line 7 and we say, hey scope of `otherClass`, I have this **target reference** for `topic` ever heard of it? No, so we go to the `global scope` and we say, `global scope` have you ever heard of `topic`, and the `global scope` gonna respond with `ReferenceError`, never heard of it.
 
-> Whenever we are in `non-strict mode` (or `sloppy mode`), and we have a **target reference** for a `non-declared variable`, we will `auto create` it (`auto global`) in **run-time**.
+> Whenever we are in `non-strict-mode` (or `sloppy-mode`), and we have a **target reference** for a `non-declared variable`, we will `auto create` it (`auto global`) in **run-time**.
 >
-> And if in `non-strict mode`, we try to get `non-declared variable` that is in a **source position**, `global scope` throw us a `ReferenceError`.
+> And if in `non-strict-mode`, we try to get `non-declared variable` that is in a **source position**, `global scope` throw us a `ReferenceError`.
 
-> If we have any kind of reference (**target** or **source**) for `non-declared variable` in **`strict mode`**, `global scope` throw us a `ReferenceError` (instead of `auto create` it, if `non-declared variable` was in **target position**).
+> If we have any kind of reference (**target** or **source**) for `non-declared variable` in **`strict-mode`**, `global scope` throw us a `ReferenceError` (instead of `auto create` it, if `non-declared variable` was in **target position**).
 
-That's what we would like to happen all of the time. It now happens as the result of `strict mode`, we get a `ReferenceError`. So one of the many, many reasons why it would be good for us to be using `strict mode`. It will avoid mistakes like line 7, cuz it almost certainly a mistake, it should not be something we intentionally try to create `global`.
+That's what we would like to happen all of the time. It now happens as the result of `strict-mode`, we get a `ReferenceError`. So one of the many, many reasons why it would be good for us to be using `strict-mode`. It will avoid mistakes like line 7, cuz it almost certainly a mistake, it should not be something we intentionally try to create `global`.
 
 > The difference between `TypeErrors` and `ReferenceErrors` are , `TypeErrors` are when we found the `variable` and the `value` that it is currently holding, is not legal to do whatever we're trying to do with it. Like trying to execute or access a `property` on an `undefined` or `null`, things like that, that's `TypeError`.
 > A `ReferenceError` is, when JavaScript engine couldn't find that `variable` on any scope that we have access to.
 
-**Q:** Is `strict mode` always pretty on `ES6`?
+**Q:** Is `strict-mode` always pretty on `ES6`?
 
-**A:** The `strict mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict mode` in there for us.
-So if we're using transpired code, it was almost a virtual certainty that our code is running in `strict mode`. But JavaScript is not default the `strict mode` because then that would break a bunch of programs. So that were written 20 years ago or something. So because of backwards compatible, we will always have to opt into `strict mode`.
-Another little caveat inside of certain kinds of mechanisms within `ES6` and going forward, it is assumed to be in `strict mode`. So we don't even type it, so inside of a `class`, or inside of `ES6 module`, inside of both of those, `strict mode` is assumed, we don't even have to put the `strict mode`, is just assume that, that code is running in `strict mode`. But as a general rule for JavaScript itself, it's not in `strict mode` unless we opt-in.
+**A:** The `strict-mode` is not always on. It's true that tools like `babel` and other transpilers basically always put the `strict-mode` in there for us.
+So if we're using transpired code, it was almost a virtual certainty that our code is running in `strict-mode`. But JavaScript is not default the `strict-mode` because then that would break a bunch of programs. So that were written 20 years ago or something. So because of backwards compatible, we will always have to opt into `strict-mode`.
+Another little caveat inside of certain kinds of mechanisms within `ES6` and going forward, it is assumed to be in `strict-mode`. So we don't even type it, so inside of a `class`, or inside of `ES6 module`, inside of both of those, `strict-mode` is assumed, we don't even have to put the `strict-mode`, is just assume that, that code is running in `strict-mode`. But as a general rule for JavaScript itself, it's not in `strict-mode` unless we opt-in.
 
-> In the `babel` and other transpilers, basically always put the `strict mode` in there for us.
+> In the `babel` and other transpilers, basically always put the `strict-mode` in there for us.
 >
-> By default `ES6 class` and `ES6 module` are executed in the `strict mode`.
+> By default `ES6 class` and `ES6 module` are executed in the `strict-mode`.
 
 So in `stric mode`, we can't auto create `variables`, you have to declare them.
 
@@ -2002,7 +2015,7 @@ This is an example of a nested scope:
 13. otherClass();                   // Suzy Why?
 14. ask("???");                     // ReferenceError
 
-Scope
+// Scope
 ```
 
 We start by looking at line 1, that's a formal declaration that makes a red marble. Line 3 is a formal declaration that also creates a red marble. Line 4 and 6 both are the formal declaration that create a blue marble.
@@ -2025,12 +2038,12 @@ So when we then ask for the marble that we find, which is a green marble and we 
 What's gonna happen with line 14? How does line 14 execute?
 Hey `global scope`, I have a **source reference** for an `identifier` called `ask`, ever heard of it? No, so we have a `ReferenceError`.
 
-Even though `ask` exist within the program, it doesn't exist in any scope that we have access to at this moment. So it is therefore an `undeclared variable`. Because we're not in `strict mode`, unlike `auto globals` which go ahead and create a marble for us, if we have a **source referenced** to a `variable` that is `undeclared`, it always throws a `ReferenceError`. That's why it's critical to understand the difference between a **target reference** and a **source reference**. At least if you're in `non-strict mode`.
-Once you go to `strict mode`, they both behave exactly the same, so it stops mattering as much **target** versus **reference**.
+Even though `ask` exist within the program, it doesn't exist in any scope that we have access to at this moment. So it is therefore an `undeclared variable`. Because we're not in `strict-mode`, unlike `auto globals` which go ahead and create a marble for us, if we have a **source referenced** to a `variable` that is `undeclared`, it always throws a `ReferenceError`. That's why it's critical to understand the difference between a **target reference** and a **source reference**. At least if you're in `non-strict-mode`.
+Once you go to `strict-mode`, they both behave exactly the same, so it stops mattering as much **target** versus **reference**.
 
-> If in `non-strict mode`, we have a **source referenced** to a `variable` that is `undeclared` (it doesn't exist in any scope that we have access to at that moment), it always throws a `ReferenceError`. And if the `variable` is in the **target reference**, the `global scope` will be auto created it (`auto global`).
+> If in `non-strict-mode`, we have a **source referenced** to a `variable` that is `undeclared` (it doesn't exist in any scope that we have access to at that moment), it always throws a `ReferenceError`. And if the `variable` is in the **target reference**, the `global scope` will be auto created it (`auto global`).
 >
-> But in `strict mode`, it doesn't matter `undeclared variable` is in the **source position** or the **target position**, the JavaScript engine will always throw us a `Reference Error`.
+> But in `strict-mode`, it doesn't matter `undeclared variable` is in the **source position** or the **target position**, the JavaScript engine will always throw us a `Reference Error`.
 
 **Q:** When we're passing the `"Why?"` to `ask` on line 10, is there behind the scenes, is JavaScript saying `var question = "Why?"` at some point?
 
@@ -2046,7 +2059,7 @@ What is the difference between `undefined` and `undeclared`?
 
 **Undefined:** means a `variable` exists but at the moment it has no `value`. It may have never had a `value` or it might have used to have a `value` and it doesn't anymore but there is no other `value` and the vacuum of space it is `undefined`.
 
-**Undeclared:** is actually never formally declared in any scope that we have accessed to (we do not have a marble for it). And in `strict mode`, it always results in those `ReferenceErrors`.
+**Undeclared:** is actually never formally declared in any scope that we have accessed to (we do not have a marble for it). And in `strict-mode`, it always results in those `ReferenceErrors`.
 
 Unfortunately, JavaScript tries to mess around with this and pretend that `undeclared` is sort of the same thing as `undefined` and some of its error messages and other outputtings and things and not is historically a really bad idea. We need to keep these two concepts separate. There's a different something being `undeclared` (doesn't exist), and being `undefined` (definitely it does exist, but doesn't have a `value`).
 
@@ -2069,7 +2082,7 @@ We've been talking about `functions` in the **compilation phase**, adding their 
 8. console.log(myTeacher);
 9. console.log(anotherTeacher);                   //ReferenceError
 
-Scope: which scope?
+// Scope: which scope?
 ```
 
 In this example `teacher` in line 1 (`function declaration`), creates a red marble but `anotherTeacher` in line 3 (`function expression`) creates a blue marble.
@@ -2100,7 +2113,7 @@ What is a named `function expression`? That means a `function expression` that's
 6.    // ...
 7. };
 
-Named Function Expressions
+// Named Function Expressions
 ```
 
 Why line 1 is a `function expression`?
@@ -2117,9 +2130,7 @@ So on line 1, we see a `function expression`, but we see no name. So that's call
 
 **Why we sould always, always use `named function expressions`?**
 
-- Reliable `function` self-reference (the name produces or creates a reliable self-reference to the `function` from inside of itself).
-  That is useful if we're going to make the `function` recursive, or that `function` is an event handler of some sort and it needs to reference itself to unbind itself. or it's useful if we need to access any properties on that `function object` such as its `length` or its name or other thing of that sort.
-  Anytime we might need a self-reference to the `function`, the single only right answer to that question is, it needs to have a name.
+- Reliable `function` self-reference (the name produces or creates a reliable self-reference to the `function` from inside of itself). That is useful if we're going to make the `function` recursive, or that `function` is an event handler of some sort and it needs to reference itself to unbind itself. or it's useful if we need to access any properties on that `function object` such as its `length` or its name or other thing of that sort. Anytime we might need a self-reference to the `function`, the single only right answer to that question is, it needs to have a name.
 - More debuggable stack traces. So automatically by naming our functions, we make our code and stack traces more debuggable.
 - More self-documenting code. If we have a `function` that is anonymous, and we look at that `function` to figure out what that `anonymous function` is doing, we have to read the `function` body and we also probably have to read where it's being parsed.
 
@@ -2168,7 +2179,7 @@ That's where that name even comes from, that **lex** shares the same root as the
 
 We have two type of **Scope** model:
 
-- **Lexical Scope**: It's an author time decision and all the **scopes** (where the `function` and `variables` written) create in **compile-time**. So when we talk about **Lexical Scope**, we think about something that is **fixed** at author time and it's predictable, it is **not** affected by **run-time** conditions.
+- **Lexical Scope**: It's an author-time decision and all the **scopes** (where the `function` and `variables` written) create in **compile-time**. So when we talk about **Lexical Scope**, we think about something that is **fixed** at author-time and it's predictable, it is **not** affected by **run-time** conditions.
 
 - **Dynamic Scope**: It creates in **run-time**. The `Bash script` is an example of **Dynamic scope** language and it makes sense because `Bach Script` is an **interpreted language** so it has no **run-time** term. So we can say the **Dynamic scope** is the opposite of the **Lexical Scope**, and it implies that the **run-time** (the dynamic) conditions of your program, are going to affect something about the **scoping**.
 
@@ -2184,7 +2195,7 @@ The **Dynamic Scope** is not very common at all, we generally only see this in a
 1.  var teacher = "Kyle";
 2.
 3.  function ask(question) {
-2.      console.log(teacher, question);
+4.      console.log(teacher, question);
 5.  }
 6.
 7.  function otherClass() {
@@ -2194,10 +2205,10 @@ The **Dynamic Scope** is not very common at all, we generally only see this in a
 11. }
 12.
 13. otherClass();
-14. // Output in Lexically Scoped languages: Kyle Why?
-15. // Output in Dynamically Scoped languages: Suzy Why?
+14. // Output in Lexically Scoped language: Kyle Why?
+15. // Output in Dynamically Scoped language: Suzy Why?
 
-Lexical Scope and Dynamic Scope
+// Lexical Scope and Dynamic Scope
 ```
 
 We know that **Dynamic Scope** exists in some languages, but it does not exist in JavaScript. So this is a _theoretical_ example.
@@ -2230,6 +2241,8 @@ cobsole.log(teacher);   // Suzy -- oops
 // ..
 
 cobsole.log(teacher);   // Suzy -- oops
+
+// Function Scoping
 ```
 
 Into this one:
@@ -2245,6 +2258,8 @@ function anotherTeacher() {
 anotherTeacher();
 
 cobsole.log(teacher);   // Kyle
+
+// Function Scoping
 ```
 
 We still have a **Naming Collision**, we just shifted it to a different variable name (`anotherTeacher`).
@@ -2278,6 +2293,8 @@ var teacher = "Kyle";
 })();
 
 cobsole.log(teacher);   // Kyle
+
+// Function Scoping: IIFE
 ```
 
 But probably we have seen this code with an `anonymous function expression` form.
@@ -2306,6 +2323,8 @@ var teacher = "Kyle";
 })("Suzy");
 
 cobsole.log(teacher);   // Kyle
+
+// Function Scoping: IIFE
 ```
 
 ## Block Scoping:
@@ -2321,6 +2340,8 @@ var teacher = "Kyle";
 };
 
 cobsole.log(teacher);   // Kyle
+
+// Block Scoping: encapsulation
 ```
 
 The **Block Scoping**, it's scoping that's done with blocks (curly braces `{}`) instead of with `functions`.
@@ -2358,7 +2379,7 @@ function repeat(fn, n) {
     return result;
 }
 
-Block Scoping: let + var
+// Block Scoping: let + var
 ```
 
 **The `var`**: When we have a variable that belongs to the entire **`function` scope** or needs to escape an unintended block, we use **`var`**. The `var` hoists and attaches itself to the **`function` scope**. The `var` can be reused within a scope, but `let` can not.
@@ -2384,7 +2405,7 @@ function formatStr(str) {
     return str.slice(4);
 }
 
-Block Scoping: explicit let block
+// Block Scoping: explicit let block
 ```
 
 Open up a curly brace pair `{}` and create a scope just for those three lines of code to use the `prefix` and the `rest` variable, and then don't let them exist for any other part of the `function`.
@@ -2412,6 +2433,8 @@ myTeacher = "Suzy";                    // TypeError1
 
 const teachers = ["Kyle", "Suzy"];
 teachers[1] = "Brian";                 // Allowed!
+
+// Block Scoping: const(antly confusing)
 ```
 
 **Note:** We should know that the `const` keyword, does not carry its own weight within the language. And this big cost that comes with `const` is not even unique to JavaScript.
@@ -2443,7 +2466,7 @@ teacher;                        // undefined
 var student = "you";
 var teacher = "Kyle";
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 In **lexical scope** discussion we would first pass through this as the **compiler**, and then we would pass through it as an **execution**.
@@ -2475,7 +2498,7 @@ otherTeacher = function() {
     return "Suzy";
 }
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 For the exact same reason it doesn't move `variables`, it doesn't move `functions`. It handles them during the **first pass**, and then it **executes**.
@@ -2505,7 +2528,7 @@ function otherTeacher() {
     var teacher = "Suzy";
 }
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 When should use hoisting and when not:
@@ -2524,7 +2547,7 @@ function getTeacher() {
     return teacher;
 }
 
-Scope: hoisting
+// Scope: hoisting
 ```
 
 ### Hoisting and `let`:
@@ -2537,7 +2560,7 @@ This example shows us if we use `variable` before it declared (only if it was `l
     let teacher;
 }
 
-Hoisting: let gotcha
+// Hoisting: let gotcha
 ```
 
 **If we use a `variable` before it declared (with `let` or `const`), we get a `TDZ error` (Temporal Dead Zone error).**
@@ -2553,6 +2576,8 @@ This example proves to us, that `let` (and `const`) will be hoist too:
 4.     console.log(teacher);    // TDZ error!
 5.     let teacher = "Suzy";
 6. }
+
+// Hoisting: let gotcha
 ```
 
 In above code, if the `teacher` on line 5 did not host, then line 4 should print out `"Kyle"`. Because there is no `teacher` as of line 4 and it should go to the outer scope and find the `variable` from line 1. But this code still throws a `TDZ error`, and the reason is because **`let` and `const` still hoist**.
@@ -2605,9 +2630,7 @@ As far as I'm concerned, this is the right answer to that question:
 
 - The `function` is able to access its **lexical scope**: We already know that, this is **lexical scope** definition in itself! **lexical scope** is that a `function` can reference `variables` outside of itself and it just goes up the **scope chain** to find it.
 
-- The second part is the critical part. Without the second part, it's just **lexical scope**. With the second part of this definition, which is, even when the `function` is executed in a **different scope**, now we start to see something interesting. Cuz when we take a `function` and we pass it as a callback, or we take a `function` and return it back, the scope that it was originally defined in (at least conceptually), has gone away.
-  And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that.
-  That doesn't happen by accident. That's not magical, that's **closure**.
+- The second part is the critical part. Without the second part, it's just **lexical scope**. With the second part of this definition, which is, even when the `function` is executed in a **different scope**, now we start to see something interesting. Cuz when we take a `function` and we pass it as a callback, or we take a `function` and return it back, the scope that it was originally defined in (at least conceptually), has gone away. And we would think, normally, it's been **garbage collected**, it's done. But there's a `function` that survived that was defined within that scope. It turns out that the scope didn't go away at all. It turns out that this `function` is able to hold on to a reference to that scope, and wherever we pass the `function`, it continues to have access to that. That doesn't happen by accident. That's not magical, that's **closure**.
 
 The preservation, the linkage back to the original scope where it was defined, no matter where we pass that value, no matter where it executes, it retains that value. It preserves that scope. That's called **closure**.
 
@@ -2615,14 +2638,14 @@ So let's take a look at some examples of closure:
 
 ```JavaScript
 function ask(question) {
-    setTimout(function waitASec() {
+    setTimeout(function waitASec() {
         console.log(question);
     }, 100);
 }
 
 ask("What is closure?");   // What is colsure?
 
-Closure
+// Closure
 ```
 
 At the time that `waitASec function` runs, the `ask function` has already finished, and the `variable question` which it's closed over should have gone away. But it didn't go away because closure preserved it, so-called the `waitASec function` is closed over the `variable question`. That's a **closure**.
@@ -2649,7 +2672,7 @@ Another example of closure:
 10.
 11. myQuestion();   // What is closure
 
-Closure
+// Closure
 ```
 
 Here is the exact same thing. If we returned a `function` here that is closed over the `question variable`, then even though the `ask function` has finished, by line 11, we still have access to that `variable`.
@@ -2674,7 +2697,7 @@ Here's an example that shows us, the value is not a snapshot of `variable`:
 8.
 9. myTeacher();       // Suzy
 
-Closure: NOT capturing a value
+// Closure: NOT capturing a value
 ```
 
 In this example when we create the `myTeacher function` on line 3, at that moment `teacher` has the value `"Kyle"`.
@@ -2695,7 +2718,7 @@ for (var i = 1; i <= 3; i++) {
 // i: 4
 // i: 4
 
-Closure: loops
+// Closure: loops
 ```
 
 This `function`, that is being created in each iteration, it has the appearance that what it's doing is closing over the `i` value in each iteration.
@@ -2716,7 +2739,7 @@ for (var i = 1; i <= 3; i++) {
 // j: 2
 // j: 3
 
-Closure: loops
+// Closure: loops
 ```
 
 So if we wanna create **more than one variable** with the **same name**, we need to make **new scopes**, right? So we could do an **IIFE** here, but the much more common way now that we have **block-scoping** (ES6), is to just stick a block-scoped declaration in the iteration. So now `let j` is going to run every time the `for` loop iterates. And it's gonna create a **whole new `j`** in that **whole new iteration of the loop**. There are three separate `j`s and therefore we get the values in them `1`, `2`, and `3`.
@@ -2736,7 +2759,7 @@ for (let i = 1; i <= 3; i++) {
 // i: 2
 // i: 3
 
-Closure: loops
+// Closure: loops
 ```
 
 Why don't we just go ahead and make it so that if we use a `let` on our `for` loop we'll automatically create a new `i` for each iteration. Instead of creating just one that belongs to the whole `for` loop, here there's gonna be a brand new `i` for each iteration. Which means the closure just magically works.
@@ -2771,7 +2794,7 @@ var workshop = {
 
 workshop.ask("Is this a modules?");   // Kyle Is this a module?
 
-Namespace, NOT a module
+// Namespace, NOT a module
 ```
 
 **Pattern**: A common pattern where we have a set of behavior, like `functions` and a set of data that those `functions` operate on. And we wanna collect them together into some logical **unit**, the simplest way is to just make an `object` and put our data and our `functions` directly on the `object`.
@@ -2817,7 +2840,7 @@ This is the module pattern that was codified by Doug Crawford-ish in 2001:
 11.
 12  workshop.ask("It's a module, right?");   // Kyle It's a module, right?
 
-Classic/Revealing module pattern
+// Classic/Revealing module pattern
 ```
 
 This **Classic Module Pattern (Revealing Module Pattern)** has two components to it:
@@ -2884,7 +2907,7 @@ The previous example had a module **`IIFE`** (also known as a **module singleton
 13.
 14. workshop.ask("It's a module, right?");   // Kyle It's a module, right?
 
-Module Factory
+// Module Factory
 ```
 
 We can make just regular `functions` that can be called multiple times. And every time a `function` is called, it's gonna produce a new instance of our module. We lovingly refer to those as **Factory Functions**.
@@ -2914,7 +2937,7 @@ But they're expected sometime in Q1 of 2020 to land stable in Node the first pha
 4.     console.log(teacher, question);
 5. };
 
-ES6 module pattern
+// ES6 module pattern
 ```
 
 **Somethings we should know about modules:**
@@ -2945,7 +2968,7 @@ There's a bunch of variations import modules, but two major styles:
 6.
 7. workshop.ask("It's a namespace import, right?");   // Kyle It's a namespace import, right?
 
-ES6 module pattern
+// ES6 module pattern
 ```
 
 There are **two major style of import modules**:
@@ -2954,8 +2977,605 @@ There are **two major style of import modules**:
 
 - The second style is referred to generally as the **namespace import** (as we see on line 7), which is to say we wanna get this whole module and collect **all of its contents** onto a **single namespaced `variable`**, in this case called `workshop`.
 
-**A:** When you say you prefer the old module style you mean, the revealing module pattern in one file?
+**Q:** When you say you prefer the old module style you mean, the revealing module pattern in one file?
 
-**Q:** Yes, the `function` wrapped around a couple slides ago. Specifically when I'm gonna do a module, I expose my modules as **UMD** (Universal Module Definition) style modules. It's supposed to kind of inter-operate between browsers, module loaders and node. So that's the format I choose to write in.
+**A:** Yes, the `function` wrapped around a couple slides ago. Specifically when I'm gonna do a module, I expose my modules as **UMD** (Universal Module Definition) style modules. It's supposed to kind of inter-operate between browsers, module loaders and node. So that's the format I choose to write in.
 
 So whether we use a syntactic support in our language to define our modules, or whether we choose to hack it with the old school revealing module pattern, the same concept applies, which is that we're organizing a set of behavior into a cohesive unit hiding data in it and exposing a minimal necessary API. That's the design pattern that we wanna get. So that somebody can import that behavior into their app and use it. All right, so there you go, there is the module pattern. And with that, we now have a full breadth of understanding of the lexical scope core or the main pillar (the most important pillar), this main pillar of the JavaScript language.
+
+# Object
+
+### Objects Overview:
+
+The **objects oriented system** is one of the important of three pillars of the language. The `objects`, the `this` keyword and the `prototypes`, those make up the **objects oriented system**.
+
+**Objects (Oriented)**
+
+- `this`
+- `class {}`
+- Prototypes
+- "Inheritance" vs. "Behavior Delegation" (OO vs. OLOO)
+
+We're deliberately saying **objects oriented** instead of **object oriented**, because this is **not** strictly a **class system**, there is classes that have been layered on top of it, but it is not **inherently a class system**.
+
+## The `this` keyword:
+
+The first step that needs to take for understanding `this` keyword, is to stop trying to make it like `this` keyword in other languages. Because maybe some other languages behavior holds us back, and make it so harder for us to understand or leverage JavaScript.
+
+Well it turns out that `this` keyword is actually a bit more straightforward and powerful than we would imagine. It's just been explained and taught incorrectly.
+
+> A `function`'s `this` references the **execution context** for that call (a context in which that call was being made), determined entirely by <u>how the `function` was called.</u>
+
+**In other words, if we look at a `function` that has `this` keyword in it, it is assigned based upon how the `function` is called.**
+
+Most people think that we could look at a `function`, and figure out what `this` keyword is gonna point out. But **the definition of the `function` doesn't matter at all**, to determining the `this` keyword. **The only thing that matters is how does that function get invoked.**
+
+> A `this`-aware `function` can thus have a different context each time it's called, which makes it more flexible & reusable.
+
+**So in other words, the `this` keyword is JavaScript's version of <u>dynamic scope</u>. If it's this way of having as flexible, reusable behavior.**
+
+If we recall and remember that we had a `function` that was in a dynamically scoped language:
+
+```JavaScript
+1.  var teacher = "Kyle";
+2.
+3.  function ask(question) {
+4.      console.log(teacher, question);
+5.  }
+6.
+7.  function otherClass() {
+8.      var teacher = "Suzy";
+9.
+10.     ask("Why?");
+11. }
+12.
+13. otherClass();   // Output in Dynamically Scoped language: Suzy Why?
+
+// Recall: dynamic scope
+```
+
+So here with **dynamically scoped language**, on line 4, when it references `teacher`, instead of trying to line 1 to get `teacher`, it goes to line 8.
+Because `ask` was called from line 10 it was called from the `otherClass` scope, that's what dynamic scope does.
+
+**In JavaScript we have something very similar (to dynamically scoped language), but it's not based upon scope boundaries, or where something's called from, it's based on <u>how the `function` was called.</u>**
+
+So here we have a version of the `ask function` which is `this`-aware (it uses a `this` keyword, so it's `this`-aware):
+
+```JavaScript
+function ask(question) {
+    console.log(this.teacher, question);
+}
+
+function otherClass() {
+    var myContext = {
+        teacher: "Suzy"
+    };
+    ask.call(myContext, "Why?");    // Suzy Why?
+}
+
+otherClass();
+
+// Dynamic Context ~= JS's Dynamic Scope
+```
+
+We'll notice that we're calling `ask function` from some other location but (with `this` keyword) that doesn't matter where we call it from, it's how we call it.
+
+If we use `ask.call` here, we're saying use this particular `object` as your `this` keyword, and invoke the `function` in that context. So the `this` keyword in this particular case, will end up pointing at `myContext`.
+
+So we can see that sort of **dynamic flexibility** happening here. So we could call that same `ask function`, lots of different ways, and provide lots of different context `objects` for the `this` keyword point on, **that's the dynamic flexible reusability of the `this` keyword**. That's why it exists by the way, it exists so that we can invoke `functions` in these different contexts.
+
+**In JavaScript there are 4 different ways to invoke a `function`, and each one of them is gonna answer the question, what is the `this` keyword, differently.**
+
+In **lexical scope** land, we start at the current scope, and work our way up to the global scope. Well here (with `this` keyword) we are gonna have a different building involved. **We're gonna to start at the bottom of a building. But the real question is, which building?**
+
+## Implicit & Explicit Binding:
+
+So let's look at those four different ways to invoke a `function`.
+
+### 1. Implicit binding:
+
+The first of them we'll look at is called **implicit binding**.
+
+In this example we called `workshop object` the **namespace pattern** and we're gonna ask how does the `this` keyword behave in that namespace pattern?
+
+![implicit binding](https://user-images.githubusercontent.com/37678729/74843783-ab4ab100-5341-11ea-829f-2570391b1063.png)
+
+When we get the `ask question` invoked, how does it figure out what the `this` keyword should point at? And the answer is **because of the call site**.
+
+Because of the call site, the `this` keyword is gonna end up pointing at the `object` that is used to invoke it, which in this case on line 8 is the `workshop object`. The `workshop.ask` says invoke `ask` with the `this` keyword pointing at `workshop`. That's what the **implicit binding** rule says.
+
+That's exactly how the `this` binding works in other languages. It decides (the `this` keyword inside) the `method` based upon what `object` we call it from.
+
+Here we're defining just one `ask function`, but we're sharing the `ask function` across two different `objects`:
+
+```JavaScript
+1.  function ask(question) {
+2.      console.log(this.teacher, question);
+3.  }
+4.
+5.  var workshop1 = {
+6.      teacher: "Kyle",
+7.      ask: ask
+8.  };
+9.
+10. var workshop2 = {
+11.     teacher: "Suzy",
+12.     ask: ask
+13. };
+14.
+15. workshop1.ask("How do I share a method?");
+16. // Kyle How do I share a method?
+17.
+18. workshop2.ask("How do I share a method?");
+19. // Suzy How do I share a method?
+
+// this: dynamic binding -> sharing
+```
+
+> The idea of having **implicit binding** is useful because this is how we share behavior among different contexts.
+
+The `workshop1` and `workshop2` are two separate `objects` with two separate pieces of data in them. But because on line 7 and line 12 we have a reference to the `ask function` on it. When we use that reference to invoke the `ask function`, the **implicit binding** rule says invoke that one `function` in a different context each time. One `function` used in lots of different contexts.
+
+> If we think back to how we described the idea of **lexical scope**, which was a very **fixed**, **predictable** thing. It's defined at **author-time**, and nothing about the run-time can ever change that.
+>
+> And here with **`this` keyword**, we have something which is **not fixed and predictable**, it's entirely **dynamic**, it's entirely determined at **run-time**. And the trade off here is not accidental, the trade off here is very intentional, that what we really are getting is we're getting the choice between **predictable** and **flexible**.
+
+Here we benefit from the flexibility of being able to share one `function` across different contexts. But there are times when that flexibility is a downside and what we would prefer is to have predictability. It's not that one is right and the other's wrong, it's just that these are different tools and they have different benefits. Here we're seeing the flexibility benefit of the `this` keyword.
+
+But **implicit binding** is only one of the four ways to invoke a `function`, and that's where the extra confusion can come in.
+
+### 2. Explicit Binding:
+
+There's another way to invoke `functions`:
+
+```JavaScript
+1.  function ask(question) {
+2.      console.log(this.teacher, question);
+3.  }
+4.
+5.  var workshop1 = {
+6.      teacher: "Kyle",
+7.  };
+8.
+9.  var workshop2 = {
+10.     teacher: "Suzy",
+11. };
+12.
+13. ask.call(workshop1, "Can I explicitly set context?");
+14. // Kyle Can I explicitly set context?
+15.
+16. ask.call(workshop2, "Can I explicitly set context?");
+17. // Suzy Can I explicitly set context?
+
+// this: explicit binding
+```
+
+> The `.call` method along with it's cousin, `.apply` method, both of them take, as their first `argument`, a `this` keyword.
+
+So on line 13, when we say `.call` and we pass in `workshop1`, it is saying invoke the `ask function` with the this context of `workshop1`. It's very similar to the previous slide, we are still sharing that `function`, **but here we're doing so explicitly rather than implicitly**. We're saying wherever this `function` comes from, invoke it in a particular context which we're going to specify.
+
+> **So we can use `.call` and `.apply` to explicitly tell JavaScript which context to invoke it in.**
+
+Now, we're gonna talk about a variation of **explicit binding**, this is the second of the rules that we're looking at. But this isn't a separate rule, but kind of a sub-rule or a sub-part of this rule, which is an extremely common scenario or phenomenon referred to as **losing your `this` binding**.
+
+If we've ever worked with a `function` that we pass around, and all of a sudden, it used to have a `this` binding and now it doesn't have a `this` binding. It's very frustrating when we think of a `this` keyword as being predictable and then we find out oops, actually, **it's not predictable, it's flexible**.
+
+#### 2.1. Hard Binding:
+
+So variation of explicit binding is called **hard binding**. This is a sub-rule or a sub-part of **explicit binding** which is a second ways of calling a `function`.
+
+```JavaScript
+1.  var workshop = {
+2.      teacher: "Kyle",
+3.      ask(question) {
+4.          console.log(this.teacher, question);
+5.      }
+6.  };
+7.
+8.  setTimeout(workshop.ask, 10, "Lost this?");
+9.  // undefined "Lost this?"
+10.
+11. setTimeout(workshop.ask.bind(workshop, "Hard bound this?"), 10);
+12. // Kyle Lost this?
+
+// this: hard binding
+```
+
+Looking at line 8, if we passed in `workshop.ask`, that method is on the `workshop object`, but that **line 8 is not the call site**. We have to imagine in our head, what would the call site look like for the `function` whenever that timer ran ten milliseconds from now?
+And that call site would look like cb(), or something like that. It's not going to look like `workshop.ask`, and because it doesn't look like that, it's not going to invoke `ask` in a `workshop` context. Which is we've lost our `this` binding, we end up getting `undefined`.
+
+> Actually just as side note, technically, the `setTimeout` utility is defined by HTML, it's not evoking it just with the default call, it actually **explicitly** invokes it with a `.call` in the context of **global**.
+
+So it would actually invoke `workshop.ask` by saying `cb.call(window)`. Invoking it in the **global object** context.
+
+**Q:** Would this be unnecessary if `ask` were defined as an `arrow function`?
+
+**A:** The `ask` here as an `arrow function` would **not** solve the problem.
+
+So line 8, we're losing our `this` binding and it's actually getting rebound to something else, in this case the **global object**. That's not what we want. So a very common solution to this is line 11, passing a **hard-bound `function`**. **If we pass in a hard-bound `function` using the `.bind` method, it will take away that whole flexibility thing and force it to only use the `this` that we've specified on line 11.**
+It says evoke this `function`, and no matter how you invoke it, always use `workshop` as it's this context.
+
+> In other words the `.bind` method, **doesn't invoke the `function`**, it produces a **new `function`** which is bound to a particular specific `this` context.
+
+So we see a trade-off here:
+
+We see the predictable, flexible `this` binding, but then we see some scenarios where, it's kind of frustrating that it's flexible. And what I'd really like is for it to be super predictable.
+
+**There's a tension here:**
+
+If we were to go to all the trouble to define a bunch of `functions` on some **namespace object**, and have `this.` in front of every property reference and every method access. And then all of our `function` calls use the `.bind`, we would be cutting ourself off at the knees.
+
+Because the whole purpose of this system, **the whole reason that we pay the tax of putting `this.` in front of everything is to get the dynamicism. And then we're going and taking that whole dynamic system and locking it down so that it's completely predictable.**
+
+At that point, wouldn't we be better served simply writing a **module** that uses **closure** and has a **fixed**, **predictable behavior**?
+
+So how do we deal with this tension? We like using the `this` keyword, it can be useful to us, but there are times when we need it to not be so flexible.
+If we go to the trouble to write a `this`-aware set of code, and then most of our core sites are using the flexible dynamism, and every once in a while we have to do something like a **hard binding**. Then we're getting a lot of benefits out of that system, seems like a reasonable trade-off.
+
+On the other hand, if we go to all the trouble to write a `this`-aware system and then everyone or most of our calls sites have to use `.bind`, that's a clue to ous we're doing this the hard way. **We should switch back and use the predictable lexical closure.**
+
+> If we want **flexible dynamism**, use a **`this` keyword**, if we want **predictability**, use **lexical scope** (closures).
+
+So just keep that in mind when we're using the `.bind` method.
+Not that it is bad, not that it is evil, not that it is an anti-pattern. But if we find that happening more often than not, we're probably doing things the hard way.
+
+### 3. The `new` Keyword:
+
+The `new` keyword is the third way that we can invoke a `function`:
+
+```JavaScript
+                 "constructor calls"
+
+function ask(question) {
+    console.log(this.teacher, question);
+}
+
+var newEmptyObject = new ask("What is 'new' donig here?");
+// undefined "What is 'new' donig here?"
+
+// this: new binding
+```
+
+> We should know that the **`new` keyword** seems as if it has something to do with invoking **`class constructors`**, **but the `new` keyword has not got anything to do with `classes`.** It's just an unfortunate syntactic trick to make it look like it's dealing with `classes` when it really isn't.
+>
+> But the purpose of the **`new` keyword** is actually to **invoke a `function`** with a `this` keyword pointing at a whole **new empty `object`**.
+
+So far the three ways to invoke a `function`:
+
+- One way is, invoking `functions` and pointing them at a context `object`, like a `workshop.ask`.
+- The second way is to invoke a `function` and givie it a specific `object` with `.call` or `.apply` or force it with `.bind` method.
+- A third way is to invoke a `function` and use a whole **new empty `object`**. And the **`new` keyword** can accomplish that (it also does other stuff too). We can accomplish that same goal by saynig, `function.call({})`. Cuz that would invoke our `function` in the context of a brand new empty `object`.
+
+So in other words, these two statements are equal:
+
+```JavaScript
+ask.call({}) ==== new ask();
+```
+
+So the `new` keyword isn't actually buying ous much except the syntactic sugar of, hey I want this `function` invoked with a new `this` content.
+
+**The `new` keyword does four things when it's used to invoke `function` (or what we should call it with heavy air quotes a `"constructor"` call):**
+
+- Create a brand **new empty `object`** (out of thin air).
+- Link that `object` to another `object` (so it first creates a brand new `object` and then links it somewhere).
+- It calls the `function` with its **`this` keyword pointed at the new `object`** (not the linked `object`, the new `object`).
+- And fourth and finally, the `new` keyword after the `function` call is done, if that `function` does not return its own `object`, the `new` keyword assumes that you meant to **return `this` keyword**.
+
+**So these four things happen every single time a `new` keyword is invoked with a `function`.**
+
+**Q:** When we describe it this way, which of the two entities seems like it's doing all the work?
+Does it seem like the `new` keyword is doing all the work?
+Or does it seem like your `"constructor" function's` doing all the work?
+
+**A:** It's really the `new` keyword, isn't it? As a matter of fact, if you put `new` in front of almost any `function`, **even a completely empty `function`**, all four of these things would happen. It’s almost as if the `function` doesn’t even matter. The `new` keyword is just sort of hijacking the `function` so that it can do these four things.
+
+### 4. Default Binding:
+
+And our fourth and final way of invoking a `function` is the fallback, if none of the other three match, which is called the **default binding**:
+
+```JavaScript
+1.  var teacher = "Kyle";
+2.
+3.  function ask(question) {
+4.      console.log(this.teacher, question);
+5.  }
+6.
+7.  function askAgain(question) {
+8.      "use strict";
+9.      console.log(this.teacher, question);
+10. }
+11.
+12. ask("What's the non-strick-mode default?");
+13. // Kyle What's the non-strick-mode default?
+14.
+15. askAgain("What's the strick-mode default?");
+16. TypeError
+
+// this: default binding
+```
+
+Here we have an `ask function`. And when we call it on line 12, we'll notice that on line 12, we don't have any context `object`. We don't have any `.call`, or a `bind`, or a `new`. It's just a normal `function` call. It doesn't match any of the other rules.
+
+> So since it **doesn't match any of the other rules**, the fallback is defined in the spec as, in **non-strict-mode**, default to the **global**.
+
+So it's why we print `"Kyle"` here, cuz there's a **global `variable`** called `teacher`, with a value `"Kyle"`.
+
+But notice that the `askAgain function` is in **strict-mode**. And when we invoke it, we actually get a `TypeError`.
+
+**Q:** Can anybody guess why there's a `TypeError`?
+
+**A:** Specifically in **strict-mode**, when we invoke it with no other `this` bindings, the default behavior is to leave `this`, `undefined`. So we're now trying to access a property on the `undefined` value, which is a `TypeError`.
+
+> In **strict-mode**, when we invoke a `function` with no other `this` bindings rules, the default behavior is to leave `this`, **`undefined`**.
+
+Now, why do they chose in **strict-mode** to make `this`, `undefined`, so that it would create a `TypeError`?
+It's because it is almost certainly an `error` on our part to define a `this`-aware `function`, and invoke it without it any `this`. That's a terrible idea, that's almost as bad as **auto-creating globals**. Which nobody would ever do, right? **That's a terrible idea to invoke a `this`-aware `function` using the default binding**.
+
+And in **non-strict** (so-called **sloppy-mode**), it ends up using the **global object**, which is almost never what we would want, in exactly the same way that it's almost never the case that we wanna **auto-create globals**. But **strict-mode** fixes that up for us and it says, hey, you've made an `error`.
+
+Our `error` is not that we're doing a `this.` reference. Our `error` is that we've invoked the `function` without giving it a `this`. We need to use one of the other three ways. Use a `new` keyword, use a `.call`, or `.apply`, or a `.bind`, or use a context `object`.
+
+So there we go, four ways to invoke a `function`. Those are the only four ways, by the way. That's it, just those four.
+**These four ways are all we need to learn to be able to understand how the `this` keyword get bound.** But let's reset our mind back. The question that we set out to ask is:
+
+**Q:** If we have a `this`-aware `function`, how do we know what its `this` keyword points at?
+
+**A:** And our strong temptation is, we wanna assume that we can just answer that by looking at the `function`. And what we've now seen is, **there's no way to look at the `function` to answer that question. We have to look at the call site. We have to look at how the function's being called.**
+Because every time it gets called, the how of the call controls what the `this` keyboard will point at.
+
+### **Summary:**
+
+So far the three ways to invoke a `function`:
+
+- One way is, invoking `functions` and pointing them at a **context `object`**, like a `workshop.ask` (**implicit binding**).
+- The second way is to invoke a `function` and givie it a specific `object` with `.call` or `.apply` (**explicit binding**) or force it with `.bind` method (**hard binding:**).
+- A third way is to invoke a `function` and use a whole **new empty `object`**. And the **`new` keyword** can accomplish that (it also does other stuff too). We can accomplish that same goal by saynig, `function.call({})`. Cuz that would invoke our `function` in the context of a brand new empty `object` (**the `new` keyword**).
+- And our fourth and final way of invoking a `function` is the fallback, if none of the other three match, which is called the **default binding**. Since it doesn't match any of the other rules, `this` in **non-strict** (so-called **sloppy-mode**), ends up using the **global object**. But in **strict-mode** the default behavior is to leave `this`, **`undefined`**.
+
+## Binding Precedence:
+
+What if we have a really crazy call site like line 8?
+
+```JavaScript
+1. var workshop = {
+2.     teacher: "Kyle",
+3.     ask: function ask(question) {
+4.     console.log(this.teacher, question);
+5.     }
+6. };
+7.
+8. new (workshop.ask.bind(workshop))("What does this do?");
+9. // undefined "What does this do?"
+
+// this: binding rule precedence?
+```
+
+On line 8, we have a `new` keyword, we have a `workshop.ask` (so we have a context `object`), and we have `.bind` (which under the covers, of course, using `apply`). We have three of our four rules matched on the same call site. By the way we should not ever write a call site like that, but it does actually work.
+
+So from here forward, if we ever need to ask ourself what is our `this` keyword gonna point out, when this `function` gets invoked, this is how we determine that.
+
+**This precedence that shows us, if we have more than one rule matches a call site, what is our `this` keyword gonna point out when the `function` gets invoked :**
+
+1. **Is the `function` called by `new`? If so, the newly created `object` will be the `this` keyword.**
+2. **Is the `function` called by `call` or `apply()`? (And by the way `bind()` is a sub of that rule because it also uses `apply()`). If so, the context `object` that is specified will be used.**
+3. **Is the `function` called on a context `object` (like `workshop.ask`)? If so, use that `object`.**
+4. **DEFAULT: global object (except strict mode), if none of those three have applied, then we fallback to the default.**
+
+That's it, just those four rules in that order, and it'll perfectly and completely answer every question that we may have about what does my `this` keyword point at?
+
+## Arrow Functions & Lexical `this`:
+
+Let's examine the arrow `functions` within the context of what we've just discussed, which is the `this` keyword:
+
+![this: arrow functions](https://user-images.githubusercontent.com/37678729/75470429-e7b38800-59a5-11ea-9ba3-2714a6e00f14.png)
+
+Here we'll notice that the `this` keyword, when the arrow `function` is invoked, is correctly is pointing at the `workshop object`.
+
+**This is what we refer to as lexical `this` behavior.**
+
+So let's explain what **Lexical `this`** means:
+
+> Many people have in their minds a mental model that a arrow `function` is essentially a hard-bound `function` to the parents `this`, **that is not accurate**.
+>
+> The proper way to think about what an arrow `function` is, **an arrow `function` does not define a `this` keyword at all. There is no such thing as a `this` keyword in an arrow `function`.**
+>
+> Which means if we put a **`this` keyword** inside of an **arrow `function`**, **it's gonna behave exactly like any other `variable`**. Which means it's going to **lexically** resolve to some enclosing scope that does define of `this` keyword.
+
+So in this particular case, on line 5, when we say `this.` there is no `this` in that arrow `function` no matter how it gets invoked, so we lexically go up one level of scope which is, which `function`? The `ask function`.
+
+It goes up from the callback `function` (the arrow `function`, that scope), to the enclosing scope, which is? `ask`. And what is `ask`s definition of the `this` keyword? What line of code controls what the `this` keyword will point out inside of `ask`? Line 10, because the `ask function`s `this` keyword gets set by the call site.
+
+And then when that callback gets later invoked, it’s essentially closed over, that parent scope that had a `this` keyword pointing at the `workshop object`. That's what we mean by **lexical `this`**.
+
+**Arrow `function` is not a hard-bound `function`. It's a `function` that doesn't have a `this` at all. And so it revolves lexically. That means if it had to go up, five levels because we had five nested arrow `functions`, it just keeps going and going and going up the building elevator until it finds a `function` that defines a `this` keyword.
+And whatever the `this` keyword points at for that `function`, that's what it uses.**
+
+> So this is **not the correct explanation**: An arrow `function` is `this-`bound (aka `.bind()`) to its parent `function`.
+
+And here is the spec:
+
+> ![ECMAScript](https://user-images.githubusercontent.com/37678729/75474747-c99d5600-59ac-11ea-8af7-1d672d0238aa.png)
+>
+> [ECMAScript](https://www.ecma-international.org/ecma-262/10.0/index.html#sec-arrow-function-definitions-runtime-semantics-evaluation)
+
+### Resolving `this` in Arrow Functions:
+
+Here's a place where it is perpetually frustrating that we have **overloaded operators**. We tend to think that curly braces `{}` must be scopes. They're blocks, they're `function` bodies, they must be scopes. But they're not!
+
+What's gonna happen when we define an arrow `function` on line three?
+
+![this: arrow functions](https://user-images.githubusercontent.com/37678729/75797114-e5787180-5d89-11ea-87c1-d019e39164e8.png)
+
+What is the parent lexical scope from which that arrow `function` will go up one level to resolve the `this` keyword? It is the global.
+
+It is not the `workshop object` because, guess what? Just cuz there's **curly braces `{}` around that `object` doesn't make it a scope. Objects are not scopes.** So this is a very common mistake that people have, where people are saying, why is the arrow `function` not getting my `workshop` as my content?
+Well, **because `workshop object's` not a scope. We have to think about an `arrow` function as not having of `this` and resolving it lexically.** So what is the parent scope? There's only two scopes in this program. The scope of the `ask function`, which is an arrow, and the global scope. There's no intervening scope in between.
+
+> It is unfortunate that we've overloaded the curly brace `{}` that confuses us into thinking it's a scope, but it isn't.
+
+The downside is that arrow `functions` are anonymous and so they're a bit harder to debug at times, they don't explain themselves well. If we take the entire context, Kyle Simpson perception is that **the only time we should ever use an arrow `function` is when we're gonna benefit from lexical `this` behavior.**
+
+Because the alternative to lexical `this` behavior is a hack like the `var self = this` this days. Let me just say, `var self = this` is the worst possible name anybody ever could have come up with. **Because `this` keyword never, ever, ever, under any circumstances, points at the `function` itself, it points at a context.**
+**So if we absolutely must do the `var self = this` hack, we should do `var context = this`. Cuz that's what `this` keyword is, is a context.**
+
+> But this arrow `function` lexical `this` behavior is a much better way of doing it than, a `var self = this`. And even better than doing the `function.bind()`.
+>
+> It is a much better way because it actually matches the mental model of what we want. We want the `this` keyword to behave lexically here. We don't want for the arrow `function` to have some magical `this` behavior to it. We want it to just adopt the `this` keyword of some parent scope.
+
+**Q:** When we would be parsing this example, `workshop` is going into the red bucket, it’s getting the global scope. The `teacher` property, though, would be scoped to ...
+
+**A:** Properties aren't scoped, properties aren't lexical identifiers. It's a member on an `object` value. It's not participating in lexical scope at all.
+
+If we gonna use an arrow `function` to get our lexical `this`, we need to combat those three downsides that we talked about with anonymous `function`. We need to combat the downside that, anonymous `functions` don't have a self reference, in case we need to do recursion or unbinding.
+We need to combat the fact that they don't have a name. Use it in some way so that it's gonna get a name inference, like, assign it to a `variable` or a property. Because it's gonna show up as anonymous otherwise.
+And we need to have some way of making it clear and obvious to the reader. What is the purpose of this `function`? Don't make them read the `function` body to figure that out.
+
+> The only thing we ever need to do to understand the `this` keyword is look for the call site of a `function` that defines the this keyword, and ask those four rules.
+
+## ES6 `class` Keyword
+
+> The `class` keyword is ostensibly **syntactic sugar** layered on top of the **prototype system**.
+>
+> By the way, this is a little know fact. `classes` don't have to be statements, `classes` can be **expressions**, and they can be **anonymous**.
+
+The `classes` can be defined with or without an `extends` clause. Here, we're just defining a `class` that doesn't extend anything, so it's the top level `class`.
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. var deepJS = new Workshop("Kyle");
+11. var reactJS = new Workshop("Suzy");
+12.
+13. deepJS.ask("Is 'class' a class?");
+14. // Kyle Is 'class' a class?
+15.
+16. reactJS.ask("Is this class OK?");
+17. // Suzy Is this class OK?
+
+// ES6 class
+```
+
+We can choose to define a `constructor` if we want, like we're doing on line 2, and we can add methods.
+
+And look on line 4, we don't even need commas in between them. They did a fantastic job of just dribbling all kinds of syntactic sugar on this feature. It's very attractive. Then we look at line 10, it looks exactly like instantiating classes in any other class-oriented language.
+
+We just say `new`, capital W `Workshop`, and we get an instance. And we call `deepJS.ask` and the method call works. And there's a `this` context that works. So that's what the `class` syntax looks like.
+
+**If we want to extend one `class` into another `class`, we use the `extends` clause**. Like here on line 10:
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. class AnotherWorkshop extends Workshop {
+11.     speakUp(msg) {
+12.         this.ask(msg);
+13.     }
+14. }
+15.
+16. var JSRecentParts = new AnotherWorkshop("Kyle");
+17.
+18. JSRecentParts.speakUp("Are classes getting better?");
+19. // Kyle Are classes getting better?
+
+// ES6 class: extends (inheritance)
+```
+
+We don't have to redefine any other methods that are already defined because they'll be so-called **inherited**. So we can define new methods like the `speakUp` method here on line 11 and when we instantiate that child `class`, we can invoke that method, `.speakUp` (line 18), exactly like it was on the `object`.
+
+In the below, is a example of relative polymorphism in `classes`:
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. class AnotherWorkshop extends Workshop {
+11.     ask(msg) {
+12.         super.ask(msg.toUpperCase());
+13.     }
+14. }
+15.
+16. var JSRecentParts = new AnotherWorkshop("Kyle");
+17.
+18. JSRecentParts.ask("Are classes getting better?");
+19. // Kyle ARE CLASSES GETTING BETTER?
+
+// ES6 class: extends (relative polymorphism)
+```
+
+> The `class` system also now has a **`super` keyword** in it, which allows us to do **relative polymorphism**. If we have a child `class` that defines a method of the **same name** as a parent `class` (so-called **shadowing**), we can refer to the parent from the child by saying `super.` like we see on line 12.
+
+**By the way, this is an example of extension beyond syntactic sugar because prior to ES6 `classes`, there was essentially no way to do relative polymorphism. There was no equivalent of the `super` keyword.**
+
+Not saying that's a bad thing, just saying, when people say, it's just syntactic sugar anyway, no, it isn't. It's its whole own mechanism, with its own set of complexities. It's like a language within a language at this point, **`classes` are not just syntactic sugar**, but that is a useful, mental model for these simplest of examples.
+
+It's need to say that even though there's a bunch of syntactic sugar, **they didn't change anything fundamentally about how `function` calls work and how that `this` keyword gets bound.** So, even if we define a method on a `class` instance, if we pass it into a `setTimeout`, guess what?
+It's gonna lose its `this` binding.
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.      }
+5.      ask(question) {
+6.          console.log(this.teacher, question);
+7.      }
+8.  }
+9.
+10. var deepJS = new Workshop("Kyle");
+11.
+12. setTimeout(deepJS.ask, 100, "Still losing 'this'?");
+13. // undefined "Still losing 'this'?"
+
+// ES6 class: still dynamic this
+```
+
+They're not somehow magically auto bound. Those methods on `class` instances, behave just like any other `function`.
+
+And that idea of having an autobound `this` method is why in this interim period for the last several years, we have seen an explosion of patterns where people want hardbound or autobound methods and they aren't automatically.
+
+So what we see a lot happening is something like line 4 in below example:
+
+```JavaScript
+1.  class Workshop {
+2.      constructor(teacher) {
+3.          this.teacher = teacher;
+4.          this.ask = question => {
+5.              console.log(this.teacher, question);
+6.          };
+7.      }
+8.  }
+9.
+10. var deepJS = new Workshop("Kyle");
+11.
+12. setTimeout(deepJS.ask, 100, "Is 'this' fixed?");
+13. // Kyle Is 'this' fixed?
+
+// ES6 class: "fixing" this?
+```
+
+**Where instead of defining a method on the `prototype`, we added into the `constructor` and use a hardbound method or use an arrow `function`.**
+
+This deeply troubles to see this propagation of this idiom. This idea that it's got to be hard bound and don't want any dynamism to it all, so I'm gonna use a lexical `this` from an arrow `function` or I'm gonna use a hard bound `function` to accomplish that.
+
+Because we are essentially betraying the entire system that `classes` has built upon. **The entire `class` system is built upon this idea that our methods don't exist on our instances, they exist on our prototypes.** And guess what happens when we say `this.ask` and we assign it a `function`? **It's no longer on the `prototype` anymore, it's on our instance. So every single time we instantiate a `function`, we're getting a whole separate copy of all those `functions` added to every single instance.**
+
