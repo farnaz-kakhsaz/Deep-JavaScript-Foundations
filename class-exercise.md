@@ -1,39 +1,63 @@
-# `this`
+# `class`
 
-In this exercise, you will refactor some code that manages student enrollment records for a workshop, from the module pattern to the namespace pattern using the `this` keyword.
+In this exercise, you will refactor some code that manages student enrollment records for a workshop, from the namespace pattern to the `class` pattern.
 
 ## Instructions
 
-1. Remove the `defineWorkshop()` module factory, and replace it with an object literal (named `deepJS`) that holds all the module's functions, as well as the `currentEnrollment` and `studentRecords` data arrays.
+1. Define a class called `Helpers` that includes the functions that are not `this`-aware.
 
-2. Change all internal function references and references to the data  arrays to use the `this` keyword prefix.
+2. Define a class called `Workshop` that extends `Helpers`, which includes all the other functions. Hint: `constructor()` and `super()`.
 
-3. Make sure any place where a `this`-aware callback is passed is hard-bound with `bind(..)`. Don't `bind(..)` a function reference if it's not `this`-aware.
+3. Instantiate the `Workshop` class as `deepJS`.
+
 
 # Solution:
 
 ```JavaScript
-var deepJS = {
-    currentEnrollment: [],
-    studentRecords: [],
+class Helpers {
+    sortByNameAsc(record1, record2) {
+        if (record1.name < record2.name) return -1;
+        else if (record1.name > record2.name) return 1;
+        else return 0;
+    }
+
+    printRecord(record) {
+        console.log(`${record.name} (${record.id}): ${record.paid ? "Paid": "Not Paid"}`);
+    }
+}
+
+class Workshop extends Helpers {
+    constructor() {
+        super(); // That Helpers parent class doesn't need a constructor. But now that we're defining a parent class, it does mean a little nuance, which is that we're gonna have to make sure to call super from our child constructor.
+        // If we don't define a child constructor, it automatically does. But if we make a child constructor, we have to call super to invoke the parent constructor, and we have to do it first. So that there is a this object that has been constructed for us.
+
+        this.currentEnrollment = [];
+        this.studentRecords = [];
+    }
+
     addStudent(id, name, paid) {
         this.studentRecords.push({id, name, paid});
-    },
+    }
+
     enrollStudent(id) {
         if (!this.currentEnrollment.includes(id)) {
             this.currentEnrollment.push(id);
         }
-    },
+    }
+
     printCurrentEnrollment() {
         this.printRecords(this.currentEnrollment);
-    },
+    }
+
     enrollPaidStudents() {
         this.currentEnrollment = this.paidStudentsToEnroll();
         this.printCurrentEnrollment();
-    },
+    }
+
     remindUnpaidStudents() {
         this.remindUnpaid(this.currentEnrollment);
-    },
+    }
+
     getStudentById(studentId) {
         return this.studentRecords.find(matchId);
 
@@ -42,45 +66,45 @@ var deepJS = {
         function matchId(record) {
             return (record.id == studentId);
         }
-    },
+    }
+
     printRecords(recordIds) {
         var records = recordIds.map(this.getStudentById.bind(this));
 
         records.sort(this.sortByNameAsc);
 
         records.forEach(this.printRecord);
-    },
-    sortByNameAsc(record1, record2) {
-        if (record1.name < record2.name) return -1;
-        else if (record1.name > record2.name) return 1;
-        else return 0;
-    },
-    printRecord(record) {
-        console.log(`${record.name} (${record.id}): ${record.paid ? "Paid": "Not Paid"}`);
-    },
+    }
+
     paidStudentsToEnroll() {
         var recordsToEnroll = this.studentRecords.filter(this.needToEnroll.bind(this));
 
         var idsToEnroll = recordsToEnroll.map(this.getStudentId);
 
         return [...this.currentEnrollment , ...idsToEnroll];
-    },
+    }
+
     needToEnroll(record) {
         return (record.paid && !this.currentEnrollment.includes(record.id));
-    },
+    }
+
     getStudentId(record) {
         return record.id;
-    },
+    }
+
     remindUnpaid(recordIds) {
         var unpaidIds = recordIds.filter(this.isUnpaid.bind(deepJS));
 
         this.printRecords(unpaidIds);
-    },
+    }
+
     isUnpaid(studentId) {
         var record = this.getStudentById(studentId);
         return !record.paid;
     }
-};
+}
+
+var deepJS = new Workshop();
 
 // ********************************
 
