@@ -1759,7 +1759,7 @@ So that's a good thing, because then, on line 13, those parentheses `()` that we
 In this case, because we got a `function`, so we can execute it, and moves to what 4.
 Line 4 does not have a `var` on it anymore but because of an assignment it does have, **target** operation.
 
-So that conversation is gonna continue exactly like it did on line 1. Hey, scope of `otherClass` (blue bucket), I have a **traget reference** for a marble called `teacher`, ever heard of it? Yes. Here's your marble. So now we have a location in memory, that's a different place than the one from line 1. It's a different location in memory, cuz it's a different scope.
+So that conversation is gonna continue exactly like it did on line 1. Hey, scope of `otherClass` (blue bucket), I have a **target reference** for a marble called `teacher`, ever heard of it? Yes. Here's your marble. So now we have a location in memory, that's a different place than the one from line 1. It's a different location in memory, cuz it's a different scope.
 We have this marble, and then we take the `value "Suzy"`, and we assign into it, then line 4 is executed.
 
 > The `console.log` is an `identifier` (and it's in **source position**) that we didn't created, but it is an `identifier`. The JavaScript engine has that available to us as sort of like an `auto global` (it's already in `global scope`). And when it find it (in `global scope`), and look at the `value` of it, it's an `object`, it has a `method` call `log`, so it can `invoke` it.
@@ -2181,7 +2181,7 @@ We have two type of **Scope** model:
 
 - **Lexical Scope**: It's an author-time decision and all the **scopes** (where the `function` and `variables` written) create in **compile-time**. So when we talk about **Lexical Scope**, we think about something that is **fixed** at author-time and it's predictable, it is **not** affected by **run-time** conditions.
 
-- **Dynamic Scope**: It creates in **run-time**. The `Bash script` is an example of **Dynamic scope** language and it makes sense because `Bach Script` is an **interpreted language** so it has no **run-time** term. So we can say the **Dynamic scope** is the opposite of the **Lexical Scope**, and it implies that the **run-time** (the dynamic) conditions of your program, are going to affect something about the **scoping**.
+- **Dynamic Scope**: It creates in **run-time**. The `Bash script` is an example of **Dynamic scope** language and it makes sense because `Bash Script` is an **interpreted language** so it has no **run-time** term. So we can say the **Dynamic scope** is the opposite of the **Lexical Scope**, and it implies that the **run-time** (the dynamic) conditions of your program, are going to affect something about the **scoping**.
 
 The vast majority of all programming languages in existence, and almost certainly all programming languages that we've ever worked with, are in fact **lexically scoped**.
 
@@ -2360,7 +2360,7 @@ But if we have them in a place that's a statement, it's totally okay.
 We can't use `var` in this example, because of historically the difference between the **`var`** and **`let`** or **`const`**:
 
 - The **`var`** has been attaching itself to the outer **`function` scope** or **`global scope`**.
-- But with the **`let`** or **`const`** we can make a declaration inside of a block (curly braces `{}`) and it turns that block into a scope(or in other words, **`let`** and **`const`** attached themselves to their enclosing **block scope**).
+- But with the **`let`** or **`const`** we can make a declaration inside of a block (curly braces `{}`) and it turns that block into a scope (or in other words, **`let`** and **`const`** attached themselves to their enclosing **block scope**).
 
 > **Blocks** are not **Scopes** until they have a `let` or `const` inside of them and then that sort of implicitly makes them a **scope**.
 
@@ -2580,7 +2580,7 @@ This example proves to us, that `let` (and `const`) will be hoist too:
 // Hoisting: let gotcha
 ```
 
-In above code, if the `teacher` on line 5 did not host, then line 4 should print out `"Kyle"`. Because there is no `teacher` as of line 4 and it should go to the outer scope and find the `variable` from line 1. But this code still throws a `TDZ error`, and the reason is because **`let` and `const` still hoist**.
+In above code, if the `teacher` on line 5 did not host, then line 4 should print out `"Kyle"`. Because there is no `teacher` as of line 4 and it should go to the outer scosdfsdfpe and find the `variable` from line 1. But this code still throws a `TDZ error`, and the reason is because **`let` and `const` still hoist**.
 
 **There is a difference between how `var` and `let` or `const` hoist:**
 
