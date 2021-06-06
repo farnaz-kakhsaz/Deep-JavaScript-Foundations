@@ -8,7 +8,7 @@
 2. [Types](#Types)
 3. [Coercion](#Coercion)
 4. [Equality](#Equality)
-5. [Static Typing](#Static Typing)
+5. [Static Typing](#static-typing)
 6. [Scope](#Scope)
 7. [Closure](#Closure)
 8. [Object](#Object)
