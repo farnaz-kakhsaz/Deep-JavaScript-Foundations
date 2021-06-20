@@ -1,6 +1,6 @@
 # Deep JavaScript Foundations
 
-> **Note:** In this note, I collected some important JavaScript foundations, that most of this information comes from Kyle Simpson's books ([YDKJS](https://github.com/getify/You-Dont-Know-JS) series), [ECMAScript](https://www.ecma-international.org/), [MDN](https://developer.mozilla.org/en-US/) (Mozilla Developer Network) or courses that I took. It did help me a lot to have a deeper understanding of JavaScript.
+> **Note:** In this note, I collected some important JavaScript foundations, that most of this information comes from Kyle Simpson's books ([YDKJS](https://github.com/getify/You-Dont-Know-JS) series), [ECMAScript](https://www.ecma-international.org/), [MDN](https://developer.mozilla.org/en-US/) (Mozilla Developer Network) or courses that I took. It did help me a lot to have a deeper understanding of JavaScript. Hope it will help you too ;)
 
 ## Table of Contents
 
